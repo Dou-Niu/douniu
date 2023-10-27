@@ -1,0 +1,120 @@
+syntax = "v1"  // 版本号
+
+// 接口信息
+info(
+    title: "douniu/user.api"
+    author: "liuxian"
+    version: "1.0.0"
+)
+type (
+    // 发验证码
+    SendVerificationCodeReq {
+        Phone string `json:"phone" validate:"required,phone"`
+    }
+    SendVerificationCodeResp {
+        VerificationCode string `json:"verification_code"`
+    }
+
+        // 手机号注册/登陆
+    RegisterOrLoginByPhoneReq {
+        Phone string `json:"phone" validate:"required,phone"`
+        VerificationCode string `json:"verification_code"`
+    }
+    RegisterOrLoginResp {
+        UserId int64 `json:"user_id"`
+        AccessToken string `json:"access_token"`
+        RefreshToken string `json:"refresh_token"`
+    }
+        // 手机号,密码登录
+    RegisterOrLoginByPasswordReq {
+        Phone string `json:"phone" validate:"required"` // 手机号
+        Password string `json:"password"`               // 用户密码，MD5加密
+    }
+        // 重新设置密码
+    ResetPassword {
+        NewPassword string `json:"new_password"`
+    }
+        // 查询用户信息
+    userInfoReq {
+        UserId int64 `json:"user_id"` // 用户id
+    }
+
+    UserInfoResp {
+        UserInfo *UserInfoItem `json:"userinfo"`
+    }
+
+    UserInfoItem {
+        ID int64 `json:"id"`
+        NickName string `json:"nickname"`
+        FollowCount int64 `json:"follow_count"`
+        FollowerCount int64 `json:"follower_count"`
+        IsFollow bool `json:"is_follow"`
+        Avatar string `json:"avatar"`
+        BackgroundImage string `json:"background_image"`
+        Signature string `json:"signature"`
+        TotalFavorited string `json:"total_favorited"`
+        WorkCount int64 `json:"work_count"`
+        FavoriteCount int64 `json:"favorite_count"`
+    }
+
+        // 刷新token
+    TokenResp {
+        AccessToken string `json:"access_token"`
+        RefreshToken string `json:"refresh_token"`
+    }
+)
+
+@server(
+    prefix: user
+)
+service user-api {
+    @doc(
+        summary: "发验证码"
+    )
+    @handler Sendcode
+    post /sendcode (SendVerificationCodeReq) returns (SendVerificationCodeResp)
+
+    @doc(
+        summary: "用户验证码形式注册/登陆"
+    )
+    @handler LoginByPhone
+    post /login/phone (RegisterOrLoginByPhoneReq) returns (RegisterOrLoginResp)
+
+    @doc(
+        summary: "用户密码形式登录"
+    )
+    @handler LoginByPassword
+    post /login/password (RegisterOrLoginByPasswordReq) returns (RegisterOrLoginResp)
+
+    @doc(
+        summary: "忘记密码"
+    )
+    @handler ForgetPassword
+    post /password/forget (ResetPassword) returns ()
+}
+
+@server(
+    middleware: JWT // 路由中间件声明
+    prefix: user
+)
+service user-api {
+    @doc(
+        summary: "修改密码"
+    )
+    @handler ChangePassword
+    post /password/change (ResetPassword) returns ()
+
+
+    @doc(
+        summary: "用户信息"
+    )
+    @handler userInfo
+    get /userinfo (userInfoReq) returns (UserInfoResp)
+
+
+    @doc(
+        summary: "刷新token"
+    )
+    @handler RefreshToken
+    post /refreshToken () returns (TokenResp)
+}

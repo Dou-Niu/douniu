@@ -22,7 +22,7 @@ func Response(r *http.Request, w http.ResponseWriter, resp interface{}, err erro
 		//成功返回
 		r := &Body{
 			Code:    0,
-			Message: "success",
+			Message: "ok",
 			Data:    resp,
 		}
 		httpx.WriteJson(w, http.StatusOK, r)

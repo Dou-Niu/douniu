@@ -14,9 +14,6 @@ type MyClaims struct {
 	jwt.StandardClaims
 }
 
-// var accessSecret = []byte("liuxian123")
-// var refreshSecret = []byte("123456789")
-
 // GetToken 获取accessToken和refreshToken
 func GetToken(id int64, state, a, r string) (string, string) {
 	// accessToken 的数据

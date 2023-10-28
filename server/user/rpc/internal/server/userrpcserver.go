@@ -11,49 +11,49 @@ import (
 	"douniu/server/user/rpc/types/pb"
 )
 
-type UserApiServer struct {
+type UserRpcServer struct {
 	svcCtx *svc.ServiceContext
-	pb.UnimplementedUserApiServer
+	pb.UnimplementedUserRpcServer
 }
 
-func NewUserApiServer(svcCtx *svc.ServiceContext) *UserApiServer {
-	return &UserApiServer{
+func NewUserRpcServer(svcCtx *svc.ServiceContext) *UserRpcServer {
+	return &UserRpcServer{
 		svcCtx: svcCtx,
 	}
 }
 
 // 发送验证码
-func (s *UserApiServer) SendVerificationCode(ctx context.Context, in *pb.SendVerificationCodeReq) (*pb.SendVerificationCodeResp, error) {
+func (s *UserRpcServer) SendVerificationCode(ctx context.Context, in *pb.SendVerificationCodeReq) (*pb.SendVerificationCodeResp, error) {
 	l := logic.NewSendVerificationCodeLogic(ctx, s.svcCtx)
 	return l.SendVerificationCode(in)
 }
 
 // 使用验证码进行手机号注册或登录
-func (s *UserApiServer) RegisterOrLoginByPhone(ctx context.Context, in *pb.RegisterOrLoginByPhoneReq) (*pb.RegisterOrLoginResp, error) {
+func (s *UserRpcServer) RegisterOrLoginByPhone(ctx context.Context, in *pb.RegisterOrLoginByPhoneReq) (*pb.RegisterOrLoginResp, error) {
 	l := logic.NewRegisterOrLoginByPhoneLogic(ctx, s.svcCtx)
 	return l.RegisterOrLoginByPhone(in)
 }
 
 // 使用密码进行手机号注册或登录
-func (s *UserApiServer) RegisterOrLoginByPassword(ctx context.Context, in *pb.RegisterOrLoginByPasswordReq) (*pb.RegisterOrLoginResp, error) {
+func (s *UserRpcServer) RegisterOrLoginByPassword(ctx context.Context, in *pb.RegisterOrLoginByPasswordReq) (*pb.RegisterOrLoginResp, error) {
 	l := logic.NewRegisterOrLoginByPasswordLogic(ctx, s.svcCtx)
 	return l.RegisterOrLoginByPassword(in)
 }
 
 // 忘记密码并重置密码
-func (s *UserApiServer) ForgetPassword(ctx context.Context, in *pb.ResetPassword) (*pb.CommonResp, error) {
+func (s *UserRpcServer) ForgetPassword(ctx context.Context, in *pb.ResetPassword) (*pb.CommonResp, error) {
 	l := logic.NewForgetPasswordLogic(ctx, s.svcCtx)
 	return l.ForgetPassword(in)
 }
 
 // 修改密码
-func (s *UserApiServer) ChangePassword(ctx context.Context, in *pb.ResetPassword) (*pb.CommonResp, error) {
+func (s *UserRpcServer) ChangePassword(ctx context.Context, in *pb.ResetPassword) (*pb.CommonResp, error) {
 	l := logic.NewChangePasswordLogic(ctx, s.svcCtx)
 	return l.ChangePassword(in)
 }
 
 // 获取用户信息
-func (s *UserApiServer) GetUserInfo(ctx context.Context, in *pb.UserInfoReq) (*pb.UserInfoResp, error) {
+func (s *UserRpcServer) GetUserInfo(ctx context.Context, in *pb.UserInfoReq) (*pb.UserInfoResp, error) {
 	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
 	return l.GetUserInfo(in)
 }

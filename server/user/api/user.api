@@ -95,7 +95,7 @@ service user-api {
 }
 
 @server(
-	jwt: Auth
+    jwt: JWTAuth
 	prefix: douniu/user
 )
 service user-api {

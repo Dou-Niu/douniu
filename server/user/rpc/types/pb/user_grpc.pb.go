@@ -19,18 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserApi_SendVerificationCode_FullMethodName      = "/user.UserApi/SendVerificationCode"
-	UserApi_RegisterOrLoginByPhone_FullMethodName    = "/user.UserApi/RegisterOrLoginByPhone"
-	UserApi_RegisterOrLoginByPassword_FullMethodName = "/user.UserApi/RegisterOrLoginByPassword"
-	UserApi_ForgetPassword_FullMethodName            = "/user.UserApi/ForgetPassword"
-	UserApi_ChangePassword_FullMethodName            = "/user.UserApi/ChangePassword"
-	UserApi_GetUserInfo_FullMethodName               = "/user.UserApi/GetUserInfo"
+	UserRpc_SendVerificationCode_FullMethodName      = "/user.UserRpc/SendVerificationCode"
+	UserRpc_RegisterOrLoginByPhone_FullMethodName    = "/user.UserRpc/RegisterOrLoginByPhone"
+	UserRpc_RegisterOrLoginByPassword_FullMethodName = "/user.UserRpc/RegisterOrLoginByPassword"
+	UserRpc_ForgetPassword_FullMethodName            = "/user.UserRpc/ForgetPassword"
+	UserRpc_ChangePassword_FullMethodName            = "/user.UserRpc/ChangePassword"
+	UserRpc_GetUserInfo_FullMethodName               = "/user.UserRpc/GetUserInfo"
 )
 
-// UserApiClient is the client API for UserApi service.
+// UserRpcClient is the client API for UserRpc service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type UserApiClient interface {
+type UserRpcClient interface {
 	// 发送验证码
 	SendVerificationCode(ctx context.Context, in *SendVerificationCodeReq, opts ...grpc.CallOption) (*SendVerificationCodeResp, error)
 	// 使用验证码进行手机号注册或登录
@@ -45,72 +45,72 @@ type UserApiClient interface {
 	GetUserInfo(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoResp, error)
 }
 
-type userApiClient struct {
+type userRpcClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUserApiClient(cc grpc.ClientConnInterface) UserApiClient {
-	return &userApiClient{cc}
+func NewUserRpcClient(cc grpc.ClientConnInterface) UserRpcClient {
+	return &userRpcClient{cc}
 }
 
-func (c *userApiClient) SendVerificationCode(ctx context.Context, in *SendVerificationCodeReq, opts ...grpc.CallOption) (*SendVerificationCodeResp, error) {
+func (c *userRpcClient) SendVerificationCode(ctx context.Context, in *SendVerificationCodeReq, opts ...grpc.CallOption) (*SendVerificationCodeResp, error) {
 	out := new(SendVerificationCodeResp)
-	err := c.cc.Invoke(ctx, UserApi_SendVerificationCode_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserRpc_SendVerificationCode_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userApiClient) RegisterOrLoginByPhone(ctx context.Context, in *RegisterOrLoginByPhoneReq, opts ...grpc.CallOption) (*RegisterOrLoginResp, error) {
+func (c *userRpcClient) RegisterOrLoginByPhone(ctx context.Context, in *RegisterOrLoginByPhoneReq, opts ...grpc.CallOption) (*RegisterOrLoginResp, error) {
 	out := new(RegisterOrLoginResp)
-	err := c.cc.Invoke(ctx, UserApi_RegisterOrLoginByPhone_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserRpc_RegisterOrLoginByPhone_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userApiClient) RegisterOrLoginByPassword(ctx context.Context, in *RegisterOrLoginByPasswordReq, opts ...grpc.CallOption) (*RegisterOrLoginResp, error) {
+func (c *userRpcClient) RegisterOrLoginByPassword(ctx context.Context, in *RegisterOrLoginByPasswordReq, opts ...grpc.CallOption) (*RegisterOrLoginResp, error) {
 	out := new(RegisterOrLoginResp)
-	err := c.cc.Invoke(ctx, UserApi_RegisterOrLoginByPassword_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserRpc_RegisterOrLoginByPassword_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userApiClient) ForgetPassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error) {
+func (c *userRpcClient) ForgetPassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error) {
 	out := new(CommonResp)
-	err := c.cc.Invoke(ctx, UserApi_ForgetPassword_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserRpc_ForgetPassword_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userApiClient) ChangePassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error) {
+func (c *userRpcClient) ChangePassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error) {
 	out := new(CommonResp)
-	err := c.cc.Invoke(ctx, UserApi_ChangePassword_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserRpc_ChangePassword_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userApiClient) GetUserInfo(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoResp, error) {
+func (c *userRpcClient) GetUserInfo(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoResp, error) {
 	out := new(UserInfoResp)
-	err := c.cc.Invoke(ctx, UserApi_GetUserInfo_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, UserRpc_GetUserInfo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// UserApiServer is the server API for UserApi service.
-// All implementations must embed UnimplementedUserApiServer
+// UserRpcServer is the server API for UserRpc service.
+// All implementations must embed UnimplementedUserRpcServer
 // for forward compatibility
-type UserApiServer interface {
+type UserRpcServer interface {
 	// 发送验证码
 	SendVerificationCode(context.Context, *SendVerificationCodeReq) (*SendVerificationCodeResp, error)
 	// 使用验证码进行手机号注册或登录
@@ -123,182 +123,182 @@ type UserApiServer interface {
 	ChangePassword(context.Context, *ResetPassword) (*CommonResp, error)
 	// 获取用户信息
 	GetUserInfo(context.Context, *UserInfoReq) (*UserInfoResp, error)
-	mustEmbedUnimplementedUserApiServer()
+	mustEmbedUnimplementedUserRpcServer()
 }
 
-// UnimplementedUserApiServer must be embedded to have forward compatible implementations.
-type UnimplementedUserApiServer struct {
+// UnimplementedUserRpcServer must be embedded to have forward compatible implementations.
+type UnimplementedUserRpcServer struct {
 }
 
-func (UnimplementedUserApiServer) SendVerificationCode(context.Context, *SendVerificationCodeReq) (*SendVerificationCodeResp, error) {
+func (UnimplementedUserRpcServer) SendVerificationCode(context.Context, *SendVerificationCodeReq) (*SendVerificationCodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendVerificationCode not implemented")
 }
-func (UnimplementedUserApiServer) RegisterOrLoginByPhone(context.Context, *RegisterOrLoginByPhoneReq) (*RegisterOrLoginResp, error) {
+func (UnimplementedUserRpcServer) RegisterOrLoginByPhone(context.Context, *RegisterOrLoginByPhoneReq) (*RegisterOrLoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterOrLoginByPhone not implemented")
 }
-func (UnimplementedUserApiServer) RegisterOrLoginByPassword(context.Context, *RegisterOrLoginByPasswordReq) (*RegisterOrLoginResp, error) {
+func (UnimplementedUserRpcServer) RegisterOrLoginByPassword(context.Context, *RegisterOrLoginByPasswordReq) (*RegisterOrLoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterOrLoginByPassword not implemented")
 }
-func (UnimplementedUserApiServer) ForgetPassword(context.Context, *ResetPassword) (*CommonResp, error) {
+func (UnimplementedUserRpcServer) ForgetPassword(context.Context, *ResetPassword) (*CommonResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ForgetPassword not implemented")
 }
-func (UnimplementedUserApiServer) ChangePassword(context.Context, *ResetPassword) (*CommonResp, error) {
+func (UnimplementedUserRpcServer) ChangePassword(context.Context, *ResetPassword) (*CommonResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
 }
-func (UnimplementedUserApiServer) GetUserInfo(context.Context, *UserInfoReq) (*UserInfoResp, error) {
+func (UnimplementedUserRpcServer) GetUserInfo(context.Context, *UserInfoReq) (*UserInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
 }
-func (UnimplementedUserApiServer) mustEmbedUnimplementedUserApiServer() {}
+func (UnimplementedUserRpcServer) mustEmbedUnimplementedUserRpcServer() {}
 
-// UnsafeUserApiServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserApiServer will
+// UnsafeUserRpcServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserRpcServer will
 // result in compilation errors.
-type UnsafeUserApiServer interface {
-	mustEmbedUnimplementedUserApiServer()
+type UnsafeUserRpcServer interface {
+	mustEmbedUnimplementedUserRpcServer()
 }
 
-func RegisterUserApiServer(s grpc.ServiceRegistrar, srv UserApiServer) {
-	s.RegisterService(&UserApi_ServiceDesc, srv)
+func RegisterUserRpcServer(s grpc.ServiceRegistrar, srv UserRpcServer) {
+	s.RegisterService(&UserRpc_ServiceDesc, srv)
 }
 
-func _UserApi_SendVerificationCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserRpc_SendVerificationCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SendVerificationCodeReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserApiServer).SendVerificationCode(ctx, in)
+		return srv.(UserRpcServer).SendVerificationCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserApi_SendVerificationCode_FullMethodName,
+		FullMethod: UserRpc_SendVerificationCode_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).SendVerificationCode(ctx, req.(*SendVerificationCodeReq))
+		return srv.(UserRpcServer).SendVerificationCode(ctx, req.(*SendVerificationCodeReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserApi_RegisterOrLoginByPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserRpc_RegisterOrLoginByPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterOrLoginByPhoneReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserApiServer).RegisterOrLoginByPhone(ctx, in)
+		return srv.(UserRpcServer).RegisterOrLoginByPhone(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserApi_RegisterOrLoginByPhone_FullMethodName,
+		FullMethod: UserRpc_RegisterOrLoginByPhone_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).RegisterOrLoginByPhone(ctx, req.(*RegisterOrLoginByPhoneReq))
+		return srv.(UserRpcServer).RegisterOrLoginByPhone(ctx, req.(*RegisterOrLoginByPhoneReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserApi_RegisterOrLoginByPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserRpc_RegisterOrLoginByPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterOrLoginByPasswordReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserApiServer).RegisterOrLoginByPassword(ctx, in)
+		return srv.(UserRpcServer).RegisterOrLoginByPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserApi_RegisterOrLoginByPassword_FullMethodName,
+		FullMethod: UserRpc_RegisterOrLoginByPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).RegisterOrLoginByPassword(ctx, req.(*RegisterOrLoginByPasswordReq))
+		return srv.(UserRpcServer).RegisterOrLoginByPassword(ctx, req.(*RegisterOrLoginByPasswordReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserApi_ForgetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserRpc_ForgetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetPassword)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserApiServer).ForgetPassword(ctx, in)
+		return srv.(UserRpcServer).ForgetPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserApi_ForgetPassword_FullMethodName,
+		FullMethod: UserRpc_ForgetPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).ForgetPassword(ctx, req.(*ResetPassword))
+		return srv.(UserRpcServer).ForgetPassword(ctx, req.(*ResetPassword))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserApi_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserRpc_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetPassword)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserApiServer).ChangePassword(ctx, in)
+		return srv.(UserRpcServer).ChangePassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserApi_ChangePassword_FullMethodName,
+		FullMethod: UserRpc_ChangePassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).ChangePassword(ctx, req.(*ResetPassword))
+		return srv.(UserRpcServer).ChangePassword(ctx, req.(*ResetPassword))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserApi_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserRpc_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserInfoReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserApiServer).GetUserInfo(ctx, in)
+		return srv.(UserRpcServer).GetUserInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserApi_GetUserInfo_FullMethodName,
+		FullMethod: UserRpc_GetUserInfo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServer).GetUserInfo(ctx, req.(*UserInfoReq))
+		return srv.(UserRpcServer).GetUserInfo(ctx, req.(*UserInfoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// UserApi_ServiceDesc is the grpc.ServiceDesc for UserApi service.
+// UserRpc_ServiceDesc is the grpc.ServiceDesc for UserRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var UserApi_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.UserApi",
-	HandlerType: (*UserApiServer)(nil),
+var UserRpc_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "user.UserRpc",
+	HandlerType: (*UserRpcServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SendVerificationCode",
-			Handler:    _UserApi_SendVerificationCode_Handler,
+			Handler:    _UserRpc_SendVerificationCode_Handler,
 		},
 		{
 			MethodName: "RegisterOrLoginByPhone",
-			Handler:    _UserApi_RegisterOrLoginByPhone_Handler,
+			Handler:    _UserRpc_RegisterOrLoginByPhone_Handler,
 		},
 		{
 			MethodName: "RegisterOrLoginByPassword",
-			Handler:    _UserApi_RegisterOrLoginByPassword_Handler,
+			Handler:    _UserRpc_RegisterOrLoginByPassword_Handler,
 		},
 		{
 			MethodName: "ForgetPassword",
-			Handler:    _UserApi_ForgetPassword_Handler,
+			Handler:    _UserRpc_ForgetPassword_Handler,
 		},
 		{
 			MethodName: "ChangePassword",
-			Handler:    _UserApi_ChangePassword_Handler,
+			Handler:    _UserRpc_ChangePassword_Handler,
 		},
 		{
 			MethodName: "GetUserInfo",
-			Handler:    _UserApi_GetUserInfo_Handler,
+			Handler:    _UserRpc_GetUserInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -5,7 +5,7 @@ package user;
 option go_package = "./pb";
 
 // 发送验证码的接口
-service UserApi {
+service UserRpc {
   // 发送验证码
   rpc SendVerificationCode (SendVerificationCodeReq) returns (SendVerificationCodeResp);
 

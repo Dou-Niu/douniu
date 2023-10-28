@@ -2,9 +2,11 @@ package svc
 
 import (
 	"douniu/server/common/consts"
+	"douniu/server/common/init_db"
 	"douniu/server/user/model"
 	"douniu/server/user/rpc/internal/config"
 	"github.com/bwmarrin/snowflake"
+	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -12,7 +14,7 @@ type ServiceContext struct {
 	Config      config.Config
 	Snowflake   *snowflake.Node
 	SqlConn     sqlx.SqlConn
-	RedisClient *redis.Redis
+	RedisClient *redis.Client
 	UserModel   model.UserModel
 }
 
@@ -24,6 +26,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		SqlConn:     mysqlConn,
 		UserModel:   model.NewUserModel(mysqlConn, c.CacheRedis),
 		Snowflake:   snowflakeNode,
-		RedisClient: redis.MustNewRedis(c.RedisConf),
+		RedisClient: init_db.InitRedis(c.RedisConf.Host, c.RedisConf.Password),
 	}
 }

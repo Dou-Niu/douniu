@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/bytedance/go-tagexpr/v2 v2.9.11
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
@@ -24,6 +25,8 @@ require (
 )
 
 require (
+	github.com/andeya/ameda v1.5.3 // indirect
+	github.com/andeya/goutil v1.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -70,6 +73,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mozillazg/go-httpheader v0.2.1 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/nyaruka/phonenumbers v1.0.55 // indirect
 	github.com/openzipkin/zipkin-go v0.4.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
 	github.com/pierrec/lz4/v4 v4.1.17 // indirect

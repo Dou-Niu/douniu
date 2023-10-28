@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package favorite;
+
+option go_package = "./pb";
+
+service FavoriteRpc {
+    rpc AddFavorite(AddFavoriteRequest) returns (AddFavoriteResponse) {}
+    rpc DelFavorite(DelFavoriteRequest) returns (DelFavoriteResponse) {}
+    rpc GetVideoFavoriteCount(GetVideoFavoriteCountRequest) returns (GetVideoFavoriteCountResponse) {}
+    rpc GetUserFavoriteCount(GetUserFavoriteCountRequest) returns (GetUserFavoriteCountResponse) {}
+    rpc GetUserFavoritedCount(GetUserFavoritedCountRequest) returns (GetUserFavoritedCountResponse) {}
+    rpc IsFavorite(IsFavoriteRequest) returns (IsFavoriteResponse) {}
+    rpc GetFavoriteVideoIdList(GetFavoriteVideoIdListRequest) returns (GetFavoriteVideoListIdResponse) {}
+}
+
+message GetFavoriteVideoIdListRequest {
+    int64 user_id = 1;
+    int64 offset = 2;
+    int64 limit = 3;
+}
+
+message GetFavoriteVideoListIdResponse {
+    repeated int64 video_id_list = 1;
+}
+
+message AddFavoriteRequest {
+    int64 user_id = 1;
+    int64 video_id = 2;
+}
+
+message AddFavoriteResponse {
+
+}
+
+message DelFavoriteRequest {
+    int64 user_id = 1;
+    int64 video_id = 2;
+}
+
+message DelFavoriteResponse {
+
+}
+
+message GetVideoFavoriteCountRequest {
+    int64 video_id = 1;
+}
+
+message GetVideoFavoriteCountResponse {
+    int64 count = 1;
+}
+
+message GetUserFavoriteCountRequest {
+    int64 user_id = 1;
+}
+
+message GetUserFavoriteCountResponse {
+    int64 count = 1;
+}
+
+message GetUserFavoritedCountRequest {
+    int64 user_id = 1;
+}
+
+message GetUserFavoritedCountResponse {
+    int64 count = 1;
+}
+
+message IsFavoriteRequest {
+    int64 user_id = 1;
+    int64 video_id = 2;
+}
+
+message IsFavoriteResponse {
+    bool is_favorite = 1;
+}
+

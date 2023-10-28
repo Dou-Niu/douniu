@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"douniu/server/user/rpc/types/pb"
+	"github.com/pkg/errors"
 
 	"douniu/server/user/api/internal/svc"
 	"douniu/server/user/api/internal/types"
@@ -24,7 +26,26 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 }
 
 func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	// meId, err := l.ctx.Value(consts.UserId).(json.Number).Int64()
+	res, err := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &pb.UserInfoReq{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(err, "req: %+v", req)
+	}
+	u := res.Userinfo
+	return &types.UserInfoResp{UserInfo: &types.UserInfoItem{
+		ID:              u.Id,
+		Phone:           u.Phone,
+		NickName:        u.Nickname,
+		IsFollow:        u.IsFollow,
+		Avatar:          u.Avatar,
+		BackgroundImage: u.BackgroundImage,
+		Signature:       u.Signature,
+		TotalFavorited:  u.TotalFavorited,
+		WorkCount:       u.WorkCount,
+		FavoriteCount:   u.FavoriteCount,
+		FollowCount:     u.FollowCount,
+		FollowerCount:   u.FollowerCount,
+	}}, nil
 }

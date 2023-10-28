@@ -33,11 +33,11 @@ type (
 		// 重新设置密码
 	ResetPassword {
 		UserId int64 `json:"user_id"` // 用户id
-		NewPassword string `json:"new_password validate:"required,max=32,min=6"`
+		NewPassword string `json:"new_password" validate:"required,max=32,min=6"`
 	}
 		// 查询用户信息
 	userInfoReq {
-		UserId int64 `json:"user_id"` // 用户id
+		UserId int64 `form:"user_id"` // 用户id
 	}
 
 	UserInfoResp {

@@ -30,8 +30,12 @@ func NewRegisterOrLoginByPasswordLogic(ctx context.Context, svcCtx *svc.ServiceC
 // 使用密码进行手机号登录
 func (l *RegisterOrLoginByPasswordLogic) RegisterOrLoginByPassword(in *pb.RegisterOrLoginByPasswordReq) (*pb.RegisterOrLoginResp, error) {
 	u, err := l.svcCtx.UserModel.FindOneByPhone(l.ctx, in.Phone)
-	if err != nil || !utils.ValidMd5Password(in.Password, l.svcCtx.Config.Salt, u.Password) {
-		return nil, errors.Wrapf(errorx.NewDefaultError("登录失败，用户名或者密码错误"), "注册失败，userinfo 写入mysql错误 RegisterReq：%v", in)
+	if err != nil {
+		return nil, errors.Wrapf(errorx.NewDefaultError("登录失败，手机号或者密码错误"), "注册失败，userinfo 写入mysql错误 RegisterReq：%v", in)
+	}
+	if utils.Md5Password(in.Password, l.svcCtx.Config.Salt) != u.Password {
+		return nil, errors.Wrapf(errorx.NewDefaultError("登录失败，手机号或者密码错误"), "注册失败，userinfo 写入mysql错误 RegisterReq：%v", in)
+
 	}
 	userId := u.Id
 	auth := l.svcCtx.Config.JWTAuth

@@ -27,11 +27,11 @@ type RegisterOrLoginByPasswordReq struct {
 
 type ResetPassword struct {
 	UserId      int64  `json:"user_id"` // 用户id
-	NewPassword string `json:"new_password validate:"required,max=32,min=6"`
+	NewPassword string `json:"new_password" validate:"required,max=32,min=6"`
 }
 
 type UserInfoReq struct {
-	UserId int64 `json:"user_id"` // 用户id
+	UserId int64 `form:"user_id"` // 用户id
 }
 
 type UserInfoResp struct {

@@ -3,7 +3,6 @@ package model
 import (
 	"context"
 	"douniu/server/common/consts"
-	"fmt"
 	"github.com/pkg/errors"
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -27,8 +26,13 @@ type (
 )
 
 func (m *customUserModel) ChangePassword(ctx context.Context, userId int64, newPassword string) error {
-	query := fmt.Sprintf("updata %s set password = ? where id = ?", m.table)
-	_, err := m.ExecNoCacheCtx(ctx, query, newPassword, userId)
+	one, err := m.FindOne(ctx, userId)
+	if err != nil {
+		return err
+	}
+	one.Password = newPassword
+	err = m.Update(ctx, one)
+
 	return err
 }
 

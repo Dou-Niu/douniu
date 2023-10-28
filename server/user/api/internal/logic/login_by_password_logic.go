@@ -29,7 +29,6 @@ func NewLoginByPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *L
 }
 
 func (l *LoginByPasswordLogic) LoginByPassword(req *types.RegisterOrLoginByPasswordReq) (resp *types.RegisterOrLoginResp, err error) {
-	// todo: add your logic here and delete this line
 	err = utils.DefaultGetValidParams(l.ctx, req)
 	if err != nil {
 		return nil, errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
@@ -46,5 +45,5 @@ func (l *LoginByPasswordLogic) LoginByPassword(req *types.RegisterOrLoginByPassw
 		AccessToken:  res.AccessToken,
 		RefreshToken: res.RefreshToken,
 	}, nil
-	return
+
 }

@@ -46,5 +46,4 @@ func (l *LoginByPhoneLogic) LoginByPhone(req *types.RegisterOrLoginByPhoneReq) (
 		RefreshToken: res.RefreshToken,
 	}, nil
 
-	return
 }

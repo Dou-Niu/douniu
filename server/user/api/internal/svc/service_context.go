@@ -2,7 +2,6 @@ package svc
 
 import (
 	"douniu/server/user/api/internal/config"
-
 	"douniu/server/user/rpc/userrpc"
 	"github.com/zeromicro/go-zero/zrpc"
 )

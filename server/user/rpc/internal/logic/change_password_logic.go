@@ -2,6 +2,10 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/errorx"
+	"douniu/server/common/utils"
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logc"
 
 	"douniu/server/user/rpc/internal/svc"
 	"douniu/server/user/rpc/types/pb"
@@ -25,7 +29,11 @@ func NewChangePasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ch
 
 // 修改密码
 func (l *ChangePasswordLogic) ChangePassword(in *pb.ResetPassword) (*pb.CommonResp, error) {
-	// todo: add your logic here and delete this line
+	err := l.svcCtx.UserModel.ChangePassword(l.ctx, in.UserId, utils.Md5Password(in.NewPassword, l.svcCtx.Config.Salt))
+	if err != nil {
+		logc.Error(l.ctx, err)
+		return nil, errors.Wrapf(errorx.NewDefaultError("更改用户密码失败"+err.Error()), "更改用户密码失败ResetPassword：%v", in)
 
+	}
 	return &pb.CommonResp{}, nil
 }

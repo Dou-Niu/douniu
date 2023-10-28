@@ -14,30 +14,36 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type SendcodeLogic struct {
+type LoginByPasswordLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewSendcodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendcodeLogic {
-	return &SendcodeLogic{
+func NewLoginByPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginByPasswordLogic {
+	return &LoginByPasswordLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *SendcodeLogic) Sendcode(req *types.SendVerificationCodeReq) (resp *types.SendVerificationCodeResp, err error) {
+func (l *LoginByPasswordLogic) LoginByPassword(req *types.RegisterOrLoginByPasswordReq) (resp *types.RegisterOrLoginResp, err error) {
 	err = utils.DefaultGetValidParams(l.ctx, req)
 	if err != nil {
 		return nil, errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
 	}
-	res, err := l.svcCtx.UserRpc.SendVerificationCode(l.ctx, &pb.SendVerificationCodeReq{Phone: req.Phone})
+	res, err := l.svcCtx.UserRpc.RegisterOrLoginByPassword(l.ctx, &pb.RegisterOrLoginByPasswordReq{
+		Phone:    req.Phone,
+		Password: req.Password,
+	})
 	if err != nil {
 		return nil, errors.Wrapf(err, "req: %+v", req)
 	}
-	return &types.SendVerificationCodeResp{
-		VerificationCode: res.VerificationCode,
+	return &types.RegisterOrLoginResp{
+		UserId:       res.UserId,
+		AccessToken:  res.AccessToken,
+		RefreshToken: res.RefreshToken,
 	}, nil
+
 }

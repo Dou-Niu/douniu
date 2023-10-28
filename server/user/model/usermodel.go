@@ -16,8 +16,8 @@ type (
 	// and implement the added methods in customUserModel.
 	UserModel interface {
 		userModel
-
 		IsCodeVerify(ctx context.Context, rdb *redis.Client, phone string, code string) error
+		ChangePassword(ctx context.Context, userId int64, newPassword string) error
 	}
 
 	customUserModel struct {
@@ -25,7 +25,19 @@ type (
 	}
 )
 
+func (m *customUserModel) ChangePassword(ctx context.Context, userId int64, newPassword string) error {
+	one, err := m.FindOne(ctx, userId)
+	if err != nil {
+		return err
+	}
+	one.Password = newPassword
+	err = m.Update(ctx, one)
+
+	return err
+}
+
 func (m *customUserModel) IsCodeVerify(ctx context.Context, rdb *redis.Client, phone string, code string) error {
+
 	TrueCode, err := rdb.Get(ctx, consts.PhoneCode+phone).Result()
 	if err != nil || TrueCode != code {
 		return errors.New("验证码错误")

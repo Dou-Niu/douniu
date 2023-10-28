@@ -44,7 +44,6 @@ func (l *RegisterOrLoginByPhoneLogic) RegisterOrLoginByPhone(in *pb.RegisterOrLo
 	u, err := l.svcCtx.UserModel.FindOneByPhone(l.ctx, in.Phone)
 	if err != nil && !errors.Is(err, sqlc.ErrNotFound) {
 		return nil, errors.Wrapf(errorx.NewDefaultError("redis查询手机号是否已经注册时候失败,err:"+err.Error()), "redis查询手机号是否已经注册时候失败 RegisterOrLoginByPhoneReq：%v", in)
-
 	}
 	var userId int64
 	if errors.Is(err, sqlc.ErrNotFound) {

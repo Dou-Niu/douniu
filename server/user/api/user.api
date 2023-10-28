@@ -18,7 +18,7 @@ type (
 		// 手机号注册/登陆
 	RegisterOrLoginByPhoneReq {
 		Phone string `json:"phone" validate:"required,phone"`
-		VerificationCode string `json:"verification_code"`
+		VerificationCode string `json:"verification_code"  validate:"required,max=6,min=6"`
 	}
 	RegisterOrLoginResp {
 		UserId int64 `json:"user_id"`
@@ -27,16 +27,17 @@ type (
 	}
 		// 手机号,密码登录
 	RegisterOrLoginByPasswordReq {
-		Phone string `json:"phone" validate:"required"`    // 手机号
-		Password string `json:"password"`                  // 用户密码，MD5加密
+		Phone string `json:"phone" validate:"required"`                    // 手机号
+		Password string `json:"password" validate:"required,max=32,min=6"` // 用户密码，MD5加密
 	}
 		// 重新设置密码
 	ResetPassword {
-		NewPassword string `json:"new_password"`
+		UserId int64 `json:"user_id"` // 用户id
+		NewPassword string `json:"new_password" validate:"required,max=32,min=6"`
 	}
 		// 查询用户信息
 	userInfoReq {
-		UserId int64 `json:"user_id"` // 用户id
+		UserId int64 `form:"user_id"` // 用户id
 	}
 
 	UserInfoResp {
@@ -95,7 +96,7 @@ service user-api {
 }
 
 @server(
-    jwt: JWTAuth
+	jwt: JWTAuth
 	prefix: douniu/user
 )
 service user-api {

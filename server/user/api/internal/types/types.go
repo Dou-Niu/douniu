@@ -11,7 +11,7 @@ type SendVerificationCodeResp struct {
 
 type RegisterOrLoginByPhoneReq struct {
 	Phone            string `json:"phone" validate:"required,phone"`
-	VerificationCode string `json:"verification_code"`
+	VerificationCode string `json:"verification_code"  validate:"required,max=6,min=6"`
 }
 
 type RegisterOrLoginResp struct {
@@ -21,16 +21,17 @@ type RegisterOrLoginResp struct {
 }
 
 type RegisterOrLoginByPasswordReq struct {
-	Phone    string `json:"phone" validate:"required"` // 手机号
-	Password string `json:"password"`                  // 用户密码，MD5加密
+	Phone    string `json:"phone" validate:"required"`                 // 手机号
+	Password string `json:"password" validate:"required,max=32,min=6"` // 用户密码，MD5加密
 }
 
 type ResetPassword struct {
-	NewPassword string `json:"new_password"`
+	UserId      int64  `json:"user_id"` // 用户id
+	NewPassword string `json:"new_password" validate:"required,max=32,min=6"`
 }
 
 type UserInfoReq struct {
-	UserId int64 `json:"user_id"` // 用户id
+	UserId int64 `form:"user_id"` // 用户id
 }
 
 type UserInfoResp struct {

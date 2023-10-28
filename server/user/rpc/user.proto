@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./pb";
+
+// 发送验证码的接口
+service UserApi {
+  // 发送验证码
+  rpc SendVerificationCode (SendVerificationCodeReq) returns (SendVerificationCodeResp);
+
+  // 使用验证码进行手机号注册或登录
+  rpc RegisterOrLoginByPhone (RegisterOrLoginByPhoneReq) returns (RegisterOrLoginResp);
+
+  // 使用密码进行手机号注册或登录
+  rpc RegisterOrLoginByPassword (RegisterOrLoginByPasswordReq) returns (RegisterOrLoginResp);
+
+  // 忘记密码并重置密码
+  rpc ForgetPassword (ResetPassword) returns (CommonResp);
+
+  // 修改密码
+  rpc ChangePassword (ResetPassword) returns (CommonResp);
+
+  // 获取用户信息
+  rpc GetUserInfo (UserInfoReq) returns (UserInfoResp);
+}
+
+// 请求发送验证码
+message SendVerificationCodeReq {
+  string phone = 1;
+}
+
+// 包含验证码的响应
+message SendVerificationCodeResp {
+  string verification_code = 1;
+}
+
+// 用户注册或登录后的响应
+message RegisterOrLoginResp {
+  int64 user_id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+// 使用手机号注册或登录的请求
+
+message RegisterOrLoginByPhoneReq {
+  string phone = 1 ;
+  string verification_code = 2;
+}
+// 使用密码进行登录的请求
+message RegisterOrLoginByPasswordReq {
+  string phone = 1;
+  string password = 2;
+}
+
+// 重置密码的请求
+message ResetPassword {
+  string new_password = 1;
+}
+
+// 获取用户信息的请求
+message UserInfoReq {
+  int64 user_id = 1;
+}
+
+// 包含用户信息的响应
+message UserInfoResp {
+  UserInfoItem userinfo = 1;
+}
+
+// 用户信息项
+message UserInfoItem {
+  int64 id = 1;
+  string phone = 2;
+  string nickname = 3;
+  bool is_follow = 4;
+  string avatar = 5;
+  string background_image = 6;
+  string signature = 7;
+  int64 total_favorited = 8;
+  int64 work_count = 9;
+  int64 favorite_count = 10;
+  int64 follow_count = 11;
+  int64 follower_count = 12;
+}
+
+// 包含访问令牌和刷新令牌的响应
+message TokenResp {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+// 通用响应
+message CommonResp {
+  int64 code = 1;
+  string message = 2;
+}

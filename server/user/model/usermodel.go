@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"douniu/server/common/consts"
+	"fmt"
 	"github.com/pkg/errors"
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -16,8 +17,8 @@ type (
 	// and implement the added methods in customUserModel.
 	UserModel interface {
 		userModel
-
 		IsCodeVerify(ctx context.Context, rdb *redis.Client, phone string, code string) error
+		ChangePassword(ctx context.Context, userId int64, newPassword string) error
 	}
 
 	customUserModel struct {
@@ -25,7 +26,14 @@ type (
 	}
 )
 
+func (m *customUserModel) ChangePassword(ctx context.Context, userId int64, newPassword string) error {
+	query := fmt.Sprintf("updata %s set password = ? where id = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, newPassword, userId)
+	return err
+}
+
 func (m *customUserModel) IsCodeVerify(ctx context.Context, rdb *redis.Client, phone string, code string) error {
+
 	TrueCode, err := rdb.Get(ctx, consts.PhoneCode+phone).Result()
 	if err != nil || TrueCode != code {
 		return errors.New("验证码错误")

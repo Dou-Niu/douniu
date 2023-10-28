@@ -56,6 +56,7 @@ message RegisterOrLoginByPasswordReq {
 // 重置密码的请求
 message ResetPassword {
   string new_password = 1;
+  int64 user_id = 2;
 }
 
 // 获取用户信息的请求

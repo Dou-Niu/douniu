@@ -40,4 +40,6 @@ func (l *SendcodeLogic) Sendcode(req *types.SendVerificationCodeReq) (resp *type
 	return &types.SendVerificationCodeResp{
 		VerificationCode: res.VerificationCode,
 	}, nil
+
+	return
 }

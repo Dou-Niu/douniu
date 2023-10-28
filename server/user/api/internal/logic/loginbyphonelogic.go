@@ -2,11 +2,13 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
-	"github.com/golang-jwt/jwt/v4"
-
+	"douniu/server/common/errorx"
+	"douniu/server/common/utils"
 	"douniu/server/user/api/internal/svc"
 	"douniu/server/user/api/internal/types"
+	"douniu/server/user/rpc/types/pb"
+	"fmt"
+	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,17 +28,21 @@ func NewLoginByPhoneLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Logi
 }
 
 func (l *LoginByPhoneLogic) LoginByPhone(req *types.RegisterOrLoginByPhoneReq) (resp *types.RegisterOrLoginResp, err error) {
-	// todo: add your logic here and delete this line
 
-	return
-}
-
-func getJwtToken(secretKey string, iat, seconds, userID int64) (string, error) {
-	claims := make(jwt.MapClaims)
-	claims["exp"] = iat + seconds
-	claims["iat"] = iat
-	claims[consts.UserId] = userID
-	token := jwt.New(jwt.SigningMethodHS256)
-	token.Claims = claims
-	return token.SignedString([]byte(secretKey))
+	err = utils.DefaultGetValidParams(l.ctx, req)
+	if err != nil {
+		return nil, errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
+	}
+	res, err := l.svcCtx.UserRpc.RegisterOrLoginByPhone(l.ctx, &pb.RegisterOrLoginByPhoneReq{
+		Phone:            req.Phone,
+		VerificationCode: req.VerificationCode,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(err, "req: %+v", req)
+	}
+	return &types.RegisterOrLoginResp{
+		UserId:       res.UserId,
+		AccessToken:  res.AccessToken,
+		RefreshToken: res.RefreshToken,
+	}, nil
 }

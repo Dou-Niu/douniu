@@ -757,7 +757,7 @@ var file_user_proto_rawDesc = []byte{
 	0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x63,
 	0x6f, 0x64, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0xba, 0x03,
-	0x0a, 0x07, 0x55, 0x73, 0x65, 0x72, 0x41, 0x70, 0x69, 0x12, 0x55, 0x0a, 0x14, 0x53, 0x65, 0x6e,
+	0x0a, 0x07, 0x55, 0x73, 0x65, 0x72, 0x52, 0x70, 0x63, 0x12, 0x55, 0x0a, 0x14, 0x53, 0x65, 0x6e,
 	0x64, 0x56, 0x65, 0x72, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x64,
 	0x65, 0x12, 0x1d, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x53, 0x65, 0x6e, 0x64, 0x56, 0x65, 0x72,
 	0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71,
@@ -816,18 +816,18 @@ var file_user_proto_goTypes = []interface{}{
 }
 var file_user_proto_depIdxs = []int32{
 	8,  // 0: user.UserInfoResp.userinfo:type_name -> user.UserInfoItem
-	0,  // 1: user.UserApi.SendVerificationCode:input_type -> user.SendVerificationCodeReq
-	3,  // 2: user.UserApi.RegisterOrLoginByPhone:input_type -> user.RegisterOrLoginByPhoneReq
-	4,  // 3: user.UserApi.RegisterOrLoginByPassword:input_type -> user.RegisterOrLoginByPasswordReq
-	5,  // 4: user.UserApi.ForgetPassword:input_type -> user.ResetPassword
-	5,  // 5: user.UserApi.ChangePassword:input_type -> user.ResetPassword
-	6,  // 6: user.UserApi.GetUserInfo:input_type -> user.UserInfoReq
-	1,  // 7: user.UserApi.SendVerificationCode:output_type -> user.SendVerificationCodeResp
-	2,  // 8: user.UserApi.RegisterOrLoginByPhone:output_type -> user.RegisterOrLoginResp
-	2,  // 9: user.UserApi.RegisterOrLoginByPassword:output_type -> user.RegisterOrLoginResp
-	10, // 10: user.UserApi.ForgetPassword:output_type -> user.CommonResp
-	10, // 11: user.UserApi.ChangePassword:output_type -> user.CommonResp
-	7,  // 12: user.UserApi.GetUserInfo:output_type -> user.UserInfoResp
+	0,  // 1: user.UserRpc.SendVerificationCode:input_type -> user.SendVerificationCodeReq
+	3,  // 2: user.UserRpc.RegisterOrLoginByPhone:input_type -> user.RegisterOrLoginByPhoneReq
+	4,  // 3: user.UserRpc.RegisterOrLoginByPassword:input_type -> user.RegisterOrLoginByPasswordReq
+	5,  // 4: user.UserRpc.ForgetPassword:input_type -> user.ResetPassword
+	5,  // 5: user.UserRpc.ChangePassword:input_type -> user.ResetPassword
+	6,  // 6: user.UserRpc.GetUserInfo:input_type -> user.UserInfoReq
+	1,  // 7: user.UserRpc.SendVerificationCode:output_type -> user.SendVerificationCodeResp
+	2,  // 8: user.UserRpc.RegisterOrLoginByPhone:output_type -> user.RegisterOrLoginResp
+	2,  // 9: user.UserRpc.RegisterOrLoginByPassword:output_type -> user.RegisterOrLoginResp
+	10, // 10: user.UserRpc.ForgetPassword:output_type -> user.CommonResp
+	10, // 11: user.UserRpc.ChangePassword:output_type -> user.CommonResp
+	7,  // 12: user.UserRpc.GetUserInfo:output_type -> user.UserInfoResp
 	7,  // [7:13] is the sub-list for method output_type
 	1,  // [1:7] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name

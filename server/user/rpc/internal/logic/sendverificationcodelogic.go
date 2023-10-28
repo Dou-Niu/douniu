@@ -27,6 +27,7 @@ func NewSendVerificationCodeLogic(ctx context.Context, svcCtx *svc.ServiceContex
 // 发送验证码
 func (l *SendVerificationCodeLogic) SendVerificationCode(in *pb.SendVerificationCodeReq) (*pb.SendVerificationCodeResp, error) {
 	vecode := utils.SMS(in.Phone, l.svcCtx.Config.Credential.SecretId, l.svcCtx.Config.Credential.SecretKey, l.ctx, l.svcCtx.RedisClient)
-
-	return &pb.SendVerificationCodeResp{}, nil
+	return &pb.SendVerificationCodeResp{
+		VerificationCode: vecode,
+	}, nil
 }

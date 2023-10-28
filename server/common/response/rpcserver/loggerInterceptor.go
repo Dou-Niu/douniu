@@ -2,7 +2,7 @@ package rpcserver
 
 import (
 	"context"
-	"douniu/common/errorx"
+	"douniu/server/common/errorx"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"

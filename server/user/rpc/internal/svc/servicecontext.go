@@ -1,11 +1,10 @@
 package svc
 
 import (
-	"douniu/common/consts"
+	"douniu/server/common/consts"
 	"douniu/server/user/model"
 	"douniu/server/user/rpc/internal/config"
 	"github.com/bwmarrin/snowflake"
-	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 

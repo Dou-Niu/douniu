@@ -43,23 +43,21 @@ func InitGorm(MysqlDataSourece string) *gorm.DB {
 }
 
 // redis初始化
-func InitRedis(redisCluster []string) *redis.ClusterClient {
-	// Redis集群连接参数
-	clusterOptions := &redis.ClusterOptions{
-		Addrs: redisCluster,
-	}
-	// 创建Redis集群客户端
-	rdb := redis.NewClusterClient(clusterOptions)
+func InitRedis(addr, password string) *redis.Client {
+	// 创建一个 Redis 客户端连接
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     addr,     // Redis 服务器地址
+		Password: password, // 如果有密码的话
+		DB:       0,        // 默认数据库
+	})
 
-	// 连接Redis集群
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	_, err := rdb.Ping(ctx).Result()
+	// 使用 Ping 操作检查连接是否正常
+	_, err := rdb.Ping(context.Background()).Result()
 	if err != nil {
 		panic("连接redis失败, error=" + err.Error())
 	}
 	fmt.Println("redis连接成功")
+
 	return rdb
 }
 

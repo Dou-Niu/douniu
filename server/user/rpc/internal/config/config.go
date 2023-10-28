@@ -19,4 +19,8 @@ type Config struct {
 
 	CacheRedis cache.CacheConf
 	RedisConf  redis.RedisConf
+	Credential struct {
+		SecretId  string
+		SecretKey string
+	}
 }

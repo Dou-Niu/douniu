@@ -1,7 +1,7 @@
 package response
 
 import (
-	"douniu/common/errorx"
+	"douniu/server/common/errorx"
 	"net/http"
 
 	"github.com/pkg/errors"

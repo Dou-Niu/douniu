@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package video;
+
+option go_package = "./pb";
+
+service VideoRpc {
+    rpc GetAuthorId (GetAuthorIdReq) returns (GetAuthorIdResp) {}
+}
+
+message GetAuthorIdReq {
+    int64 video_id = 1;
+}
+
+message GetAuthorIdResp {
+    int64 user_id = 1;
+}

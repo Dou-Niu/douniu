@@ -12,4 +12,5 @@ type Config struct {
 		AccessExpire int64
 	}
 	FavoriteRpcConf zrpc.RpcClientConf
+	VideoRpcConf    zrpc.RpcClientConf
 }

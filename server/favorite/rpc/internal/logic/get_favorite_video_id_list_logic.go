@@ -27,7 +27,8 @@ func NewGetFavoriteVideoIdListLogic(ctx context.Context, svcCtx *svc.ServiceCont
 
 func (l *GetFavoriteVideoIdListLogic) GetFavoriteVideoIdList(in *pb.GetFavoriteVideoIdListRequest) (resp *pb.GetFavoriteVideoListIdResponse, err error) {
 	resp = new(pb.GetFavoriteVideoListIdResponse)
-	idListStr, err := l.svcCtx.RedisClient.ZrevrangeCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1)
+	//idListStr, err := l.svcCtx.RedisClient.ZrevrangeCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1)
+	idListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1, int(in.PageNum), 15)
 	if err != nil {
 		l.Errorf("RedisClient ZrangeCtx error: %v", err)
 		return
@@ -35,7 +36,7 @@ func (l *GetFavoriteVideoIdListLogic) GetFavoriteVideoIdList(in *pb.GetFavoriteV
 
 	idList := make([]int64, 0, len(idListStr))
 	for _, idStr := range idListStr {
-		id, err := strconv.Atoi(idStr)
+		id, err := strconv.Atoi(idStr.Key)
 		if err != nil {
 			l.Errorf("strconv.Atoi error: %v", err)
 			return nil, err

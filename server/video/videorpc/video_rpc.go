@@ -13,11 +13,16 @@ import (
 )
 
 type (
-	GetAuthorIdReq  = pb.GetAuthorIdReq
-	GetAuthorIdResp = pb.GetAuthorIdResp
+	GetAuthorIdReq       = pb.GetAuthorIdReq
+	GetAuthorIdResp      = pb.GetAuthorIdResp
+	GetVideoListInfoReq  = pb.GetVideoListInfoReq
+	GetVideoListInfoResp = pb.GetVideoListInfoResp
+	User                 = pb.User
+	Video                = pb.Video
 
 	VideoRpc interface {
 		GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error)
+		GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error)
 	}
 
 	defaultVideoRpc struct {
@@ -34,4 +39,9 @@ func NewVideoRpc(cli zrpc.Client) VideoRpc {
 func (m *defaultVideoRpc) GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error) {
 	client := pb.NewVideoRpcClient(m.cli.Conn())
 	return client.GetAuthorId(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.GetVideoListInfo(ctx, in, opts...)
 }

@@ -17,6 +17,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/douniu/favorite/action",
 				Handler: FavoriteActionHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/douniu/favorite/list",
+				Handler: FavoriteListHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)

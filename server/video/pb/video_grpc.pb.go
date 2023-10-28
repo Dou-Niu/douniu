@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	VideoRpc_GetAuthorId_FullMethodName = "/video.VideoRpc/GetAuthorId"
+	VideoRpc_GetAuthorId_FullMethodName      = "/video.VideoRpc/GetAuthorId"
+	VideoRpc_GetVideoListInfo_FullMethodName = "/video.VideoRpc/GetVideoListInfo"
 )
 
 // VideoRpcClient is the client API for VideoRpc service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type VideoRpcClient interface {
 	GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error)
+	GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error)
 }
 
 type videoRpcClient struct {
@@ -46,11 +48,21 @@ func (c *videoRpcClient) GetAuthorId(ctx context.Context, in *GetAuthorIdReq, op
 	return out, nil
 }
 
+func (c *videoRpcClient) GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error) {
+	out := new(GetVideoListInfoResp)
+	err := c.cc.Invoke(ctx, VideoRpc_GetVideoListInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VideoRpcServer is the server API for VideoRpc service.
 // All implementations must embed UnimplementedVideoRpcServer
 // for forward compatibility
 type VideoRpcServer interface {
 	GetAuthorId(context.Context, *GetAuthorIdReq) (*GetAuthorIdResp, error)
+	GetVideoListInfo(context.Context, *GetVideoListInfoReq) (*GetVideoListInfoResp, error)
 	mustEmbedUnimplementedVideoRpcServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedVideoRpcServer struct {
 
 func (UnimplementedVideoRpcServer) GetAuthorId(context.Context, *GetAuthorIdReq) (*GetAuthorIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAuthorId not implemented")
+}
+func (UnimplementedVideoRpcServer) GetVideoListInfo(context.Context, *GetVideoListInfoReq) (*GetVideoListInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVideoListInfo not implemented")
 }
 func (UnimplementedVideoRpcServer) mustEmbedUnimplementedVideoRpcServer() {}
 
@@ -92,6 +107,24 @@ func _VideoRpc_GetAuthorId_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoRpc_GetVideoListInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVideoListInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoRpcServer).GetVideoListInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoRpc_GetVideoListInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoRpcServer).GetVideoListInfo(ctx, req.(*GetVideoListInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // VideoRpc_ServiceDesc is the grpc.ServiceDesc for VideoRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var VideoRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAuthorId",
 			Handler:    _VideoRpc_GetAuthorId_Handler,
+		},
+		{
+			MethodName: "GetVideoListInfo",
+			Handler:    _VideoRpc_GetVideoListInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

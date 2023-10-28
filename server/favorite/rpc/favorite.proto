@@ -16,8 +16,7 @@ service FavoriteRpc {
 
 message GetFavoriteVideoIdListRequest {
     int64 user_id = 1;
-    int64 offset = 2;
-    int64 limit = 3;
+    int64 page_num = 2;
 }
 
 message GetFavoriteVideoListIdResponse {

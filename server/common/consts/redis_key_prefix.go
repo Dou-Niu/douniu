@@ -7,6 +7,8 @@ const (
 	VideoFavorPrefix   = ProjectNamePrefix + "videoFavor:"
 )
 
+// User服务
 const (
-	PhoneCode = ProjectNamePrefix + "phoneCode:"
+	PhoneCode      = ProjectNamePrefix + "phoneCode:"
+	UserIsRegister = ProjectNamePrefix + "isRegister:"
 )

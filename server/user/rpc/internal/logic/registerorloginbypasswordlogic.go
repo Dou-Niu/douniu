@@ -25,7 +25,6 @@ func NewRegisterOrLoginByPasswordLogic(ctx context.Context, svcCtx *svc.ServiceC
 
 // 使用密码进行手机号注册或登录
 func (l *RegisterOrLoginByPasswordLogic) RegisterOrLoginByPassword(in *pb.RegisterOrLoginByPasswordReq) (*pb.RegisterOrLoginResp, error) {
-	// todo: add your logic here and delete this line
 
 	return &pb.RegisterOrLoginResp{}, nil
 }

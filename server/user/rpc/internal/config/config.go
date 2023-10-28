@@ -25,4 +25,5 @@ type Config struct {
 		SecretId  string
 		SecretKey string
 	}
+	Salt string
 }

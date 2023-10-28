@@ -17,8 +17,8 @@ import (
 var (
 	favoriteFieldNames          = builder.RawFieldNames(&Favorite{})
 	favoriteRows                = strings.Join(favoriteFieldNames, ",")
-	favoriteRowsExpectAutoSet   = strings.Join(stringx.Remove(favoriteFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	favoriteRowsWithPlaceHolder = strings.Join(stringx.Remove(favoriteFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	favoriteRowsExpectAutoSet   = strings.Join(stringx.Remove(favoriteFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`updated_at`"), ",")
+	favoriteRowsWithPlaceHolder = strings.Join(stringx.Remove(favoriteFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`updated_at`"), "=?,") + "=?"
 )
 
 type (
@@ -39,6 +39,8 @@ type (
 		Id         int64 `db:"id"`
 		UserId     int64 `db:"user_id"`
 		VideoId    int64 `db:"video_id"`
+		AuthorId   int64 `db:"author_id"`
+		Status     int64 `db:"status"`
 		UpdateTime int64 `db:"update_time"`
 	}
 )
@@ -71,20 +73,20 @@ func (m *defaultFavoriteModel) FindOne(ctx context.Context, id int64) (*Favorite
 }
 
 func (m *defaultFavoriteModel) Insert(ctx context.Context, data *Favorite) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, favoriteRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId)
+	query := fmt.Sprintf("insert into %s (%s) values (?,?, ?, ?, ?,?)", m.table, favoriteRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.UserId, data.VideoId, data.AuthorId, data.Status, data.UpdateTime)
 	return ret, err
 }
 
 func (m *defaultFavoriteModel) TxInsert(ctx context.Context, tx sqlx.Session, data *Favorite) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, favoriteRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, favoriteRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.AuthorId, data.Status)
 	return ret, err
 }
 
 func (m *defaultFavoriteModel) Update(ctx context.Context, data *Favorite) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, favoriteRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.AuthorId, data.Status, data.UpdateTime, data.Id)
 	return err
 }
 

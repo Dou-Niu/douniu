@@ -13,6 +13,7 @@ const (
 	UserMachineId = iota
 	ChatMachineId
 	VideoMachineId
+	FavoriteMachineId
 )
 
 const (
@@ -45,4 +46,10 @@ const (
 	DefaultAvatar          = "http://s36rnw3k2.hn-bkt.clouddn.com/douniu/%E6%96%97%E7%89%9B%E9%BB%98%E8%AE%A4%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8F.jpg"
 	DefaultBackgroundImage = "http://s36rnw3k2.hn-bkt.clouddn.com/douniu/%E6%96%97%E7%89%9B%E9%BB%98%E8%AE%A4%E7%94%A8%E6%88%B7%E8%83%8C%E6%99%AF%E5%9B%BE.jpg"
 	DefaultSignature       = "这个家伙很懒什么都没留下"
+)
+
+// 点赞
+const (
+	FavoriteAdd = 1
+	FavoriteDel = 2
 )

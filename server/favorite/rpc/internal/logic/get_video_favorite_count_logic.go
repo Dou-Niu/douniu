@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/consts"
+	"strconv"
 
 	"douniu/server/favorite/rpc/internal/svc"
 	"douniu/server/favorite/rpc/pb"
@@ -24,9 +26,14 @@ func NewGetVideoFavoriteCountLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *GetVideoFavoriteCountLogic) GetVideoFavoriteCount(in *pb.GetVideoFavoriteCountRequest) (resp *pb.GetVideoFavoriteCountResponse, err error) {
-	// todo: add your logic here and delete this line
-
+	videoIdStr := strconv.Itoa(int(in.VideoId))
 	resp = new(pb.GetVideoFavoriteCountResponse)
+	count, err := l.svcCtx.RedisClient.ZcardCtx(l.ctx, consts.VideoFavoritedIdPrefix+videoIdStr)
+	if err != nil {
+		l.Errorf("RedisClient ZcardCtx error: %v", err)
+		return
+	}
+	resp.Count = int64(count)
 
 	return
 }

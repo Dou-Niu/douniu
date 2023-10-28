@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/consts"
+	"strconv"
 
 	"douniu/server/favorite/rpc/internal/svc"
 	"douniu/server/favorite/rpc/pb"
@@ -24,9 +26,23 @@ func NewGetFavoriteVideoIdListLogic(ctx context.Context, svcCtx *svc.ServiceCont
 }
 
 func (l *GetFavoriteVideoIdListLogic) GetFavoriteVideoIdList(in *pb.GetFavoriteVideoIdListRequest) (resp *pb.GetFavoriteVideoListIdResponse, err error) {
-	// todo: add your logic here and delete this line
-
 	resp = new(pb.GetFavoriteVideoListIdResponse)
+	idListStr, err := l.svcCtx.RedisClient.ZrevrangeCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1)
+	if err != nil {
+		l.Errorf("RedisClient ZrangeCtx error: %v", err)
+		return
+	}
+
+	idList := make([]int64, 0, len(idListStr))
+	for _, idStr := range idListStr {
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			l.Errorf("strconv.Atoi error: %v", err)
+			return nil, err
+		}
+		idList = append(idList, int64(id))
+	}
+	resp.VideoIdList = idList
 
 	return
 }

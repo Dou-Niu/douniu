@@ -13,8 +13,6 @@ const (
 	UserIsRegister = ProjectNamePrefix + "isRegister:"
 )
 
-
-
 const (
 	VideoCommentCountPrefix = ProjectNamePrefix + "videoCommentCount:"
 
@@ -26,5 +24,5 @@ const (
 	UserFavoritedCountPrefix = ProjectNamePrefix + "userFavoritedCount:"
 
 	UserFollowPrefix   = ProjectNamePrefix + "userFollow:"
-	UserFollowerPrefix = ProjectNamePrefix + "userFollower:" =
+	UserFollowerPrefix = ProjectNamePrefix + "userFollower:"
 )

@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package relation;
+
+option go_package = "./pb";
+
+service RelationRpc {
+    rpc FollowAction (FollowActionRequest) returns (FollowActionResponse) {}
+    rpc GetFollowList (GetFollowListRequest) returns (GetFollowListResponse) {}
+    rpc GetFollowerList (GetFollowerListRequest) returns (GetFollowerListResponse) {}
+    rpc GetUserFollowCount (GetUserFollowCountRequest) returns (GetUserFollowCountResponse) {}
+    rpc GetUserFollowerCount (GetUserFollowerCountRequest) returns (GetUserFollowerCountResponse) {}
+    rpc GetFriendList (GetFriendListRequest) returns (GetFriendListResponse) {}
+    rpc IsFollow (IsFollowRequest) returns (IsFollowResponse) {}
+}
+
+message FollowActionRequest {
+    int64 user_id = 1;
+    int64 to_user_id = 2;
+    int64 action_type = 3;
+}
+
+message FollowActionResponse {
+
+}
+
+message GetFollowListRequest {
+    int64 user_id = 1;
+    int64 to_user_id = 2;
+}
+
+message GetFollowListResponse {
+    repeated User user_list = 1;
+}
+
+message GetFollowerListRequest {
+    int64 user_id = 1;
+    int64 to_user_id = 2;
+}
+
+message GetFollowerListResponse {
+    repeated User user_list = 1;
+}
+
+message GetUserFollowCountRequest {
+    int64 user_id = 1;
+}
+
+message GetUserFollowCountResponse {
+    int64 count = 1;
+}
+
+message GetUserFollowerCountRequest {
+    int64 user_id = 1;
+}
+
+message GetUserFollowerCountResponse {
+    int64 count = 1;
+}
+
+message GetFriendListRequest {
+    int64 user_id = 1;
+    int64 to_user_id = 2;
+}
+
+message GetFriendListResponse {
+    repeated FriendUser user_list = 1;
+}
+
+message IsFollowRequest {
+    int64 user_id = 1;
+    int64 target_user_id = 2;
+}
+
+message IsFollowResponse {
+    bool is_follow = 1;
+}
+
+message User {
+    int64 id = 1;
+    string username = 2;
+    int64 follow_count = 3;
+    int64 follower_count = 4;
+    bool is_follow = 5;
+    string avatar = 6;
+    string background_image = 7;
+    string signature = 8;
+    int64 total_favorited = 9;
+    int64 work_count = 10;
+    int64 favorite_count = 11;
+}
+
+
+
+message FriendUser {
+    int64 id = 1;
+    string username = 2;
+    int64 follow_count = 3;
+    int64 follower_count = 4;
+    bool is_follow = 5;
+    string avatar = 6;
+    string background_image = 7;
+    string signature = 8;
+    int64 total_favorited = 9;
+    int64 work_count = 10;
+    int64 favorite_count = 11;
+    string message = 12;
+    int64 msg_type = 13;
+}

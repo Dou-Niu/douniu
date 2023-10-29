@@ -13,8 +13,8 @@ const (
 )
 
 const (
-	// VideoHotScorePrefix 视频热度排行
-	VideoHotScorePrefix = ProjectNamePrefix + "videoHotScore"
+	// VideoHotScore 视频热度排行
+	VideoHotScore = ProjectNamePrefix + "videoHotScore"
 )
 
 const (

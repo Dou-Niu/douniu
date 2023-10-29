@@ -12,3 +12,4 @@
 /server/user/rpc/etc
 /server/video/api/etc
 /server/video/rpc/etc
+/server/video/mq/etc

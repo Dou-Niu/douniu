@@ -7,6 +7,7 @@ option go_package = "./pb";
 service VideoRpc {
   rpc GetAuthorId (GetAuthorIdReq) returns (GetAuthorIdResp) {}
   rpc GetVideoListInfo(GetVideoListInfoReq) returns (GetVideoListInfoResp);
+  rpc PublishVideo(PublishVideoReq) returns(CommonResp);
 }
 
 message GetAuthorIdReq {
@@ -39,7 +40,7 @@ message Video {
 }
 message User {
   int64 id = 1;
-  string username = 2;
+  string nickname = 2;
   int64 follow_count = 3;
   int64 follower_count = 4;
   bool is_follow = 5;
@@ -49,4 +50,17 @@ message User {
   int64 total_favorited = 9;
   int64 work_count = 10;
   int64 favorite_count = 11;
+}
+
+message PublishVideoReq{
+  int64 VideoId = 1;
+  int64 MeUserID = 2;
+  string VideoUrl = 3;
+  string CoverUrl = 4;
+  int64 Partition = 5;
+  string Title = 6;
+}
+message CommonResp{
+  int64 Code = 1;
+  string Message = 2;
 }

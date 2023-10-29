@@ -7,4 +7,8 @@
 .idea
 /tmp/
 *.yaml
-server/video/rpc/etc/video.yaml
+./server/video/rpc/etc/video.yaml
+/server/user/api/etc
+/server/user/rpc/etc
+/server/video/api/etc
+/server/video/rpc/etc

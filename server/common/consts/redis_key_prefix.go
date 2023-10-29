@@ -15,6 +15,13 @@ const (
 const (
 	// VideoHotScore 视频热度排行
 	VideoHotScore = ProjectNamePrefix + "videoHotScore"
+	// VideoTimeScore 视频时序排行
+	VideoTimeScore = ProjectNamePrefix + "videoTimeScore"
+
+	// VideoUserSet  每个用户的所有视频id
+	VideoUserSet = ProjectNamePrefix + "videoUserSet:"
+	// VideoPartitionSet 每个分区的所有视频id
+	VideoPartitionSet = ProjectNamePrefix + "videoPartitionSet:"
 )
 
 const (

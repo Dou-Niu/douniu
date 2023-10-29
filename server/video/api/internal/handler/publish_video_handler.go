@@ -21,5 +21,6 @@ func PublishVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := logic.NewPublishVideoLogic(r.Context(), svcCtx)
 		err := l.PublishVideo(&req)
 		response.Response(r, w, 0, err) //②
+
 	}
 }

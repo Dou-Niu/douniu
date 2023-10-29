@@ -31,9 +31,12 @@ declare module 'vue' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    LoginCard: typeof import('./src/components/LoginCard/LoginCard.vue')['default']
     Logo: typeof import('./src/components/SiderBar/Logo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideLogo: typeof import('./src/components/SideBar/SideLogo.vue')['default']
+    VideoList: typeof import('./src/components/Video/VideoList.vue')['default']
+    VideoPlay: typeof import('./src/components/Video/VideoPlay.vue')['default']
   }
 }

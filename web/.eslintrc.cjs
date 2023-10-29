@@ -32,10 +32,11 @@ module.exports = {
 		"vue"
 	],
 	"rules": {
-		// "indent": [
-		// 	"error",
-		// 	"spaces"
-		// ],
+		"@typescript-eslint/ban-types": ["off"],
+		"indent": [
+			"error",
+			"spaces"
+		],
 		"quotes": [
 			"error",
 			"double"

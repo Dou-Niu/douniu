@@ -8,7 +8,7 @@
         <HeaderBar />
       </el-header>
       <el-main>
-        <el-empty :image-size="200" />
+        <slot></slot>
       </el-main>
     </el-container>
   </el-container>

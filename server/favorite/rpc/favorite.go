@@ -1,19 +1,18 @@
 package main
 
 import (
+	"douniu/server/favorite/rpc/internal/server"
+	"douniu/server/favorite/rpc/pb"
 	"flag"
 	"fmt"
-
-	"douniu/server/favorite/rpc/internal/config"
-	"douniu/server/favorite/rpc/internal/server"
-	"douniu/server/favorite/rpc/internal/svc"
-	"douniu/server/favorite/rpc/pb"
-
-	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	"douniu/server/favorite/rpc/internal/config"
+	"douniu/server/favorite/rpc/internal/svc"
+	"github.com/zeromicro/go-zero/core/conf"
 )
 
 var configFile = flag.String("f", "etc/favorite.yaml", "the config file")

@@ -2,6 +2,11 @@ package logic
 
 import (
 	"context"
+	"douniu/server/comment/rpc/commentrpc"
+	"douniu/server/common/consts"
+	"encoding/json"
+	"errors"
+	"github.com/jinzhu/copier"
 
 	"douniu/server/comment/api/internal/svc"
 	"douniu/server/comment/api/internal/types"
@@ -24,9 +29,34 @@ func NewCommentActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Com
 }
 
 func (l *CommentActionLogic) CommentAction(req *types.CommentActionRequest) (resp *types.CommentActionResponse, err error) {
-	// todo: add your logic here and delete this line
-
+	userId, _ := l.ctx.Value(consts.UserId).(json.Number).Int64()
 	resp = new(types.CommentActionResponse)
+	if req.ActionType == consts.CommentAdd {
+		addCommentResp, err := l.svcCtx.CommentRpc.AddComment(l.ctx, &commentrpc.AddCommentRequest{
+			UserId:   userId,
+			VideoId:  req.VideoId,
+			Content:  req.Content,
+			ParentId: req.ParentId,
+		})
+		if err != nil {
+			return nil, err
+		}
+		resp.Comment = new(types.Comment)
+		_ = copier.Copy(&resp.Comment, &addCommentResp.Comment)
+
+	} else if req.ActionType == consts.CommentDel {
+		if req.CommentId <= 0 {
+			return nil, errors.New("id不合法")
+		}
+
+		_, err := l.svcCtx.CommentRpc.DelComment(l.ctx, &commentrpc.DelCommentRequest{
+			CommentId: req.CommentId,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+	}
 
 	return
 }

@@ -37,6 +37,11 @@ func (s *CommentRpcServer) GetCommentList(ctx context.Context, in *pb.GetComment
 	return l.GetCommentList(in)
 }
 
+func (s *CommentRpcServer) GetCommentDetail(ctx context.Context, in *pb.GetCommentDetailRequest) (*pb.GetCommentDetailResponse, error) {
+	l := logic.NewGetCommentDetailLogic(ctx, s.svcCtx)
+	return l.GetCommentDetail(in)
+}
+
 func (s *CommentRpcServer) GetCommentCount(ctx context.Context, in *pb.GetCommentCountRequest) (*pb.GetCommentCountResponse, error) {
 	l := logic.NewGetCommentCountLogic(ctx, s.svcCtx)
 	return l.GetCommentCount(in)

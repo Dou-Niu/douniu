@@ -62,6 +62,7 @@ message ResetPassword {
 // 获取用户信息的请求
 message UserInfoReq {
   int64 user_id = 1;
+  int64 from_user_id = 2;
 }
 
 // 包含用户信息的响应

@@ -6,4 +6,4 @@
 .env
 .idea
 /tmp/
-.yaml
+*.yaml

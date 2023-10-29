@@ -17,6 +17,10 @@ const (
 )
 
 const (
+	SingleHotScore = 8640
+)
+
+const (
 	Token = "token"
 )
 

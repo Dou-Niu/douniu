@@ -3,48 +3,49 @@ package logic
 import (
 	"context"
 	"douniu/server/comment/rpc/commentrpc"
-	"douniu/server/comment/rpc/internal/svc"
-	"douniu/server/comment/rpc/pb"
 	"douniu/server/user/rpc/userrpc"
 	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/threading"
 
+	"douniu/server/comment/rpc/internal/svc"
+	"douniu/server/comment/rpc/pb"
+
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetCommentListLogic struct {
+type GetCommentDetailLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCommentListLogic {
-	return &GetCommentListLogic{
+func NewGetCommentDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCommentDetailLogic {
+	return &GetCommentDetailLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetCommentListLogic) GetCommentList(in *pb.GetCommentListRequest) (resp *pb.GetCommentListResponse, err error) {
-	commentList, err := l.svcCtx.CommentModel.FindByVideoId(l.ctx, in.VideoId, in.LastCommentId)
+func (l *GetCommentDetailLogic) GetCommentDetail(in *pb.GetCommentDetailRequest) (resp *pb.GetCommentDetailResponse, err error) {
+	resp = new(pb.GetCommentDetailResponse)
+	subList, err := l.svcCtx.CommentModel.FindSub(l.ctx, in.CommentId)
+
 	if err != nil {
-		l.Errorf("Get comment list error: %v", err)
+		l.Errorf("CommentModel FindSub error：%v", err)
 		return
 	}
-
-	resp = new(pb.GetCommentListResponse)
-	resp.CommentList = make([]*pb.Comment, len(commentList))
-	_ = copier.Copy(&resp.CommentList, &commentList)
+	resp.CommentList = make([]*pb.Comment, 0, len(subList))
+	_ = copier.Copy(&resp.CommentList, subList)
 
 	// 获取每一个评论的用户信息，这里使用协程组来并发获取
 	group := threading.NewRoutineGroup()
-	for i := 0; i < len(commentList); i++ {
+	for i := 0; i < len(subList); i++ {
 		ii := i
 		group.RunSafe(func() {
 			resp.CommentList[ii].User = new(commentrpc.User)
 			userInfoResp, ierr := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &userrpc.UserInfoReq{
-				UserId:     commentList[ii].UserId,
+				UserId:     subList[ii].UserId,
 				FromUserId: in.UserId,
 			})
 

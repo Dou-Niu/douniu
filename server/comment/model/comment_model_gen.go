@@ -17,7 +17,7 @@ import (
 var (
 	commentFieldNames          = builder.RawFieldNames(&Comment{})
 	commentRows                = strings.Join(commentFieldNames, ",")
-	commentRowsExpectAutoSet   = strings.Join(stringx.Remove(commentFieldNames,  "`create_at`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	commentRowsExpectAutoSet   = strings.Join(stringx.Remove(commentFieldNames, "`create_at`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	commentRowsWithPlaceHolder = strings.Join(stringx.Remove(commentFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 )
 
@@ -40,6 +40,8 @@ type (
 		UserId     int64  `db:"user_id"`
 		VideoId    int64  `db:"video_id"`
 		Content    string `db:"content"`
+		ParentId   int64  `db:"parent_id"`
+		SubCount   int64  `db:"sub_count"`
 		CreateTime int64  `db:"create_time"`
 	}
 )
@@ -72,20 +74,20 @@ func (m *defaultCommentModel) FindOne(ctx context.Context, id int64) (*Comment, 
 }
 
 func (m *defaultCommentModel) Insert(ctx context.Context, data *Comment) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, commentRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.Content)
+	query := fmt.Sprintf("insert into %s (%s) values (?,?, ?, ?, ?, ?,?)", m.table, commentRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Id,data.UserId, data.VideoId, data.Content, data.ParentId, data.SubCount,data.CreateTime)
 	return ret, err
 }
 
 func (m *defaultCommentModel) TxInsert(ctx context.Context, tx sqlx.Session, data *Comment) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, commentRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.Content)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, commentRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.Content, data.ParentId, data.SubCount)
 	return ret, err
 }
 
 func (m *defaultCommentModel) Update(ctx context.Context, data *Comment) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, commentRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.Content, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.Content, data.ParentId, data.SubCount, data.Id)
 	return err
 }
 

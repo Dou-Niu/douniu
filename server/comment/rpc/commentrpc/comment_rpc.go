@@ -13,21 +13,24 @@ import (
 )
 
 type (
-	AddCommentRequest       = pb.AddCommentRequest
-	AddCommentResponse      = pb.AddCommentResponse
-	Comment                 = pb.Comment
-	DelCommentRequest       = pb.DelCommentRequest
-	DelCommentResponse      = pb.DelCommentResponse
-	GetCommentCountRequest  = pb.GetCommentCountRequest
-	GetCommentCountResponse = pb.GetCommentCountResponse
-	GetCommentListRequest   = pb.GetCommentListRequest
-	GetCommentListResponse  = pb.GetCommentListResponse
-	User                    = pb.User
+	AddCommentRequest        = pb.AddCommentRequest
+	AddCommentResponse       = pb.AddCommentResponse
+	Comment                  = pb.Comment
+	DelCommentRequest        = pb.DelCommentRequest
+	DelCommentResponse       = pb.DelCommentResponse
+	GetCommentCountRequest   = pb.GetCommentCountRequest
+	GetCommentCountResponse  = pb.GetCommentCountResponse
+	GetCommentDetailRequest  = pb.GetCommentDetailRequest
+	GetCommentDetailResponse = pb.GetCommentDetailResponse
+	GetCommentListRequest    = pb.GetCommentListRequest
+	GetCommentListResponse   = pb.GetCommentListResponse
+	User                     = pb.User
 
 	CommentRpc interface {
 		AddComment(ctx context.Context, in *AddCommentRequest, opts ...grpc.CallOption) (*AddCommentResponse, error)
 		DelComment(ctx context.Context, in *DelCommentRequest, opts ...grpc.CallOption) (*DelCommentResponse, error)
 		GetCommentList(ctx context.Context, in *GetCommentListRequest, opts ...grpc.CallOption) (*GetCommentListResponse, error)
+		GetCommentDetail(ctx context.Context, in *GetCommentDetailRequest, opts ...grpc.CallOption) (*GetCommentDetailResponse, error)
 		GetCommentCount(ctx context.Context, in *GetCommentCountRequest, opts ...grpc.CallOption) (*GetCommentCountResponse, error)
 	}
 
@@ -55,6 +58,11 @@ func (m *defaultCommentRpc) DelComment(ctx context.Context, in *DelCommentReques
 func (m *defaultCommentRpc) GetCommentList(ctx context.Context, in *GetCommentListRequest, opts ...grpc.CallOption) (*GetCommentListResponse, error) {
 	client := pb.NewCommentRpcClient(m.cli.Conn())
 	return client.GetCommentList(ctx, in, opts...)
+}
+
+func (m *defaultCommentRpc) GetCommentDetail(ctx context.Context, in *GetCommentDetailRequest, opts ...grpc.CallOption) (*GetCommentDetailResponse, error) {
+	client := pb.NewCommentRpcClient(m.cli.Conn())
+	return client.GetCommentDetail(ctx, in, opts...)
 }
 
 func (m *defaultCommentRpc) GetCommentCount(ctx context.Context, in *GetCommentCountRequest, opts ...grpc.CallOption) (*GetCommentCountResponse, error) {

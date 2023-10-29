@@ -10,16 +10,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func UploadVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FeedHomeHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UploadVideoReq
+		var req types.FeedHomeReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewUploadVideoLogic(r.Context(), svcCtx)
-		resp, err := l.UploadVideo(&req)
+		l := logic.NewFeedHomeLogic(r.Context(), svcCtx)
+		resp, err := l.FeedHome(&req)
 		response.Response(r, w, resp, err) //②
+
 	}
 }

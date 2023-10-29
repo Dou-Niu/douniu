@@ -3,7 +3,7 @@ package types
 
 type AuthorInfo struct {
 	ID              int64  `json:"id"`
-	Name            string `json:"name"`
+	NickName        string `json:"nickname"`
 	FollowCount     int64  `json:"follow_count"`
 	FollowerCount   int64  `json:"follower_count"`
 	IsFollow        bool   `json:"is_follow"`
@@ -16,7 +16,7 @@ type AuthorInfo struct {
 }
 
 type VideoInfo struct {
-	ID            int64      `json:"id"`
+	VideoID       int64      `json:"video_id"`
 	Author        AuthorInfo `json:"author"`
 	PlayURL       string     `json:"play_url"`
 	CoverURL      string     `json:"cover_url"`
@@ -32,45 +32,49 @@ type VideoList struct {
 	List []*VideoInfo `json:"video_list"`
 }
 
-type UploadVideoReq struct {
-}
-
-type UploadVideoResp struct {
-	VideoId             int64  `json:"video_id"`
-	VideoUrl            string `json:"video_url"`
-	RecommendCoverUrl_1 string `json:"recommend_cover_url_1"`
-	RecommendCoverUrl_2 string `json:"recommend_cover_url_2"`
-	RecommendCoverUrl_3 string `json:"recommend_cover_url_3"`
-}
-
-type UploadCoverReq struct {
-}
-
-type UploadCoverResp struct {
-	CoverUrl string `json:"cover_url"`
-}
-
 type PublishVideoReq struct {
-	VideoId   int64  `json:"video_id"`
 	VideoUrl  string `json:"video_url"`
 	CoverUrl  string `json:"cover_url"`
 	Title     string `json:"title"`
 	Partition int64  `json:"partition"`
 }
 
-type UserVideoListReq struct {
-	UserId string `form:"user_id"`
+type FeedUserReq struct {
+	UserId int64 `form:"user_id"`
+	Sort   int64 `form:"sort"`
+	Page   int64 `form:"page"`
 }
 
-type UserVideoListResp struct {
+type FeedResp struct {
+	IsFinal bool `form:"is_final"`
 	VideoList
 }
 
-type VideoListReq struct {
-	LatestTime string `form:"latest_time,optional"`
+type FeedHostReq struct {
+	MaxHost int64 `form:"max_hot"`
 }
 
-type VideoListResp struct {
+type FeedHostResp struct {
+	NextMaxHost int64 `form:"next_max_host"`
+	VideoList
+}
+
+type FeedHomeReq struct {
+	LatestTime int64 `form:"latest_time"`
+}
+
+type FeedHomeResp struct {
 	NextTime int64 `json:"next_time"`
 	VideoList
+}
+
+type FeedFollowReq struct {
+	Sort int64 `form:"sort"`
+	Page int64 `form:"page"`
+}
+
+type FeedPartitionReq struct {
+	Sort      int64 `form:"sort"`
+	Page      int64 `form:"page"`
+	Partition int64 `form:"partition"`
 }

@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UploadVideoLogic struct {
+type FeedHomeLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewUploadVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UploadVideoLogic {
-	return &UploadVideoLogic{
+func NewFeedHomeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedHomeLogic {
+	return &FeedHomeLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *UploadVideoLogic) UploadVideo(req *types.UploadVideoReq) (resp *types.UploadVideoResp, err error) {
+func (l *FeedHomeLogic) FeedHome(req *types.FeedHomeReq) (resp *types.FeedHomeResp, err error) {
 	// todo: add your logic here and delete this line
 
 	return

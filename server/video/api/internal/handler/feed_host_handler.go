@@ -10,16 +10,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func VideoListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FeedHostHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.VideoListReq
+		var req types.FeedHostReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewVideoListLogic(r.Context(), svcCtx)
-		resp, err := l.VideoList(&req)
+		l := logic.NewFeedHostLogic(r.Context(), svcCtx)
+		resp, err := l.FeedHost(&req)
 		response.Response(r, w, resp, err) //②
+
 	}
 }

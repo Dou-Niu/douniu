@@ -15,28 +15,33 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/upload/video",
-				Handler: UploadVideoHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/upload/cover",
-				Handler: UploadCoverHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
 				Path:    "/publish",
 				Handler: PublishVideoHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/userlist",
-				Handler: UserVideoListHandler(serverCtx),
+				Path:    "/feed/home",
+				Handler: FeedHomeHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/feed",
-				Handler: VideoListHandler(serverCtx),
+				Path:    "/feed/host",
+				Handler: FeedHostHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/feed/user",
+				Handler: FeedUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/feed/follow",
+				Handler: FeedFollowHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/feed/partition",
+				Handler: FeedPartitionHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JWTAuth.AccessSecret),

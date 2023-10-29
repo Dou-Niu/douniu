@@ -10,16 +10,17 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func UserVideoListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FeedUserHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UserVideoListReq
+		var req types.FeedUserReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewUserVideoListLogic(r.Context(), svcCtx)
-		resp, err := l.UserVideoList(&req)
+		l := logic.NewFeedUserLogic(r.Context(), svcCtx)
+		resp, err := l.FeedUser(&req)
 		response.Response(r, w, resp, err) //②
+
 	}
 }

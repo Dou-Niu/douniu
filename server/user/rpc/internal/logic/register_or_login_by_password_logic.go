@@ -1,0 +1,33 @@
+package logic
+
+import (
+	"context"
+
+	"douniu/server/user/rpc/internal/svc"
+	"douniu/server/user/rpc/pb"
+
+	"github.com/zeromicro/go-zero/core/logx"
+)
+
+type RegisterOrLoginByPasswordLogic struct {
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
+	logx.Logger
+}
+
+func NewRegisterOrLoginByPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterOrLoginByPasswordLogic {
+	return &RegisterOrLoginByPasswordLogic{
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
+	}
+}
+
+// 使用密码进行手机号注册或登录
+func (l *RegisterOrLoginByPasswordLogic) RegisterOrLoginByPassword(in *pb.RegisterOrLoginByPasswordReq) (resp *pb.RegisterOrLoginResp, err error) {
+	// todo: add your logic here and delete this line
+
+	resp = new(pb.RegisterOrLoginResp)
+
+	return
+}

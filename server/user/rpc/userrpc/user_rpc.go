@@ -6,7 +6,7 @@ package userrpc
 import (
 	"context"
 
-	"douniu/server/user/rpc/types/pb"
+	"douniu/server/user/rpc/pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

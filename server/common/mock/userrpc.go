@@ -39,6 +39,21 @@ func (u UserRpc) ChangePassword(ctx context.Context, in *userrpc.ResetPassword, 
 }
 
 func (u UserRpc) GetUserInfo(ctx context.Context, in *userrpc.UserInfoReq, opts ...grpc.CallOption) (*userrpc.UserInfoResp, error) {
-	//TODO implement me
-	panic("implement me")
+	resp := &userrpc.UserInfoResp{
+		Userinfo: &userrpc.UserInfoItem{
+			Id:              2,
+			Phone:           "138888888888",
+			Nickname:        "zs",
+			IsFollow:        true,
+			Avatar:          "httpppp",
+			BackgroundImage: "httpppp",
+			Signature:       "httpppp",
+			TotalFavorited:  1,
+			WorkCount:       2,
+			FavoriteCount:   3,
+			FollowCount:     4,
+			FollowerCount:   5,
+		},
+	}
+	return resp, nil
 }

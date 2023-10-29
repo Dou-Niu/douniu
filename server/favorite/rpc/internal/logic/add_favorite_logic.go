@@ -69,6 +69,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 		l.Errorf("RedisClient IncrCtx error: %v", err)
 		return
 	}
+	// 视频热度提升
 
 	resp = new(pb.AddFavoriteResponse)
 	err = nil

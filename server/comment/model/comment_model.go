@@ -14,7 +14,10 @@ type (
 	CommentModel interface {
 		commentModel
 		FindPage(ctx context.Context, pageNum int, pageSize int) ([]*Comment, error)
-		FindByVideoId(ctx context.Context, videoId int64) ([]*Comment, error)
+		FindByVideoId(ctx context.Context, videoId int64, lastCommentId int64) ([]*Comment, error)
+		GetCountByVideoId(ctx context.Context, videoId int64) (int64, error)
+		IncrSubCount(ctx context.Context, commentId int64) error
+		FindSub(ctx context.Context, commentId int64) ([]*Comment, error)
 	}
 
 	customCommentModel struct {
@@ -22,10 +25,30 @@ type (
 	}
 )
 
-func (m *customCommentModel) FindByVideoId(ctx context.Context, videoId int64) ([]*Comment, error) {
-	query := fmt.Sprintf("select %s from %s where video_id = ?", commentRows, m.table)
+func (m *customCommentModel) IncrSubCount(ctx context.Context, commentId int64) error {
+	query := fmt.Sprintf("update %s set sub_count = sub_count + 1 where id = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, commentId)
+	return err
+}
+
+func (m *customCommentModel) GetCountByVideoId(ctx context.Context, videoId int64) (int64, error) {
+	query := fmt.Sprintf("select count(*) from %s where video_id = ?", m.table)
+	var resp int64
+	err := m.conn.QueryRowCtx(ctx, &resp, query, videoId)
+	return resp, err
+}
+
+func (m *customCommentModel) FindSub(ctx context.Context, commentId int64) ([]*Comment, error) {
+	query := fmt.Sprintf("select %s from %s where parent_id = ? order by create_time desc", commentRows, m.table)
 	var resp []*Comment
-	err := m.conn.QueryRowsCtx(ctx, &resp, query, videoId)
+	err := m.conn.QueryRowsCtx(ctx, &resp, query, commentId)
+	return resp, err
+}
+
+func (m *customCommentModel) FindByVideoId(ctx context.Context, videoId int64, lastCommentId int64) ([]*Comment, error) {
+	query := fmt.Sprintf("select %s from %s where video_id = ? and id > ? and parent_id = 0 order by create_time desc", commentRows, m.table)
+	var resp []*Comment
+	err := m.conn.QueryRowsCtx(ctx, &resp, query, videoId, lastCommentId)
 	return resp, err
 }
 

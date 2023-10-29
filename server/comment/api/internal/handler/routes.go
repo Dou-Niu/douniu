@@ -22,6 +22,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/douniu/comment/list",
 				Handler: CommentListHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/douniu/comment/detail",
+				Handler: CommentDetailHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)

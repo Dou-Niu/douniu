@@ -6,10 +6,11 @@ import (
 	"douniu/server/comment/rpc/commentrpc"
 	"douniu/server/comment/rpc/internal/svc"
 	"douniu/server/comment/rpc/pb"
+	"douniu/server/common/consts"
 	"douniu/server/user/rpc/userrpc"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
-	"github.com/zeromicro/go-zero/core/jsonx"
+	"strconv"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -41,13 +42,35 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 		Content:    in.Content,
 		VideoId:    in.VideoId,
 		UserId:     in.UserId,
+		ParentId:   in.ParentId,
 		CreateTime: time.Now().Unix(),
 	}
-	// 丢到kafka里异步落库
-	commentJson, _ := jsonx.MarshalToString(&comment)
-	err = l.svcCtx.KafkaPusher.Push(commentJson)
+	//// 丢到kafka里异步落库
+	//commentJson, _ := jsonx.MarshalToString(&comment)
+	//err = l.svcCtx.KafkaPusher.Push(commentJson)
+	//if err != nil {
+	//	l.Errorf("Push comment error: %v", err)
+	//	return
+	//}
+
+	_, err = l.svcCtx.CommentModel.Insert(l.ctx, comment)
 	if err != nil {
-		l.Errorf("Push comment error: %v", err)
+		l.Errorf("Insert comment error: %v", err)
+		return
+	}
+
+	if in.ParentId != 0 {
+		err = l.svcCtx.CommentModel.IncrSubCount(l.ctx, in.ParentId)
+		if err != nil {
+			l.Errorf("IncrSubCount error: %v", err)
+			return
+		}
+	}
+
+	// 视频评论数+1
+	_, err = l.svcCtx.RedisClient.Incr(consts.VideoCommentCountPrefix + strconv.Itoa(int(comment.VideoId)))
+	if err != nil {
+		logx.Errorf("MessageAction RedisClient.Incr error: %s", err.Error())
 		return
 	}
 

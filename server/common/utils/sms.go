@@ -57,7 +57,7 @@ func SMS(phone, secretId, secretKey string, ctx context.Context, rdb *redis.Clie
 	phoneWithPrefix := "+86" + phone
 	request.PhoneNumberSet = common.StringPtrs([]string{phoneWithPrefix})
 	//使用redis缓存
-	rdb.Set(ctx, consts.ProjectNamePrefix+phone, code1, 3*time.Minute)
+	rdb.Set(ctx, consts.PhoneCode+phone, code1, 3*time.Minute)
 	fmt.Println(phone, "  ", code1)
 	// 通过client对象调用想要访问的接口，需要传入请求对象
 	response, err := client.SendSms(request)

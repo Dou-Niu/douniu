@@ -8,7 +8,7 @@ import (
 
 	"douniu/server/user/rpc/internal/logic"
 	"douniu/server/user/rpc/internal/svc"
-	"douniu/server/user/rpc/pb"
+	"douniu/server/user/rpc/types/pb"
 )
 
 type UserRpcServer struct {

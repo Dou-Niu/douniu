@@ -55,6 +55,8 @@ const (
 // 视频
 const (
 	DefaultSizeOfPage = 10
+	SortByHot         = 1
+	SortByTime        = 2
 )
 
 // 点赞

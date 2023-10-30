@@ -45,6 +45,7 @@ func (m *customVideoModel) FindByTimeOrHot(ctx context.Context, rdb *redis.Clien
 	}).Result()
 	if err != nil {
 		logc.Error(ctx, err)
+
 		return nil, errors.Wrapf(errorx.NewDefaultError("redis ZREVRANGEBYSCORE错误"+err.Error()), "redis ZREVRANGEBYSCORE错误%v", err)
 	}
 	if len(vIds) == 0 {

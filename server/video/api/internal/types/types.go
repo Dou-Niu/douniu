@@ -41,7 +41,7 @@ type PublishVideoReq struct {
 
 type FeedUserReq struct {
 	UserId   int64 `form:"user_id"`
-	Sort     int64 `form:"sort"`
+	Sort     int64 `form:"sort"  validate:"gte=1,lte=2"`
 	MaxValue int64 `form:"max_value"`
 }
 
@@ -70,12 +70,12 @@ type FeedHomeResp struct {
 }
 
 type FeedFollowReq struct {
-	Sort     int64 `form:"sort"`
+	Sort     int64 `form:"sort" validate:"gte=1,lte=2"`
 	MaxValue int64 `form:"max_value"`
 }
 
 type FeedPartitionReq struct {
-	Sort      int64 `form:"sort"`
+	Sort      int64 `form:"sort" validate:"gte=1,lte=2"`
 	MaxValue  int64 `form:"max_value"`
-	Partition int64 `form:"partition"`
+	Partition int64 `form:"partition" validate:"gte=1,lte=5"`
 }

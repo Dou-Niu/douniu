@@ -3,8 +3,11 @@ package logic
 import (
 	"context"
 	"douniu/server/common/consts"
+	"douniu/server/common/errorx"
+	"douniu/server/common/utils"
 	"douniu/server/video/rpc/types/pb"
 	"encoding/json"
+	"fmt"
 	"github.com/pkg/errors"
 	"time"
 
@@ -29,6 +32,10 @@ func NewFeedHomeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedHome
 }
 
 func (l *FeedHomeLogic) FeedHome(req *types.FeedHomeReq) (resp *types.FeedHomeResp, err error) {
+	err = utils.DefaultGetValidParams(l.ctx, req)
+	if err != nil {
+		return nil, errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
+	}
 	if req.LatestTime == 0 {
 		req.LatestTime = time.Now().Unix()
 	}

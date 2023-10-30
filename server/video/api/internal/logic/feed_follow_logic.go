@@ -2,6 +2,10 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/errorx"
+	"douniu/server/common/utils"
+	"fmt"
+	"github.com/pkg/errors"
 
 	"douniu/server/video/api/internal/svc"
 	"douniu/server/video/api/internal/types"
@@ -24,7 +28,10 @@ func NewFeedFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedFo
 }
 
 func (l *FeedFollowLogic) FeedFollow(req *types.FeedFollowReq) (resp *types.FeedResp, err error) {
-	// todo: add your logic here and delete this line
+	err = utils.DefaultGetValidParams(l.ctx, req)
+	if err != nil {
+		return nil, errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
+	}
 
 	return
 }

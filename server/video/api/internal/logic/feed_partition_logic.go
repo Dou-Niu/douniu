@@ -3,8 +3,11 @@ package logic
 import (
 	"context"
 	"douniu/server/common/consts"
+	"douniu/server/common/errorx"
+	"douniu/server/common/utils"
 	"douniu/server/video/rpc/types/pb"
 	"encoding/json"
+	"fmt"
 	"github.com/pkg/errors"
 	"math"
 	"time"
@@ -30,6 +33,10 @@ func NewFeedPartitionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Fee
 }
 
 func (l *FeedPartitionLogic) FeedPartition(req *types.FeedPartitionReq) (resp *types.FeedResp, err error) {
+	err = utils.DefaultGetValidParams(l.ctx, req)
+	if err != nil {
+		return nil, errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
+	}
 	if req.MaxValue == 0 {
 		req.MaxValue = math.MaxInt
 	}

@@ -3,8 +3,11 @@ package logic
 import (
 	"context"
 	"douniu/server/common/consts"
+	"douniu/server/common/errorx"
+	"douniu/server/common/utils"
 	"douniu/server/video/rpc/types/pb"
 	"encoding/json"
+	"fmt"
 	"github.com/pkg/errors"
 
 	"douniu/server/video/api/internal/svc"
@@ -28,6 +31,10 @@ func NewPublishVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publ
 }
 
 func (l *PublishVideoLogic) PublishVideo(req *types.PublishVideoReq) error {
+	err := utils.DefaultGetValidParams(l.ctx, req)
+	if err != nil {
+		return errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
+	}
 	meId, err := l.ctx.Value(consts.UserId).(json.Number).Int64()
 	_, err = l.svcCtx.VideoRpc.PublishVideo(l.ctx, &pb.PublishVideoReq{
 		VideoId:   0,

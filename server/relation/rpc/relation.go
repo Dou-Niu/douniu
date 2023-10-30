@@ -1,19 +1,18 @@
 package main
 
 import (
+	"douniu/server/relation/rpc/internal/server"
+	"douniu/server/relation/rpc/pb"
 	"flag"
 	"fmt"
-
-	"douniu/server/relation/rpc/internal/config"
-	"douniu/server/relation/rpc/internal/server"
-	"douniu/server/relation/rpc/internal/svc"
-	"douniu/server/relation/rpc/pb"
-
-	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	"douniu/server/relation/rpc/internal/config"
+	"douniu/server/relation/rpc/internal/svc"
+	"github.com/zeromicro/go-zero/core/conf"
 )
 
 var configFile = flag.String("f", "etc/relation.yaml", "the config file")

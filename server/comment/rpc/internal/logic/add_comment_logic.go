@@ -74,6 +74,14 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 		return
 	}
 
+	// 视频热度提升
+	videoIdStr := strconv.Itoa(int(in.VideoId))
+	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, int64(consts.SingleHotScore), videoIdStr)
+	if err != nil {
+		l.Errorf("RedisClient ZincrbyCtx error: %v", err)
+		return
+	}
+
 	//获取用户信息
 	userInfoResp, err := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &userrpc.UserInfoReq{
 		UserId:     in.UserId,

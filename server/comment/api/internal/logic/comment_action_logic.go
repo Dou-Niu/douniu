@@ -51,6 +51,7 @@ func (l *CommentActionLogic) CommentAction(req *types.CommentActionRequest) (res
 
 		_, err := l.svcCtx.CommentRpc.DelComment(l.ctx, &commentrpc.DelCommentRequest{
 			CommentId: req.CommentId,
+			VideoId:   req.VideoId,
 		})
 		if err != nil {
 			return nil, err

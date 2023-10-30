@@ -70,7 +70,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 		return
 	}
 	// 视频热度提升
-	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, consts.SingleHotScore, videoIdStr)
+	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, int64(consts.SingleHotScore), videoIdStr)
 	if err != nil {
 		l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 		return

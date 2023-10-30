@@ -27,6 +27,7 @@ message FollowActionResponse {
 message GetFollowListRequest {
     int64 user_id = 1;
     int64 to_user_id = 2;
+    int64 page_num = 3;
 }
 
 message GetFollowListResponse {
@@ -36,6 +37,7 @@ message GetFollowListResponse {
 message GetFollowerListRequest {
     int64 user_id = 1;
     int64 to_user_id = 2;
+    int64 page_num = 3;
 }
 
 message GetFollowerListResponse {

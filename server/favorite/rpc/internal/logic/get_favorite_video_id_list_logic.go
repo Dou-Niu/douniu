@@ -4,6 +4,7 @@ import (
 	"context"
 	"douniu/server/common/consts"
 	"strconv"
+	"time"
 
 	"douniu/server/favorite/rpc/internal/svc"
 	"douniu/server/favorite/rpc/pb"
@@ -28,7 +29,7 @@ func NewGetFavoriteVideoIdListLogic(ctx context.Context, svcCtx *svc.ServiceCont
 func (l *GetFavoriteVideoIdListLogic) GetFavoriteVideoIdList(in *pb.GetFavoriteVideoIdListRequest) (resp *pb.GetFavoriteVideoListIdResponse, err error) {
 	resp = new(pb.GetFavoriteVideoListIdResponse)
 	//idListStr, err := l.svcCtx.RedisClient.ZrevrangeCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1)
-	idListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1, int(in.PageNum), 15)
+	idListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, time.Now().Unix(), int(in.PageNum), consts.DefaultSize)
 	if err != nil {
 		l.Errorf("RedisClient ZrangeCtx error: %v", err)
 		return

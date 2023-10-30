@@ -52,6 +52,11 @@ const (
 	DefaultSignature       = "这个家伙很懒什么都没留下"
 )
 
+// 视频
+const (
+	DefaultSizeOfPage = 10
+)
+
 // 点赞
 const (
 	FavoriteAdd = 1

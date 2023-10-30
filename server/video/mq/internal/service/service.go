@@ -82,6 +82,7 @@ func (s *Service) consume(ch chan *model.Video) {
 			CoverUrl:   m.CoverUrl,
 			CreateTime: time.Now(),
 			UpdateTime: time.Now(),
+			DeleteTime: time.Now(),
 			Partition:  m.Partition,
 		}
 		// 敏感词过滤
@@ -96,7 +97,7 @@ func (s *Service) consume(ch chan *model.Video) {
 		}, func() error {
 			// 全部视频时序排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoTimeScore, redis.Z{
-				Score:  float64(m.CreateTime.Unix()),
+				Score:  float64(v.CreateTime.Unix()),
 				Member: m.Id,
 			}).Err()
 
@@ -104,35 +105,35 @@ func (s *Service) consume(ch chan *model.Video) {
 		}, func() error {
 			// 全部视频热度排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoHotScore, redis.Z{
-				Score:  float64(m.CreateTime.Unix()) * 0.5,
+				Score:  float64(v.CreateTime.Unix()) * 0.5,
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 用户所有视频时序排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoEveryUserTimeScore+fmt.Sprint(m.UserId), redis.Z{
-				Score:  float64(time.Now().Unix()),
+				Score:  float64(v.CreateTime.Unix()),
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 用户所有视频热度排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoEveryUserHotScore+fmt.Sprint(m.UserId), redis.Z{
-				Score:  float64(time.Now().Unix()) * 0.5,
+				Score:  float64(v.CreateTime.Unix()) * 0.5,
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 分区所有视频时序排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoPartitionTimeScore+fmt.Sprint(m.Partition), redis.Z{
-				Score:  float64(time.Now().Unix()),
+				Score:  float64(v.CreateTime.Unix()),
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 分区所有视频热度排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoPartitionHotScore+fmt.Sprint(m.Partition), redis.Z{
-				Score:  float64(time.Now().Unix()) * 0.5,
+				Score:  float64(v.CreateTime.Unix()) * 0.5,
 				Member: m.Id,
 			}).Err()
 			return err

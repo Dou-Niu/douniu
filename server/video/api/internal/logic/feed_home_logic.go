@@ -2,6 +2,11 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/consts"
+	"douniu/server/video/rpc/types/pb"
+	"encoding/json"
+	"github.com/pkg/errors"
+	"time"
 
 	"douniu/server/video/api/internal/svc"
 	"douniu/server/video/api/internal/types"
@@ -24,7 +29,50 @@ func NewFeedHomeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedHome
 }
 
 func (l *FeedHomeLogic) FeedHome(req *types.FeedHomeReq) (resp *types.FeedHomeResp, err error) {
-	// todo: add your logic here and delete this line
+	if req.LatestTime == 0 {
+		req.LatestTime = time.Now().Unix()
+	}
+	meId, err := l.ctx.Value(consts.UserId).(json.Number).Int64()
 
-	return
+	res, err := l.svcCtx.VideoRpc.FeedHome(l.ctx, &pb.FeedHomeReq{
+		LatestTime: req.LatestTime,
+		MeUserId:   meId,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(err, "req: %+v", req)
+	}
+	list := res.VideoList
+	videoList := make([]*types.VideoInfo, 0)
+	for _, v := range list {
+
+		videoList = append(videoList, &types.VideoInfo{
+			VideoID: v.Id,
+			Author:  types.AuthorInfo{
+				//ID:              v.User.Id,
+				//NickName:        v.User.Nickname,
+				//FollowCount:     v.User.FollowCount,
+				//FollowerCount:   v.User.FollowerCount,
+				//IsFollow:        v.User.IsFollow,
+				//Avatar:          v.User.Avatar,
+				//BackgroundImage: v.User.BackgroundImage,
+				//Signature:       v.User.Signature,
+				//TotalFavorited:  v.User.TotalFavorited,
+				//WorkCount:       v.User.WorkCount,
+				//FavoriteCount:   v.User.FavoriteCount,
+
+			},
+			PlayURL:       v.PlayUrl,
+			CoverURL:      v.CoverUrl,
+			FavoriteCount: v.FavoriteCount,
+			CommentCount:  v.CommentCount,
+			IsFavorite:    v.IsFavorite,
+			Title:         v.Title,
+			Partition:     v.Partition,
+			CreateTime:    time.Unix(v.CreateTime, 0).Format(time.DateTime),
+		})
+	}
+	return &types.FeedHomeResp{
+		NextTime:  res.NextTime,
+		VideoList: types.VideoList{List: videoList},
+	}, nil
 }

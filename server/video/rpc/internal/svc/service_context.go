@@ -3,6 +3,7 @@ package svc
 import (
 	"douniu/server/common/consts"
 	"douniu/server/common/init_db"
+	"douniu/server/user/rpc/userrpc"
 	"douniu/server/video/model"
 	"douniu/server/video/rpc/internal/config"
 	"github.com/bwmarrin/snowflake"
@@ -18,6 +19,7 @@ type ServiceContext struct {
 	RedisClient    *redis.Client
 	VideoModel     model.VideoModel
 	KqPusherClient *kq.Pusher
+	UserRpc        userrpc.UserRpc
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -30,5 +32,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Snowflake:      snowflakeNode,
 		RedisClient:    init_db.InitRedis(c.RedisConf.Host, c.RedisConf.Password),
 		KqPusherClient: kq.NewPusher(c.KqPusherConf.Brokers, c.KqPusherConf.Topic),
+		//UserRpc:  userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
+
 	}
 }

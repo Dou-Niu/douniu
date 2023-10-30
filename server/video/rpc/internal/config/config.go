@@ -7,6 +7,8 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
+	UserRpcConf zrpc.RpcClientConf
+
 	MysqlConf struct {
 		DataSource string
 	}

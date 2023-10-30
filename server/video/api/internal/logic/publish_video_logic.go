@@ -2,6 +2,10 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/consts"
+	"douniu/server/video/rpc/types/pb"
+	"encoding/json"
+	"github.com/pkg/errors"
 
 	"douniu/server/video/api/internal/svc"
 	"douniu/server/video/api/internal/types"
@@ -24,7 +28,18 @@ func NewPublishVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publ
 }
 
 func (l *PublishVideoLogic) PublishVideo(req *types.PublishVideoReq) error {
-	// todo: add your logic here and delete this line
+	meId, err := l.ctx.Value(consts.UserId).(json.Number).Int64()
+	_, err = l.svcCtx.VideoRpc.PublishVideo(l.ctx, &pb.PublishVideoReq{
+		VideoId:   0,
+		MeUserID:  meId,
+		VideoUrl:  req.VideoUrl,
+		CoverUrl:  req.CoverUrl,
+		Partition: req.Partition,
+		Title:     req.Title,
+	})
+	if err != nil {
+		return errors.Wrapf(err, "req: %+v", req)
+	}
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"douniu/server/common/response/rpcserver"
 	"flag"
 	"fmt"
 
@@ -33,7 +34,8 @@ func main() {
 		}
 	})
 	defer s.Stop()
-
+	// 添加rpc 错误返回
+	s.AddUnaryInterceptors(rpcserver.LoggerInterceptor)
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

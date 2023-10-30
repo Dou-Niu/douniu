@@ -7,6 +7,7 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
+
 	JWTAuth struct {
 		AccessSecret       string
 		AccessTokenExpire  int64

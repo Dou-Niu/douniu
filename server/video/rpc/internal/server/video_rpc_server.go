@@ -36,3 +36,23 @@ func (s *VideoRpcServer) PublishVideo(ctx context.Context, in *pb.PublishVideoRe
 	l := logic.NewPublishVideoLogic(ctx, s.svcCtx)
 	return l.PublishVideo(in)
 }
+
+func (s *VideoRpcServer) FeedHome(ctx context.Context, in *pb.FeedHomeReq) (*pb.FeedHomeResp, error) {
+	l := logic.NewFeedHomeLogic(ctx, s.svcCtx)
+	return l.FeedHome(in)
+}
+
+func (s *VideoRpcServer) FeedHot(ctx context.Context, in *pb.FeedHotReq) (*pb.FeedHotResp, error) {
+	l := logic.NewFeedHotLogic(ctx, s.svcCtx)
+	return l.FeedHot(in)
+}
+
+func (s *VideoRpcServer) FeedUser(ctx context.Context, in *pb.FeedUserReq) (*pb.FeedResp, error) {
+	l := logic.NewFeedUserLogic(ctx, s.svcCtx)
+	return l.FeedUser(in)
+}
+
+func (s *VideoRpcServer) FeedPartition(ctx context.Context, in *pb.FeedPartitionReq) (*pb.FeedResp, error) {
+	l := logic.NewFeedPartitionLogic(ctx, s.svcCtx)
+	return l.FeedPartition(in)
+}

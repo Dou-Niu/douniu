@@ -10,16 +10,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func FeedHostHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func FeedHotHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.FeedHostReq
+		var req types.FeedHotReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewFeedHostLogic(r.Context(), svcCtx)
-		resp, err := l.FeedHost(&req)
+		l := logic.NewFeedHotLogic(r.Context(), svcCtx)
+		resp, err := l.FeedHot(&req)
 		response.Response(r, w, resp, err) //②
 
 	}

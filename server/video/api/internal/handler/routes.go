@@ -25,8 +25,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/feed/host",
-				Handler: FeedHostHandler(serverCtx),
+				Path:    "/feed/hot",
+				Handler: FeedHotHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,

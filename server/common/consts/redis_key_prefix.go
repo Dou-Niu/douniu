@@ -18,10 +18,15 @@ const (
 	// VideoTimeScore 视频时序排行
 	VideoTimeScore = ProjectNamePrefix + "videoTimeScore"
 
-	// VideoUserSet  每个用户的所有视频id
-	VideoUserSet = ProjectNamePrefix + "videoUserSet:"
-	// VideoPartitionSet 每个分区的所有视频id
-	VideoPartitionSet = ProjectNamePrefix + "videoPartitionSet:"
+	// VideoEveryUserTimeScore  每个用户的所有视频时序排行
+	VideoEveryUserTimeScore = ProjectNamePrefix + "videoEveryUserTimeScore:"
+	// VideoEveryUserHotScore  每个用户的所有视频热度排行
+	VideoEveryUserHotScore = ProjectNamePrefix + "videoEveryUserHotScore:"
+
+	// VideoPartitionTimeScore 每个分区的所有视频时序排序
+	VideoPartitionTimeScore = ProjectNamePrefix + "videoPartitionTimeScore:"
+	// VideoPartitionHotScore 每个分区的所有视频时序排序
+	VideoPartitionHotScore = ProjectNamePrefix + "videoPartitionHotScore:"
 )
 
 const (

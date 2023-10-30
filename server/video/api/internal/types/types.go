@@ -40,22 +40,23 @@ type PublishVideoReq struct {
 }
 
 type FeedUserReq struct {
-	UserId int64 `form:"user_id"`
-	Sort   int64 `form:"sort"`
-	Page   int64 `form:"page"`
+	UserId   int64 `form:"user_id"`
+	Sort     int64 `form:"sort"`
+	MaxValue int64 `form:"max_value"`
 }
 
 type FeedResp struct {
-	IsFinal bool `form:"is_final"`
+	NextMaxValue int64 `json:"next_max_value"`
+	IsFinal      bool  `json:"is_final"`
 	VideoList
 }
 
-type FeedHostReq struct {
-	MaxHost int64 `form:"max_hot"`
+type FeedHotReq struct {
+	MaxHot int64 `form:"max_hot"`
 }
 
-type FeedHostResp struct {
-	NextMaxHost int64 `form:"next_max_host"`
+type FeedHotResp struct {
+	NextMaxHot int64 `form:"next_max_hot"`
 	VideoList
 }
 
@@ -69,12 +70,12 @@ type FeedHomeResp struct {
 }
 
 type FeedFollowReq struct {
-	Sort int64 `form:"sort"`
-	Page int64 `form:"page"`
+	Sort     int64 `form:"sort"`
+	MaxValue int64 `form:"max_value"`
 }
 
 type FeedPartitionReq struct {
 	Sort      int64 `form:"sort"`
-	Page      int64 `form:"page"`
+	MaxValue  int64 `form:"max_value"`
 	Partition int64 `form:"partition"`
 }

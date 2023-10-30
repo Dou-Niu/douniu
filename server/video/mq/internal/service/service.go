@@ -92,27 +92,50 @@ func (s *Service) consume(ch chan *model.Video) {
 		err := mr.Finish(func() error {
 			// 写入mysql
 			_, err := s.VideoModel.Insert(s.ctx, &v)
+			return err
+		}, func() error {
+			// 全部视频时序排序
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoTimeScore, redis.Z{
+				Score:  float64(m.CreateTime.Unix()),
+				Member: m.Id,
+			}).Err()
 
 			return err
 		}, func() error {
-			// 写入redis 时间倒序zset
-			res := s.RedisClient.ZAdd(s.ctx, consts.VideoTimeScore, redis.Z{
-				Score:  float64(m.CreateTime.Unix()),
+			// 全部视频热度排序
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoHotScore, redis.Z{
+				Score:  float64(m.CreateTime.Unix()) * 0.5,
 				Member: m.Id,
-			})
-
-			return res.Err()
+			}).Err()
+			return err
 		}, func() error {
-			// 写入视频user列表 set
-			res := s.RedisClient.SAdd(s.ctx, consts.VideoUserSet+fmt.Sprint(m.UserId), m.Id)
-
-			return res.Err()
+			// 用户所有视频时序排序
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoEveryUserTimeScore+fmt.Sprint(m.UserId), redis.Z{
+				Score:  float64(time.Now().Unix()),
+				Member: m.Id,
+			}).Err()
+			return err
 		}, func() error {
-			// 写入对应分区set列表
-			res := s.RedisClient.SAdd(s.ctx, consts.VideoPartitionSet+fmt.Sprint(m.Partition), m.Id)
-
-			return res.Err()
-
+			// 用户所有视频热度排序
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoEveryUserHotScore+fmt.Sprint(m.UserId), redis.Z{
+				Score:  float64(time.Now().Unix()) * 0.5,
+				Member: m.Id,
+			}).Err()
+			return err
+		}, func() error {
+			// 分区所有视频时序排序
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoPartitionTimeScore+fmt.Sprint(m.Partition), redis.Z{
+				Score:  float64(time.Now().Unix()),
+				Member: m.Id,
+			}).Err()
+			return err
+		}, func() error {
+			// 分区所有视频热度排序
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoPartitionHotScore+fmt.Sprint(m.Partition), redis.Z{
+				Score:  float64(time.Now().Unix()) * 0.5,
+				Member: m.Id,
+			}).Err()
+			return err
 		})
 		if err != nil {
 			logx.Error("video mq并发写入mysql,redis错误，err:", err)

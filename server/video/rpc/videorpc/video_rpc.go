@@ -14,6 +14,14 @@ import (
 
 type (
 	CommonResp           = pb.CommonResp
+	FeedFollowReq        = pb.FeedFollowReq
+	FeedHomeReq          = pb.FeedHomeReq
+	FeedHomeResp         = pb.FeedHomeResp
+	FeedHotReq           = pb.FeedHotReq
+	FeedHotResp          = pb.FeedHotResp
+	FeedPartitionReq     = pb.FeedPartitionReq
+	FeedResp             = pb.FeedResp
+	FeedUserReq          = pb.FeedUserReq
 	GetAuthorIdReq       = pb.GetAuthorIdReq
 	GetAuthorIdResp      = pb.GetAuthorIdResp
 	GetVideoListInfoReq  = pb.GetVideoListInfoReq
@@ -26,6 +34,10 @@ type (
 		GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error)
 		GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error)
 		PublishVideo(ctx context.Context, in *PublishVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
+		FeedHome(ctx context.Context, in *FeedHomeReq, opts ...grpc.CallOption) (*FeedHomeResp, error)
+		FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error)
+		FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error)
+		FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error)
 	}
 
 	defaultVideoRpc struct {
@@ -52,4 +64,24 @@ func (m *defaultVideoRpc) GetVideoListInfo(ctx context.Context, in *GetVideoList
 func (m *defaultVideoRpc) PublishVideo(ctx context.Context, in *PublishVideoReq, opts ...grpc.CallOption) (*CommonResp, error) {
 	client := pb.NewVideoRpcClient(m.cli.Conn())
 	return client.PublishVideo(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) FeedHome(ctx context.Context, in *FeedHomeReq, opts ...grpc.CallOption) (*FeedHomeResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.FeedHome(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.FeedHot(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.FeedUser(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.FeedPartition(ctx, in, opts...)
 }

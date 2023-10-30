@@ -67,6 +67,12 @@ func (l *DelFavoriteLogic) DelFavorite(in *pb.DelFavoriteRequest) (resp *pb.DelF
 		l.Errorf("RedisClient IncrCtx error: %v", err)
 		return
 	}
+	// 视频热度减少
+	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, -int64(consts.SingleHotScore), videoIdStr)
+	if err != nil {
+		l.Errorf("RedisClient ZincrbyCtx error: %v", err)
+		return
+	}
 
 	resp = new(pb.DelFavoriteResponse)
 	err = nil

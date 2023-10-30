@@ -1,12 +1,8 @@
 package consts
 
 const (
-	UserId = "userId"
-
-	MsgTypeRecv = 0
-	MsgTypeSend = 1
-	CommentAdd  = 1
-	CommentDel  = 2
+	UserId      = "userId"
+	DefaultSize = 15
 )
 
 const (
@@ -14,9 +10,10 @@ const (
 	ChatMachineId
 	VideoMachineId
 	FavoriteMachineId
+	RelationMachineId
 )
 
-const (
+var (
 	SingleHotScore = 8640
 )
 
@@ -59,8 +56,19 @@ const (
 	SortByTime        = 2
 )
 
-// 点赞
+// 关注
 const (
+	FollowAdd = 1
+	FollowDel = 2
+
+	MessageSend = 1
+
+	MsgTypeRecv = 0
+	MsgTypeSend = 1
+
+	CommentAdd = 1
+	CommentDel = 2
+
 	FavoriteAdd = 1
 	FavoriteDel = 2
 )

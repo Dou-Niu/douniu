@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/rest/httpx"
 
 	"douniu/server/comment/api/internal/config"
 	"douniu/server/comment/api/internal/handler"
@@ -23,6 +24,7 @@ func main() {
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
+	httpx.SetValidator(svc.NewValidator())
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 

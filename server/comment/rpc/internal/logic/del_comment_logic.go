@@ -44,6 +44,14 @@ func (l *DelCommentLogic) DelComment(in *pb.DelCommentRequest) (resp *pb.DelComm
 		return
 	}
 
+	// 视频热度减少
+	videoIdStr := strconv.Itoa(int(in.VideoId))
+	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, -int64(consts.SingleHotScore), videoIdStr)
+	if err != nil {
+		l.Errorf("RedisClient ZincrbyCtx error: %v", err)
+		return
+	}
+
 	resp = new(pb.DelCommentResponse)
 	return
 }

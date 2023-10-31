@@ -14,6 +14,7 @@ import (
 
 type (
 	CommonResp                   = pb.CommonResp
+	ModifyUserInfoReq            = pb.ModifyUserInfoReq
 	RegisterOrLoginByPasswordReq = pb.RegisterOrLoginByPasswordReq
 	RegisterOrLoginByPhoneReq    = pb.RegisterOrLoginByPhoneReq
 	RegisterOrLoginResp          = pb.RegisterOrLoginResp
@@ -38,6 +39,8 @@ type (
 		ChangePassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error)
 		// 获取用户信息
 		GetUserInfo(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoResp, error)
+		// 修改用户信息
+		ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*CommonResp, error)
 	}
 
 	defaultUserRpc struct {
@@ -85,4 +88,10 @@ func (m *defaultUserRpc) ChangePassword(ctx context.Context, in *ResetPassword, 
 func (m *defaultUserRpc) GetUserInfo(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoResp, error) {
 	client := pb.NewUserRpcClient(m.cli.Conn())
 	return client.GetUserInfo(ctx, in, opts...)
+}
+
+// 修改用户信息
+func (m *defaultUserRpc) ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*CommonResp, error) {
+	client := pb.NewUserRpcClient(m.cli.Conn())
+	return client.ModifyUserInfo(ctx, in, opts...)
 }

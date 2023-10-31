@@ -25,6 +25,7 @@ const (
 	UserRpc_ForgetPassword_FullMethodName            = "/user.UserRpc/ForgetPassword"
 	UserRpc_ChangePassword_FullMethodName            = "/user.UserRpc/ChangePassword"
 	UserRpc_GetUserInfo_FullMethodName               = "/user.UserRpc/GetUserInfo"
+	UserRpc_ModifyUserInfo_FullMethodName            = "/user.UserRpc/ModifyUserInfo"
 )
 
 // UserRpcClient is the client API for UserRpc service.
@@ -43,6 +44,8 @@ type UserRpcClient interface {
 	ChangePassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error)
 	// 获取用户信息
 	GetUserInfo(ctx context.Context, in *UserInfoReq, opts ...grpc.CallOption) (*UserInfoResp, error)
+	// 修改用户信息
+	ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*CommonResp, error)
 }
 
 type userRpcClient struct {
@@ -107,6 +110,15 @@ func (c *userRpcClient) GetUserInfo(ctx context.Context, in *UserInfoReq, opts .
 	return out, nil
 }
 
+func (c *userRpcClient) ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*CommonResp, error) {
+	out := new(CommonResp)
+	err := c.cc.Invoke(ctx, UserRpc_ModifyUserInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserRpcServer is the server API for UserRpc service.
 // All implementations must embed UnimplementedUserRpcServer
 // for forward compatibility
@@ -123,6 +135,8 @@ type UserRpcServer interface {
 	ChangePassword(context.Context, *ResetPassword) (*CommonResp, error)
 	// 获取用户信息
 	GetUserInfo(context.Context, *UserInfoReq) (*UserInfoResp, error)
+	// 修改用户信息
+	ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*CommonResp, error)
 	mustEmbedUnimplementedUserRpcServer()
 }
 
@@ -147,6 +161,9 @@ func (UnimplementedUserRpcServer) ChangePassword(context.Context, *ResetPassword
 }
 func (UnimplementedUserRpcServer) GetUserInfo(context.Context, *UserInfoReq) (*UserInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
+}
+func (UnimplementedUserRpcServer) ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*CommonResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModifyUserInfo not implemented")
 }
 func (UnimplementedUserRpcServer) mustEmbedUnimplementedUserRpcServer() {}
 
@@ -269,6 +286,24 @@ func _UserRpc_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserRpc_ModifyUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModifyUserInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserRpcServer).ModifyUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserRpc_ModifyUserInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserRpcServer).ModifyUserInfo(ctx, req.(*ModifyUserInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserRpc_ServiceDesc is the grpc.ServiceDesc for UserRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -299,6 +334,10 @@ var UserRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserInfo",
 			Handler:    _UserRpc_GetUserInfo_Handler,
+		},
+		{
+			MethodName: "ModifyUserInfo",
+			Handler:    _UserRpc_ModifyUserInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

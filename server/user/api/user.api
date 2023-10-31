@@ -64,6 +64,11 @@ type (
 		AccessToken string `json:"access_token"`
 		RefreshToken string `json:"refresh_token"`
 	}
+		// 1.修改昵称，2.个性签名，3.头像，4.背景图
+	ModifyUserInfoReq {
+		Types int64 `json:"types" validate:"gte=1,lte=4"`
+		Value string `json:"value"`
+	}
 )
 
 @server(
@@ -117,4 +122,10 @@ service user-api {
 	)
 	@handler RefreshToken
 	post /refreshToken () returns (TokenResp)
+
+	@doc(
+		summary: "修改用户信息"
+	)
+	@handler ModifyUserInfo
+	post /userinfo/modify (ModifyUserInfoReq) returns ()
 }

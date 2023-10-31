@@ -57,3 +57,8 @@ type TokenResp struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
+
+type ModifyUserInfoReq struct {
+	Types int64  `json:"types" validate:"gte=1,lte=4"`
+	Value string `json:"value"`
+}

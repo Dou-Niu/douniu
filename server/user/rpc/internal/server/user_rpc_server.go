@@ -57,3 +57,9 @@ func (s *UserRpcServer) GetUserInfo(ctx context.Context, in *pb.UserInfoReq) (*p
 	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
 	return l.GetUserInfo(in)
 }
+
+// 修改用户信息
+func (s *UserRpcServer) ModifyUserInfo(ctx context.Context, in *pb.ModifyUserInfoReq) (*pb.CommonResp, error) {
+	l := logic.NewModifyUserInfoLogic(ctx, s.svcCtx)
+	return l.ModifyUserInfo(in)
+}

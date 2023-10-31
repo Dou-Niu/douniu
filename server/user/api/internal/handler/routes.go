@@ -53,6 +53,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/refreshToken",
 				Handler: RefreshTokenHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/userinfo/modify",
+				Handler: ModifyUserInfoHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JWTAuth.AccessSecret),
 		rest.WithPrefix("/douniu/user"),

@@ -14,6 +14,7 @@ import (
 
 type (
 	CommonResp           = pb.CommonResp
+	DeleteVideoReq       = pb.DeleteVideoReq
 	FeedFollowReq        = pb.FeedFollowReq
 	FeedHomeReq          = pb.FeedHomeReq
 	FeedHomeResp         = pb.FeedHomeResp
@@ -38,6 +39,7 @@ type (
 		FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error)
 		FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error)
 		FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error)
+		DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
 	}
 
 	defaultVideoRpc struct {
@@ -84,4 +86,9 @@ func (m *defaultVideoRpc) FeedUser(ctx context.Context, in *FeedUserReq, opts ..
 func (m *defaultVideoRpc) FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error) {
 	client := pb.NewVideoRpcClient(m.cli.Conn())
 	return client.FeedPartition(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.DeleteVideo(ctx, in, opts...)
 }

@@ -26,6 +26,7 @@ const (
 	VideoRpc_FeedHot_FullMethodName          = "/video.VideoRpc/FeedHot"
 	VideoRpc_FeedUser_FullMethodName         = "/video.VideoRpc/FeedUser"
 	VideoRpc_FeedPartition_FullMethodName    = "/video.VideoRpc/FeedPartition"
+	VideoRpc_DeleteVideo_FullMethodName      = "/video.VideoRpc/DeleteVideo"
 )
 
 // VideoRpcClient is the client API for VideoRpc service.
@@ -39,6 +40,7 @@ type VideoRpcClient interface {
 	FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error)
 	FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error)
 	FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error)
+	DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
 }
 
 type videoRpcClient struct {
@@ -112,6 +114,15 @@ func (c *videoRpcClient) FeedPartition(ctx context.Context, in *FeedPartitionReq
 	return out, nil
 }
 
+func (c *videoRpcClient) DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error) {
+	out := new(CommonResp)
+	err := c.cc.Invoke(ctx, VideoRpc_DeleteVideo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // VideoRpcServer is the server API for VideoRpc service.
 // All implementations must embed UnimplementedVideoRpcServer
 // for forward compatibility
@@ -123,6 +134,7 @@ type VideoRpcServer interface {
 	FeedHot(context.Context, *FeedHotReq) (*FeedHotResp, error)
 	FeedUser(context.Context, *FeedUserReq) (*FeedResp, error)
 	FeedPartition(context.Context, *FeedPartitionReq) (*FeedResp, error)
+	DeleteVideo(context.Context, *DeleteVideoReq) (*CommonResp, error)
 	mustEmbedUnimplementedVideoRpcServer()
 }
 
@@ -150,6 +162,9 @@ func (UnimplementedVideoRpcServer) FeedUser(context.Context, *FeedUserReq) (*Fee
 }
 func (UnimplementedVideoRpcServer) FeedPartition(context.Context, *FeedPartitionReq) (*FeedResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FeedPartition not implemented")
+}
+func (UnimplementedVideoRpcServer) DeleteVideo(context.Context, *DeleteVideoReq) (*CommonResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteVideo not implemented")
 }
 func (UnimplementedVideoRpcServer) mustEmbedUnimplementedVideoRpcServer() {}
 
@@ -290,6 +305,24 @@ func _VideoRpc_FeedPartition_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoRpc_DeleteVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteVideoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoRpcServer).DeleteVideo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoRpc_DeleteVideo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoRpcServer).DeleteVideo(ctx, req.(*DeleteVideoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // VideoRpc_ServiceDesc is the grpc.ServiceDesc for VideoRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +357,10 @@ var VideoRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FeedPartition",
 			Handler:    _VideoRpc_FeedPartition_Handler,
+		},
+		{
+			MethodName: "DeleteVideo",
+			Handler:    _VideoRpc_DeleteVideo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

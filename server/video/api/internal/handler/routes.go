@@ -43,6 +43,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/feed/partition",
 				Handler: FeedPartitionHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/delete",
+				Handler: DeleteVideoHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JWTAuth.AccessSecret),
 		rest.WithPrefix("/douniu/video"),

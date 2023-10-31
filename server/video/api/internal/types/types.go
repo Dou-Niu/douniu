@@ -79,3 +79,8 @@ type FeedPartitionReq struct {
 	MaxValue  int64 `form:"max_value"`
 	Partition int64 `form:"partition" validate:"gte=1,lte=5"`
 }
+
+type DeleteVideoReq struct {
+	VideoId   int64 `json:"video_id"`
+	Partition int64 `json:"partition" validate:"gte=1,lte=5"`
+}

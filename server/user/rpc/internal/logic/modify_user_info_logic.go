@@ -34,5 +34,5 @@ func (l *ModifyUserInfoLogic) ModifyUserInfo(in *pb.ModifyUserInfoReq) (*pb.Comm
 		return nil, errors.Wrapf(errorx.NewDefaultError("修改用户信息失败,err:"+err.Error()), "修改用户信息时候失败 RegisterOrLoginByPhoneReq：%v", in)
 
 	}
-	return nil, nil
+	return &pb.CommonResp{}, nil
 }

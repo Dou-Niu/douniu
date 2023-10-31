@@ -12,6 +12,7 @@ service VideoRpc {
   rpc FeedHot(FeedHotReq)returns(FeedHotResp);
   rpc FeedUser(FeedUserReq)returns(FeedResp);
   rpc FeedPartition(FeedPartitionReq)returns(FeedResp);
+  rpc DeleteVideo(DeleteVideoReq)returns(CommonResp);
 }
 
 message GetAuthorIdReq {
@@ -118,4 +119,9 @@ message FeedPartitionReq {
   int64 partition = 3;
   int64 me_user_id = 4;
 
+}
+message DeleteVideoReq{
+  int64 me_user_id = 1;
+  int64 video_id = 2;
+  int64 Partition = 3;
 }

@@ -49,6 +49,14 @@ const (
 	DefaultSignature       = "这个家伙很懒什么都没留下"
 )
 
+// 修改用户信息
+const (
+	ModifyNickname = iota + 1
+	ModifySignature
+	ModifyAvatar
+	ModifyBackGroundImage
+)
+
 // 视频
 const (
 	DefaultSizeOfPage = 10

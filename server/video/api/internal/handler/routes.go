@@ -44,7 +44,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: FeedPartitionHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodGet,
+				Method:  http.MethodDelete,
 				Path:    "/delete",
 				Handler: DeleteVideoHandler(serverCtx),
 			},

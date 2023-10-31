@@ -89,8 +89,8 @@ type (
 	}
         // 删除视频
     DeleteVideoReq {
-        VideoId int64 `json:"video_id"`
-        Partition int64 `json:"partition" validate:"gte=1,lte=5"`
+        VideoId int64 `form:"video_id"`
+        Partition int64 `form:"partition" validate:"gte=1,lte=5"`
     }
 )
 @server(
@@ -139,5 +139,5 @@ service video {
         summary: "用户删除视频"
     )
     @handler DeleteVideo
-    get /delete (DeleteVideoReq) returns ()
+    delete /delete (DeleteVideoReq) returns ()
 }

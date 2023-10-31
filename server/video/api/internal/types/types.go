@@ -81,6 +81,6 @@ type FeedPartitionReq struct {
 }
 
 type DeleteVideoReq struct {
-	VideoId   int64 `json:"video_id"`
-	Partition int64 `json:"partition" validate:"gte=1,lte=5"`
+	VideoId   int64 `form:"video_id"`
+	Partition int64 `form:"partition" validate:"gte=1,lte=5"`
 }

@@ -22,4 +22,7 @@ type Config struct {
 		Brokers []string
 		Topic   string
 	}
+	ESConf struct {
+		Host string
+	}
 }

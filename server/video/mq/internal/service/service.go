@@ -9,6 +9,8 @@ import (
 	"douniu/server/video/mq/internal/config"
 	"encoding/json"
 	"fmt"
+	"github.com/olivere/elastic"
+	"github.com/zeromicro/go-zero/core/jsonx"
 	"log"
 	"sync"
 	"time"
@@ -33,6 +35,7 @@ type Service struct {
 	RedisClient   *redis.Client
 	VideoModel    model.VideoModel
 	ctx           context.Context
+	ESClient      *elastic.Client
 }
 
 // NewService 创建一个新的 Service 实例
@@ -48,6 +51,7 @@ func NewService(c config.Config) *Service {
 		VideoModel:    model.NewVideoModel(mysqlConn, c.CacheRedis),
 		SensitiveTrie: utils.NewSensitiveTrie(),
 		RedisClient:   init_db.InitRedis(c.RedisConf.Host, c.RedisConf.Password),
+		ESClient:      init_db.GetESClient(c.ESConf.Host),
 	}
 
 	// 创建 chanCount 个消费者 goroutine
@@ -142,6 +146,22 @@ func (s *Service) consume(ch chan *model.Video) {
 			logx.Error("video mq并发写入mysql,redis错误，err:", err)
 			return
 		}
+		vJson, err := jsonx.MarshalToString(v)
+		if err != nil {
+			logx.Error("解析json对象，err:", err)
+
+			return
+		}
+		_, err = s.ESClient.Index().
+			Index(consts.EsVideoIndex).
+			BodyJson(vJson).
+			Type(consts.EsVideoIndex).
+			Do(s.ctx)
+		if err != nil {
+			logx.Error("video同步到es错误，err:", err)
+			return
+		}
+
 		logx.Infof("video= %v 写入成功", m.Id)
 	}
 }

@@ -1,8 +1,8 @@
 version: '3.5'
 # 网络配置
 networks:
-  gophertok:
-    external: true
+  douniu:
+    driver: bridge
 
 
 # 服务容器配置
@@ -25,7 +25,7 @@ services:
       - ES_SERVER_URLS=http://elasticsearch:9200
       - LOG_LEVEL=debug
     networks:
-      - gophertok
+      - douniu
 
   #prometheus监控 — Prometheus for monitoring
   prometheus:
@@ -45,7 +45,7 @@ services:
     ports:
       - 9090:9090
     networks:
-      - gophertok
+      - douniu
 
   #查看prometheus监控数据 - Grafana to view Prometheus monitoring data
   grafana:
@@ -62,7 +62,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - gophertok
+      - douniu
   #  #搜集kafka业务日志、存储prometheus监控数据 - Kafka for collecting business logs and storing Prometheus monitoring data
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.4
@@ -78,7 +78,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     networks:
-      - gophertok
+      - douniu
 
   #查看elasticsearch数据 - Kibana to view Elasticsearch data
   kibana:
@@ -89,7 +89,7 @@ services:
       - TZ=Asia/Shanghai
     restart: always
     networks:
-      - gophertok
+      - douniu
     ports:
       - "5601:5601"
     depends_on:
@@ -108,7 +108,7 @@ services:
     volumes:
       - ./deploy/go-stash/etc:/app/etc
     networks:
-      - gophertok
+      - douniu
     depends_on:
       - elasticsearch
 
@@ -129,7 +129,7 @@ services:
       # - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers
       - /var/lib/docker/containers:/var/lib/docker/containers
     networks:
-      - gophertok
+      - douniu
 
 
 
@@ -142,7 +142,7 @@ services:
 #      - TZ=Asia/Shanghai
 #    privileged: true
 #    networks:
-#      - gophertok
+#      - douniu
 #    ports:
 #      - "2181:2181"
 #    restart: always
@@ -163,7 +163,7 @@ services:
 #    restart: always
 #    privileged: true
 #    networks:
-#      - gophertok
+#      - douniu
 #    depends_on:
 #      - zookeeper
 ## 映射mac docker容器位置

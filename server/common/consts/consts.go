@@ -62,6 +62,7 @@ const (
 	DefaultSizeOfPage = 10
 	SortByHot         = 1
 	SortByTime        = 2
+	EsVideoIndex      = "es-douniu-video"
 )
 
 // 关注

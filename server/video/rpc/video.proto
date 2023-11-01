@@ -12,6 +12,7 @@ service VideoRpc {
   rpc FeedHot(FeedHotReq)returns(FeedHotResp);
   rpc FeedUser(FeedUserReq)returns(FeedResp);
   rpc FeedPartition(FeedPartitionReq)returns(FeedResp);
+  rpc SearchVideo(SearchVideoReq)returns(FeedResp);
   rpc DeleteVideo(DeleteVideoReq)returns(CommonResp);
 }
 
@@ -124,4 +125,9 @@ message DeleteVideoReq{
   int64 me_user_id = 1;
   int64 video_id = 2;
   int64 Partition = 3;
+}
+message SearchVideoReq{
+  int64 MeUserId = 1;
+  string KeyWords = 2;
+  int64 Size = 3;
 }

@@ -48,6 +48,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/delete",
 				Handler: DeleteVideoHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/search",
+				Handler: SearchVideoHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JWTAuth.AccessSecret),
 		rest.WithPrefix("/douniu/video"),

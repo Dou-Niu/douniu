@@ -40,15 +40,15 @@ type (
 	}
 
 	Video struct {
-		Id         int64     `db:"id"`
-		UserId     int64     `db:"user_id"`
-		Title      string    `db:"title"`
-		Partition  int64     `db:"partition"`
-		PlayUrl    string    `db:"play_url"`
-		CoverUrl   string    `db:"cover_url"`
-		CreateTime time.Time `db:"create_time"`
-		UpdateTime time.Time `db:"update_time"`
-		DeleteTime time.Time `db:"delete_time"`
+		Id         int64     `db:"id" json:"id"`
+		UserId     int64     `db:"user_id" json:"user_id"`
+		Title      string    `db:"title" json:"title"`
+		Partition  int64     `db:"partition" json:"partition"`
+		PlayUrl    string    `db:"play_url" json:"play_url"`
+		CoverUrl   string    `db:"cover_url" json:"cover_url"`
+		CreateTime time.Time `db:"create_time" json:"create_time"`
+		UpdateTime time.Time `db:"update_time" json:"update_time"`
+		DeleteTime time.Time `db:"delete_time" json:"delete_time"`
 	}
 )
 

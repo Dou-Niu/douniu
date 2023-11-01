@@ -28,6 +28,7 @@ type (
 	GetVideoListInfoReq  = pb.GetVideoListInfoReq
 	GetVideoListInfoResp = pb.GetVideoListInfoResp
 	PublishVideoReq      = pb.PublishVideoReq
+	SearchVideoReq       = pb.SearchVideoReq
 	User                 = pb.User
 	Video                = pb.Video
 
@@ -39,6 +40,7 @@ type (
 		FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error)
 		FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error)
 		FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error)
+		SearchVideo(ctx context.Context, in *SearchVideoReq, opts ...grpc.CallOption) (*FeedResp, error)
 		DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
 	}
 
@@ -86,6 +88,11 @@ func (m *defaultVideoRpc) FeedUser(ctx context.Context, in *FeedUserReq, opts ..
 func (m *defaultVideoRpc) FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error) {
 	client := pb.NewVideoRpcClient(m.cli.Conn())
 	return client.FeedPartition(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) SearchVideo(ctx context.Context, in *SearchVideoReq, opts ...grpc.CallOption) (*FeedResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.SearchVideo(ctx, in, opts...)
 }
 
 func (m *defaultVideoRpc) DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error) {

@@ -18,4 +18,7 @@ type Config struct {
 		Host     string
 		Password string
 	}
+	ESConf struct {
+		Host string
+	}
 }

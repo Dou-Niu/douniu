@@ -9,30 +9,30 @@ info(
 
 // Author
 type AuthorInfo {
-    ID int64 `json:"id"`
-    NickName string `json:"nickname"`
-    FollowCount int64 `json:"follow_count"`
-    FollowerCount int64 `json:"follower_count"`
-    IsFollow bool `json:"is_follow"`
-    Avatar string `json:"avatar"`
+	ID int64 `json:"id"`
+	NickName string `json:"nickname"`
+	FollowCount int64 `json:"follow_count"`
+	FollowerCount int64 `json:"follower_count"`
+	IsFollow bool `json:"is_follow"`
+	Avatar string `json:"avatar"`
 	BackgroundImage string `json:"background_image"`
-    Signature string `json:"signature"`
-    TotalFavorited int64 `json:"total_favorited"`
-    WorkCount int64 `json:"work_count"`
-    FavoriteCount int64 `json:"favorite_count"`
+	Signature string `json:"signature"`
+	TotalFavorited int64 `json:"total_favorited"`
+	WorkCount int64 `json:"work_count"`
+	FavoriteCount int64 `json:"favorite_count"`
 }
 // video
 type VideoInfo {
-    VideoID int64 `json:"video_id"`
-    Author AuthorInfo `json:"author"`
-    PlayURL string `json:"play_url"`
-    CoverURL string `json:"cover_url"`
-    FavoriteCount int64 `json:"favorite_count"`
-    CommentCount int64 `json:"comment_count"`
-    IsFavorite bool `json:"is_favorite"`
-    Title string `json:"title"`
-    Partition int64 `json:"partition"`
-    CreateTime string `json:"create_time"`
+	VideoID int64 `json:"video_id"`
+	Author AuthorInfo `json:"author"`
+	PlayURL string `json:"play_url"`
+	CoverURL string `json:"cover_url"`
+	FavoriteCount int64 `json:"favorite_count"`
+	CommentCount int64 `json:"comment_count"`
+	IsFavorite bool `json:"is_favorite"`
+	Title string `json:"title"`
+	Partition int64 `json:"partition"`
+	CreateTime string `json:"create_time"`
 }
 // video list
 type VideoList {
@@ -42,24 +42,24 @@ type VideoList {
 type (
 	// 投稿视频
 	PublishVideoReq {
-        VideoUrl string `json:"video_url"`
-        CoverUrl string `json:"cover_url"`
-        Title string `json:"title"`
-        Partition int64 `json:"partition"`
+		VideoUrl string `json:"video_url"`
+		CoverUrl string `json:"cover_url"`
+		Title string `json:"title"`
+		Partition int64 `json:"partition"`
 	}
 
-        // 获取用户视频流
+		// 获取用户视频流
 	FeedUserReq {
-        UserId int64 `form:"user_id"`
-        Sort int64 `form:"sort"  validate:"gte=1,lte=2"`
+		UserId int64 `form:"user_id"`
+		Sort int64 `form:"sort"  validate:"gte=1,lte=2"`
 		MaxValue int64 `form:"max_value"`
 	}
 	FeedResp {
 		NextMaxValue int64 `json:"next_max_value"`
-        IsFinal bool `json:"is_final"`
+		IsFinal bool `json:"is_final"`
 		VideoList
 	}
-        // 获取热门视频流
+		// 获取热门视频流
 	FeedHotReq {
 		MaxHot int64 `form:"max_hot"`
 	}
@@ -67,7 +67,7 @@ type (
 		NextMaxHot int64 `form:"next_max_hot"`
 		VideoList
 	}
-        // 获取首页视频（最新）
+		// 获取首页视频（最新）
 	FeedHomeReq {
 		LatestTime int64 `form:"latest_time"`
 	}
@@ -75,23 +75,28 @@ type (
 		NextTime int64 `json:"next_time"`
 		VideoList
 	}
-        // 关注的的视频流
+		// 关注的的视频流
 	FeedFollowReq {
-        Sort int64 `form:"sort" validate:"gte=1,lte=2"`
+		Sort int64 `form:"sort" validate:"gte=1,lte=2"`
 		MaxValue int64 `form:"max_value"`
 	}
 
-        // 分区视频流
+		// 分区视频流
 	FeedPartitionReq {
-        Sort int64 `form:"sort" validate:"gte=1,lte=2"`
-        MaxValue int64 `form:"max_value"`
+		Sort int64 `form:"sort" validate:"gte=1,lte=2"`
+		MaxValue int64 `form:"max_value"`
 		Partition int64 `form:"partition" validate:"gte=1,lte=5"`
 	}
-        // 删除视频
-    DeleteVideoReq {
-        VideoId int64 `form:"video_id"`
-        Partition int64 `form:"partition" validate:"gte=1,lte=5"`
-    }
+		// 删除视频
+	DeleteVideoReq {
+		VideoId int64 `form:"video_id"`
+		Partition int64 `form:"partition" validate:"gte=1,lte=5"`
+	}
+		// 搜索视频
+	SearchVideoReq {
+		KeyWords string `form:"key_words"`
+		Size int64 `form:"size" validate:"gte=1"` // 从1开始
+	}
 )
 @server(
 	jwt: JWTAuth
@@ -135,9 +140,15 @@ service video {
 	@handler FeedPartition
 	get /feed/partition (FeedPartitionReq) returns (FeedResp)
 
-    @doc(
-        summary: "用户删除视频"
-    )
-    @handler DeleteVideo
-    delete /delete (DeleteVideoReq) returns ()
+	@doc(
+		summary: "用户删除视频"
+	)
+	@handler DeleteVideo
+	delete /delete (DeleteVideoReq) returns ()
+
+	@doc(
+		summary: "搜索视频"
+	)
+	@handler SearchVideo
+	delete /search (SearchVideoReq) returns (FeedResp)
 }

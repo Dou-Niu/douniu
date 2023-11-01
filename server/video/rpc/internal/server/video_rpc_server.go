@@ -57,6 +57,11 @@ func (s *VideoRpcServer) FeedPartition(ctx context.Context, in *pb.FeedPartition
 	return l.FeedPartition(in)
 }
 
+func (s *VideoRpcServer) SearchVideo(ctx context.Context, in *pb.SearchVideoReq) (*pb.FeedResp, error) {
+	l := logic.NewSearchVideoLogic(ctx, s.svcCtx)
+	return l.SearchVideo(in)
+}
+
 func (s *VideoRpcServer) DeleteVideo(ctx context.Context, in *pb.DeleteVideoReq) (*pb.CommonResp, error) {
 	l := logic.NewDeleteVideoLogic(ctx, s.svcCtx)
 	return l.DeleteVideo(in)

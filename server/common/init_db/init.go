@@ -3,6 +3,7 @@ package init_db
 import (
 	"context"
 	"fmt"
+	"github.com/olivere/elastic"
 	"time"
 
 	"github.com/minio/minio-go/v7"
@@ -80,4 +81,16 @@ func InitMinio(Endpoint, AccessKey, SecretKey string) *minio.Client {
 	}
 	fmt.Println("连接minio集群成功")
 	return minioClient
+}
+func GetESClient(url string) *elastic.Client {
+	client, err := elastic.NewClient(elastic.SetURL(url),
+		elastic.SetSniff(false),
+		elastic.SetHealthcheck(false))
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("ES initialized...")
+
+	return client
+
 }

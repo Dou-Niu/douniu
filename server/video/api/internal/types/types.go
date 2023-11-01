@@ -84,3 +84,8 @@ type DeleteVideoReq struct {
 	VideoId   int64 `form:"video_id"`
 	Partition int64 `form:"partition" validate:"gte=1,lte=5"`
 }
+
+type SearchVideoReq struct {
+	KeyWords string `form:"key_words"`
+	Size     int64  `form:"size" validate:"gte=1"` // 从1开始
+}

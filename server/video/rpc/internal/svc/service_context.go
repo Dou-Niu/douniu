@@ -7,6 +7,7 @@ import (
 	"douniu/server/video/model"
 	"douniu/server/video/rpc/internal/config"
 	"github.com/bwmarrin/snowflake"
+	"github.com/olivere/elastic"
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -20,6 +21,7 @@ type ServiceContext struct {
 	VideoModel     model.VideoModel
 	KqPusherClient *kq.Pusher
 	UserRpc        userrpc.UserRpc
+	ESClient       *elastic.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -33,6 +35,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		RedisClient:    init_db.InitRedis(c.RedisConf.Host, c.RedisConf.Password),
 		KqPusherClient: kq.NewPusher(c.KqPusherConf.Brokers, c.KqPusherConf.Topic),
 		//UserRpc:  userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
-
+		ESClient: init_db.GetESClient(c.ESConf.Host),
 	}
 }

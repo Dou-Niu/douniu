@@ -5,6 +5,7 @@ import (
 	"douniu/server/common/mock"
 	"douniu/server/favorite/model"
 	"douniu/server/favorite/rpc/internal/config"
+	"douniu/server/video/rpc/videorpc"
 	"github.com/bwmarrin/snowflake"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -14,7 +15,7 @@ type ServiceContext struct {
 	Config        config.Config
 	FavoriteModel model.FavoriteModel
 	RedisClient   *redis.Redis
-	VideoRpc      mock.VideoRpc
+	VideoRpc      videorpc.VideoRpc
 	Snowflake     *snowflake.Node
 }
 

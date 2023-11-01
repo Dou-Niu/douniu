@@ -2,6 +2,11 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/consts"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"strconv"
 
 	"douniu/server/chat/rpc/internal/svc"
 	"douniu/server/chat/rpc/pb"
@@ -24,9 +29,29 @@ func NewMessageChatLastLogic(ctx context.Context, svcCtx *svc.ServiceContext) *M
 }
 
 func (l *MessageChatLastLogic) MessageChatLast(in *pb.MessageChatLastRequest) (resp *pb.MessageChatLastResponse, err error) {
-	// todo: add your logic here and delete this line
+	fromUserIdStr := strconv.Itoa(int(in.FromUserId))
+	allLastMessages, err := l.svcCtx.RedisClient.HgetallCtx(l.ctx, consts.LastMessagePrefix+fromUserIdStr)
+	if err != nil {
+		l.Errorf("MessageBatchLast error: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "MessageBatchLast error: %s", err.Error())
+	}
 
 	resp = new(pb.MessageChatLastResponse)
+	resp.LastMessageList = make([]*pb.LastMessage, 0, len(in.ToUserIdList))
+
+	for _, toUserId := range in.ToUserIdList {
+		toUserIdStr := strconv.Itoa(int(toUserId))
+		lastMessageStr := allLastMessages[toUserIdStr]
+
+		var lastMessage pb.LastMessage
+		//_ = jsonx.UnmarshalFromString(lastMessageStr, &lastMessage)
+		_ = proto.Unmarshal([]byte(lastMessageStr), &lastMessage)
+
+		resp.LastMessageList = append(resp.LastMessageList, &pb.LastMessage{
+			Content: lastMessage.Content,
+			MsgType: lastMessage.MsgType,
+		})
+	}
 
 	return
 }

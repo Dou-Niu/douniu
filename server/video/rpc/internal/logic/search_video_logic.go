@@ -38,8 +38,8 @@ func (l *SearchVideoLogic) SearchVideo(in *pb.SearchVideoReq) (*pb.FeedResp, err
 	searchSource := elastic.NewSearchSource()
 	searchSource.Query(elastic.NewMatchQuery("title", in.KeyWords))
 	// 设置分页参数
-	searchSource.From(int(in.Page) - 1)         // 从第0条记录开始
-	searchSource.Size(consts.DefaultSizeOfPage) // 每页返回10条记录
+	searchSource.From((int(in.Page) - 1) * consts.DefaultSizeOfPage) // 从第0条记录开始
+	searchSource.Size(consts.DefaultSizeOfPage)                      // 每页返回10条记录
 
 	// 设置排序参数
 	searchSource.Sort("create_time", false) // 逆序排序

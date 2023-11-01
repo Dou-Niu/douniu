@@ -49,7 +49,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: DeleteVideoHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodDelete,
+				Method:  http.MethodGet,
 				Path:    "/search",
 				Handler: SearchVideoHandler(serverCtx),
 			},

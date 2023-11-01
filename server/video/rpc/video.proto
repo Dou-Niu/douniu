@@ -127,7 +127,7 @@ message DeleteVideoReq{
   int64 Partition = 3;
 }
 message SearchVideoReq{
-  int64 MeUserId = 1;
-  string KeyWords = 2;
-  int64 Size = 3;
+  int64 me_user_id = 1;
+  string key_words = 2;
+  int64 page = 3;
 }

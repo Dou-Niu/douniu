@@ -7,8 +7,9 @@ import (
 	"douniu/server/video/model"
 	"encoding/json"
 	"fmt"
-	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/v7"
 	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logc"
 
 	"douniu/server/video/rpc/internal/svc"
 	"douniu/server/video/rpc/types/pb"
@@ -37,7 +38,7 @@ func (l *SearchVideoLogic) SearchVideo(in *pb.SearchVideoReq) (*pb.FeedResp, err
 	searchSource := elastic.NewSearchSource()
 	searchSource.Query(elastic.NewMatchQuery("title", in.KeyWords))
 	// 设置分页参数
-	searchSource.From(int(in.Size) - 1)         // 从第0条记录开始
+	searchSource.From(int(in.Page) - 1)         // 从第0条记录开始
 	searchSource.Size(consts.DefaultSizeOfPage) // 每页返回10条记录
 
 	// 设置排序参数
@@ -52,11 +53,12 @@ func (l *SearchVideoLogic) SearchVideo(in *pb.SearchVideoReq) (*pb.FeedResp, err
 
 	}
 	/* until this block */
+
 	searchService := esclient.Search().Index(consts.EsVideoIndex).SearchSource(searchSource).Type(consts.EsVideoIndex)
 	searchResult, err := searchService.Do(l.ctx)
 	if err != nil {
-		fmt.Println("[ProductsES][GetPIds]Error=", err)
-		return nil, errors.Wrapf(errorx.NewDefaultError("[ProductsES][GetPIds]Error="+err.Error()), "es序列化错误 Req：%v", in)
+		logc.Error(l.ctx, "[ProductsES][GetPIds]Error=", err)
+		return nil, errors.Wrapf(errorx.NewDefaultError("[ProductsES][GetPIds]Error="+err.Error()), "es查询错误 Req：%v", in)
 
 	}
 	videoIds := make([]int64, 0)
@@ -74,6 +76,12 @@ func (l *SearchVideoLogic) SearchVideo(in *pb.SearchVideoReq) (*pb.FeedResp, err
 
 		videoIds = append(videoIds, video.Id)
 	}
+	if len(videoIds) == 0 {
+		return &pb.FeedResp{
+			IsFinal:      true,
+			NextMaxValue: -1,
+		}, nil
+	}
 	videoList, err := l.GetVideoListInfo.GetVideoListInfo(&pb.GetVideoListInfoReq{
 		MeUserId:    in.MeUserId,
 		VideoIdList: videoIds,
@@ -82,9 +90,10 @@ func (l *SearchVideoLogic) SearchVideo(in *pb.SearchVideoReq) (*pb.FeedResp, err
 		return nil, err
 	}
 	list := videoList.VideoList
+
 	return &pb.FeedResp{
 		VideoList:    list,
-		NextMaxValue: list[len(list)-1].CreateTime,
+		NextMaxValue: in.Page + 1,
 	}, nil
 
 }

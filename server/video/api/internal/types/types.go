@@ -87,5 +87,5 @@ type DeleteVideoReq struct {
 
 type SearchVideoReq struct {
 	KeyWords string `form:"key_words"`
-	Size     int64  `form:"size" validate:"gte=1"` // 从1开始
+	Page     int64  `form:"page" validate:"gte=1"` // 从1开始
 }

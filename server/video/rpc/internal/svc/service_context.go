@@ -7,7 +7,8 @@ import (
 	"douniu/server/video/model"
 	"douniu/server/video/rpc/internal/config"
 	"github.com/bwmarrin/snowflake"
-	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/v7"
+
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"

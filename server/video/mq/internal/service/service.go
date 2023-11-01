@@ -9,7 +9,8 @@ import (
 	"douniu/server/video/mq/internal/config"
 	"encoding/json"
 	"fmt"
-	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/v7"
+
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"log"
 	"sync"

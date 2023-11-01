@@ -95,7 +95,7 @@ type (
 		// 搜索视频
 	SearchVideoReq {
 		KeyWords string `form:"key_words"`
-		Size int64 `form:"size" validate:"gte=1"` // 从1开始
+		Page int64 `form:"page" validate:"gte=1"` // 从1开始
 	}
 )
 @server(
@@ -150,5 +150,5 @@ service video {
 		summary: "搜索视频"
 	)
 	@handler SearchVideo
-	delete /search (SearchVideoReq) returns (FeedResp)
+	get /search (SearchVideoReq) returns (FeedResp)
 }

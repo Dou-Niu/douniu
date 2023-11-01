@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"douniu/server/common/response"
 	"net/http"
 
 	"douniu/server/video/api/internal/logic"
@@ -19,10 +20,7 @@ func SearchVideoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		l := logic.NewSearchVideoLogic(r.Context(), svcCtx)
 		resp, err := l.SearchVideo(&req)
-		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
-		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
-		}
+		response.Response(r, w, resp, err) //②
+
 	}
 }

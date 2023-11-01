@@ -3,7 +3,8 @@ package init_db
 import (
 	"context"
 	"fmt"
-	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/v7"
+
 	"time"
 
 	"github.com/minio/minio-go/v7"

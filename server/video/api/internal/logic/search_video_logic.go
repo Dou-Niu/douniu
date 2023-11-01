@@ -40,7 +40,7 @@ func (l *SearchVideoLogic) SearchVideo(req *types.SearchVideoReq) (resp *types.F
 	res, err := l.svcCtx.VideoRpc.SearchVideo(l.ctx, &pb.SearchVideoReq{
 		MeUserId: meId,
 		KeyWords: req.KeyWords,
-		Size:     req.Size,
+		Page:     req.Page,
 	})
 	if err != nil {
 		return nil, errors.Wrapf(err, "req: %+v", req)
@@ -78,5 +78,6 @@ func (l *SearchVideoLogic) SearchVideo(req *types.SearchVideoReq) (resp *types.F
 	return &types.FeedResp{
 		NextMaxValue: res.NextMaxValue,
 		VideoList:    types.VideoList{List: videoList},
+		IsFinal:      res.IsFinal,
 	}, nil
 }

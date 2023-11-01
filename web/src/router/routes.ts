@@ -1,25 +1,27 @@
 import {RouteRecordRaw} from "vue-router";
 
-const routes: RouteRecordRaw[] = [
+const HomeRoutes: RouteRecordRaw[] = [
 	{
 		path: "/index",
-		name: "home",
+		name: "首页",
 		component: () => import("@/views/index/index.vue"),
 	},
 	{
 		path:"/recommend",
-		name:"recommend",
-		component: () => import("@/views/Recommend/index.vue"),
+		name:"推荐",
+		component: () => import("@/views/recommend/index.vue"),
 	},
 	{
 		path:"/mine",
-		name:"mine",
-		component: () => import("@/views/Mine/index.vue"),
+		name:"我的",
+		component: () => import("@/views/mine/index.vue"),
 	},
+]
+const ErrRoutes: RouteRecordRaw[] = [
 	{
 		path:"/err/404",
-		name:"err404",
-		component:()=>import("@/views/404/index.vue"),
+		name:"404",
+		component: () => import("@/views/404/index.vue"),
 	}
 ]
-export default routes;
+export {HomeRoutes,ErrRoutes};

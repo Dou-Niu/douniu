@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory} from "vue-router";
-import routes from "./routes";
+import {HomeRoutes,ErrRoutes} from "./routes";
 
 const router = createRouter({
 	history: createWebHashHistory(),
-	routes: routes,
+	routes: [...HomeRoutes,...ErrRoutes]
 });
 
 // 路由守卫
@@ -11,7 +11,7 @@ const router = createRouter({
 router.beforeEach(async (to, _, next) => {
 	if (!to.name) {
 		//判断有没有路由
-		next({ name: "err404" });
+		next({ name: "404" });
 	} else {
 		next();
 	}

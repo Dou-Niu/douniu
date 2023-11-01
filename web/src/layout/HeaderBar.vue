@@ -5,7 +5,7 @@
       <el-button type="success" round v-if="!isLogin" @click="dialogVisible = true">
         登录
       </el-button>
-      <div v-else class="flex justify-center items-center info">
+      <div v-else class="flex justify-center items-center">
         <!-- <el-avatar :src="info?.avatar" />
         <span>Hi,{{ info?.name }}</span>
         <a @click="logout">注销</a> -->
@@ -16,10 +16,10 @@
         <template #suffix>
           <div>
             <el-button plain class="bg-#131314! btn">
-              <el-icon>
+              <el-icon size="18">
                 <Search />
               </el-icon>
-              <span class="fw-600 ml-2">搜索</span>
+              <span class="fw-600 ml-2 text-4">搜索</span>
               </el-button>
           </div>
         </template>
@@ -52,21 +52,6 @@ const setDialogVisible = (v: boolean) => {
   background-color: #141E1F !important;
 }
 
-
-
-.info>a {
-  font-size: 11px;
-  cursor: pointer;
-  text-decoration: underline;
-
-  &:hover {
-    color: #cd3420;
-  }
-}
-
-.info>* {
-  margin: 0 3px;
-}
 .el-input{
   border-color: white !important;
 }
@@ -81,6 +66,7 @@ const setDialogVisible = (v: boolean) => {
 
 .el-button.btn{
   color:white!important;
+  border-radius: 0%;
   border-left:none;
   position: absolute;  /* 绝对定位图标 */  
   right: 0;  /* 将图标放置在搜索框的右侧 */  

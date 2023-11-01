@@ -1,37 +1,30 @@
 <template>
   <div class="h-full flex flex-col bg-#060716">
     <Logo />
-    <el-menu active-text-color="white" text-color="rgba(255, 255, 255, 0.5)" background-color="#060716" router
-      class="h-full border-none! flex flex-col items-center" :default-active="currentRoute">
-      <el-menu-item index="/index">
-        <el-icon>
-          <document />
-        </el-icon>
-        <span class="text-5">首页</span>
-      </el-menu-item>
-      <el-menu-item index="/recommend">
-        <el-icon>
-          <document />
-        </el-icon>
-        <span class="text-5">推荐</span>
-      </el-menu-item>
-      <el-menu-item index="/mine">
-        <el-icon>
-          <document />
-        </el-icon>
-        <span class="text-5">我的</span>
-      </el-menu-item>
+    <el-menu active-text-color="white" text-color="rgba(255, 255, 255, 0.5)" background-color="#060716"
+      class="h-full border-none! flex flex-col items-center">
+      <template v-for="(item, index) in HomeRoutes" :key="index">
+        <el-menu-item :index="index.toString()" @click="router.push(item.path)" :class="{
+          'is-active': route.path === item.path && route.path !=='/err/404'
+        }">
+          <el-icon>
+            <document />
+          </el-icon>
+          <span class="text-5">{{ item.name }}</span>
+        </el-menu-item>
+      </template>
+      <el-divider class="w-15! border-#4C4D4F!" />
     </el-menu>
-    3131231
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+// import { ref } from "vue"
+import { useRouter, useRoute } from "vue-router"
 import Logo from "@/components/SideBar/SideLogo.vue";
-
-const currentRoute = ref("/recommend")
-
+const router = useRouter()
+const route = useRoute()
+import { HomeRoutes } from "@/router/routes"
 </script>
 
 <style scoped>

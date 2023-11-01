@@ -16,6 +16,8 @@ body {
 }
 
 * {
+  font-family: PingFang SC,DFPKingGothicGB-Regular,sans-serif;
+  outline: none;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;

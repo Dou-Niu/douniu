@@ -8,7 +8,9 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "types": ["element-plus/global"],
+    "types": [
+      "element-plus/global"
+    ],
     "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -24,10 +26,13 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
     // 路径别名
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "@": [
+        "src"
       ]
     }
   },

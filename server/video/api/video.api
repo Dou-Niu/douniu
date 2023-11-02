@@ -97,6 +97,17 @@ type (
 		KeyWords string `form:"key_words"`
 		Page int64 `form:"page" validate:"gte=1"` // 从1开始
 	}
+		// 分享视频
+	ShareVideoReq {
+		VideoId int64 `form:"video_id"`
+	}
+	ShareVideoResp {
+		ShareUrl string `json:"share_url"`
+	}
+		// 查看单个视频
+	LookOneVideoReq {
+		VideoId int64 `form:"video_id"`
+	}
 )
 @server(
 	jwt: JWTAuth
@@ -151,4 +162,15 @@ service video {
 	)
 	@handler SearchVideo
 	get /search (SearchVideoReq) returns (FeedResp)
+
+	@doc(
+		summary: "分享视频"
+	)
+	@handler ShareVideo
+	get /share (ShareVideoReq) returns (ShareVideoResp)
+	@doc(
+		summary: "查看单个视频"
+	)
+	@handler LookOneVideo
+	get / (LookOneVideoReq) returns (FeedResp)
 }

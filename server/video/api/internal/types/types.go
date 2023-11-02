@@ -89,3 +89,15 @@ type SearchVideoReq struct {
 	KeyWords string `form:"key_words"`
 	Page     int64  `form:"page" validate:"gte=1"` // 从1开始
 }
+
+type ShareVideoReq struct {
+	VideoId int64 `form:"video_id"`
+}
+
+type ShareVideoResp struct {
+	ShareUrl string `json:"share_url"`
+}
+
+type LookOneVideoReq struct {
+	VideoId int64 `form:"video_id"`
+}

@@ -53,6 +53,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/search",
 				Handler: SearchVideoHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/share",
+				Handler: ShareVideoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: LookOneVideoHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JWTAuth.AccessSecret),
 		rest.WithPrefix("/douniu/video"),

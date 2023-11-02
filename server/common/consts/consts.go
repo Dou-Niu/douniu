@@ -59,10 +59,11 @@ const (
 
 // 视频
 const (
-	DefaultSizeOfPage = 10
-	SortByHot         = 1
-	SortByTime        = 2
-	EsVideoIndex      = "es-douniu-video"
+	DefaultSizeOfPage   = 10
+	SortByHot           = 1
+	SortByTime          = 2
+	EsVideoIndex        = "es-douniu-video"
+	OneVideoPlayUrlPrex = "http://localhost:6003/douniu/video?video_id="
 )
 
 // 关注

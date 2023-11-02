@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 
 	"douniu/server/chat/rpc/internal/svc"
 	"douniu/server/chat/rpc/pb"
@@ -24,9 +25,18 @@ func NewMessageChatLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Messa
 }
 
 func (l *MessageChatLogic) MessageChat(in *pb.MessageChatRequest) (resp *pb.MessageChatResponse, err error) {
-	// todo: add your logic here and delete this line
+	messages, err := l.svcCtx.MessageModel.GetMessages(l.ctx, in.FromUserId, in.ToUserId, in.PreMsgTime)
+	if err != nil {
+		l.Errorf("MessageChat error: %s", err.Error())
+		return nil, err
+	}
 
+	messageList := make([]*pb.Message, 0, len(messages))
 	resp = new(pb.MessageChatResponse)
+	_ = copier.Copy(&messageList, &messages)
+	resp.MessageList = messageList
+
+	l.Info(resp.MessageList)
 
 	return
 }

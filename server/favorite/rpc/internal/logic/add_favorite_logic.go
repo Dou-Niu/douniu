@@ -4,7 +4,7 @@ import (
 	"context"
 	"douniu/server/common/consts"
 	"douniu/server/favorite/model"
-	"douniu/server/video/videorpc"
+	"douniu/server/video/rpc/videorpc"
 
 	"errors"
 	"github.com/zeromicro/go-zero/core/stores/redis"

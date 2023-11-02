@@ -56,3 +56,23 @@ func (s *FavoriteRpcServer) GetFavoriteVideoIdList(ctx context.Context, in *pb.G
 	l := logic.NewGetFavoriteVideoIdListLogic(ctx, s.svcCtx)
 	return l.GetFavoriteVideoIdList(in)
 }
+
+func (s *FavoriteRpcServer) AddCollection(ctx context.Context, in *pb.AddCollectionRequest) (*pb.AddCollectionResponse, error) {
+	l := logic.NewAddCollectionLogic(ctx, s.svcCtx)
+	return l.AddCollection(in)
+}
+
+func (s *FavoriteRpcServer) DelCollection(ctx context.Context, in *pb.DelCollectionRequest) (*pb.DelCollectionResponse, error) {
+	l := logic.NewDelCollectionLogic(ctx, s.svcCtx)
+	return l.DelCollection(in)
+}
+
+func (s *FavoriteRpcServer) GetUserCollectionList(ctx context.Context, in *pb.GetUserCollectionListRequest) (*pb.GetUserCollectionListResponse, error) {
+	l := logic.NewGetUserCollectionListLogic(ctx, s.svcCtx)
+	return l.GetUserCollectionList(in)
+}
+
+func (s *FavoriteRpcServer) GetUserCollectionCount(ctx context.Context, in *pb.GetUserCollectionCountRequest) (*pb.GetUserCollectionCountResponse, error) {
+	l := logic.NewGetUserCollectionCountLogic(ctx, s.svcCtx)
+	return l.GetUserCollectionCount(in)
+}

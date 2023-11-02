@@ -81,4 +81,7 @@ const (
 
 	FavoriteAdd = 1
 	FavoriteDel = 2
+
+	CollectionAdd = 1
+	CollectionDel = 2
 )

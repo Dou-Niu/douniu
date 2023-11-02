@@ -13,12 +13,20 @@ import (
 )
 
 type (
+	AddCollectionRequest           = pb.AddCollectionRequest
+	AddCollectionResponse          = pb.AddCollectionResponse
 	AddFavoriteRequest             = pb.AddFavoriteRequest
 	AddFavoriteResponse            = pb.AddFavoriteResponse
+	DelCollectionRequest           = pb.DelCollectionRequest
+	DelCollectionResponse          = pb.DelCollectionResponse
 	DelFavoriteRequest             = pb.DelFavoriteRequest
 	DelFavoriteResponse            = pb.DelFavoriteResponse
 	GetFavoriteVideoIdListRequest  = pb.GetFavoriteVideoIdListRequest
 	GetFavoriteVideoListIdResponse = pb.GetFavoriteVideoListIdResponse
+	GetUserCollectionCountRequest  = pb.GetUserCollectionCountRequest
+	GetUserCollectionCountResponse = pb.GetUserCollectionCountResponse
+	GetUserCollectionListRequest   = pb.GetUserCollectionListRequest
+	GetUserCollectionListResponse  = pb.GetUserCollectionListResponse
 	GetUserFavoriteCountRequest    = pb.GetUserFavoriteCountRequest
 	GetUserFavoriteCountResponse   = pb.GetUserFavoriteCountResponse
 	GetUserFavoritedCountRequest   = pb.GetUserFavoritedCountRequest
@@ -36,6 +44,10 @@ type (
 		GetUserFavoritedCount(ctx context.Context, in *GetUserFavoritedCountRequest, opts ...grpc.CallOption) (*GetUserFavoritedCountResponse, error)
 		IsFavorite(ctx context.Context, in *IsFavoriteRequest, opts ...grpc.CallOption) (*IsFavoriteResponse, error)
 		GetFavoriteVideoIdList(ctx context.Context, in *GetFavoriteVideoIdListRequest, opts ...grpc.CallOption) (*GetFavoriteVideoListIdResponse, error)
+		AddCollection(ctx context.Context, in *AddCollectionRequest, opts ...grpc.CallOption) (*AddCollectionResponse, error)
+		DelCollection(ctx context.Context, in *DelCollectionRequest, opts ...grpc.CallOption) (*DelCollectionResponse, error)
+		GetUserCollectionList(ctx context.Context, in *GetUserCollectionListRequest, opts ...grpc.CallOption) (*GetUserCollectionListResponse, error)
+		GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error)
 	}
 
 	defaultFavoriteRpc struct {
@@ -82,4 +94,24 @@ func (m *defaultFavoriteRpc) IsFavorite(ctx context.Context, in *IsFavoriteReque
 func (m *defaultFavoriteRpc) GetFavoriteVideoIdList(ctx context.Context, in *GetFavoriteVideoIdListRequest, opts ...grpc.CallOption) (*GetFavoriteVideoListIdResponse, error) {
 	client := pb.NewFavoriteRpcClient(m.cli.Conn())
 	return client.GetFavoriteVideoIdList(ctx, in, opts...)
+}
+
+func (m *defaultFavoriteRpc) AddCollection(ctx context.Context, in *AddCollectionRequest, opts ...grpc.CallOption) (*AddCollectionResponse, error) {
+	client := pb.NewFavoriteRpcClient(m.cli.Conn())
+	return client.AddCollection(ctx, in, opts...)
+}
+
+func (m *defaultFavoriteRpc) DelCollection(ctx context.Context, in *DelCollectionRequest, opts ...grpc.CallOption) (*DelCollectionResponse, error) {
+	client := pb.NewFavoriteRpcClient(m.cli.Conn())
+	return client.DelCollection(ctx, in, opts...)
+}
+
+func (m *defaultFavoriteRpc) GetUserCollectionList(ctx context.Context, in *GetUserCollectionListRequest, opts ...grpc.CallOption) (*GetUserCollectionListResponse, error) {
+	client := pb.NewFavoriteRpcClient(m.cli.Conn())
+	return client.GetUserCollectionList(ctx, in, opts...)
+}
+
+func (m *defaultFavoriteRpc) GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error) {
+	client := pb.NewFavoriteRpcClient(m.cli.Conn())
+	return client.GetUserCollectionCount(ctx, in, opts...)
 }

@@ -46,6 +46,13 @@ const (
 	// UserFavoritedCountPrefix 用户获赞数
 	UserFavoritedCountPrefix = ProjectNamePrefix + "userFavoritedCount:"
 
-	UserFollowPrefix   = ProjectNamePrefix + "userFollow:"
+	// UserCollectPrefix 用户收藏列表
+	UserCollectPrefix = ProjectNamePrefix + "userCollect:"
+	// VideoCollectCountPrefix 视频收藏数量
+	VideoCollectCountPrefix = ProjectNamePrefix + "videoCollectCount:"
+
+	// UserFollowPrefix 用户关注列表
+	UserFollowPrefix = ProjectNamePrefix + "userFollow:"
+	// UserFollowerPrefix 用户粉丝列表
 	UserFollowerPrefix = ProjectNamePrefix + "userFollower:"
 )

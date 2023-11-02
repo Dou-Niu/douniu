@@ -4,7 +4,7 @@ import (
 	"douniu/server/common/mock"
 	"douniu/server/favorite/api/internal/config"
 	"douniu/server/favorite/rpc/favoriterpc"
-	"douniu/server/video/videorpc"
+	"douniu/server/video/rpc/videorpc"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 

@@ -8,7 +8,29 @@ service favorite-api {
 	post /douniu/favorite/action (FavoriteLikeRequest) returns (FavoriteLikeResponse)
 	@handler FavoriteList
 	get /douniu/favorite/list (FavoriteListRequest) returns (FavoriteListResponse)
+	@handler CollectionAction
+	post /douniu/collection/action (CollectionActionRequest) returns (CollectionActionResponse)
+	@handler CollectionList
+	get /douniu/collection/list (CollectioneListRequest) returns (CollectioneListResponse)
 }
+
+type (
+	CollectionActionRequest {
+		VideoId    int64 `json:"video_id" vd vd:"$>0;msg:'video_id error'"`
+		ActionType int64 `json:"action_type" vd:"$==1||$==2;msg:'action_type error'"`
+	}
+	CollectionActionResponse {
+	}
+)
+
+type (
+	CollectioneListRequest {
+		UserId int64 `form:"user_id" vd:"$>0;msg:'user_id error'"`
+	}
+	CollectioneListResponse {
+		VideoList []*Video `json:"video_list"`
+	}
+)
 
 type (
 	FavoriteLikeRequest {

@@ -14,30 +14,31 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FavoriteListLogic struct {
+type CollectionListLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewFavoriteListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FavoriteListLogic {
-	return &FavoriteListLogic{
+func NewCollectionListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CollectionListLogic {
+	return &CollectionListLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *FavoriteListLogic) FavoriteList(req *types.FavoriteListRequest) (resp *types.FavoriteListResponse, err error) {
+func (l *CollectionListLogic) CollectionList(req *types.CollectioneListRequest) (resp *types.CollectioneListResponse, err error) {
 	userId, _ := l.ctx.Value(consts.UserId).(json.Number).Int64()
 
-	videoIdListResp, err := l.svcCtx.FavoriteRpc.GetFavoriteVideoIdList(l.ctx, &favoriterpc.GetFavoriteVideoIdListRequest{
+	videoIdListResp, err := l.svcCtx.FavoriteRpc.GetUserCollectionList(l.ctx, &favoriterpc.GetUserCollectionListRequest{
 		UserId: req.UserId,
 	})
 	if err != nil {
 		l.Errorf("FavoriteRpc GetFavoriteVideoIdList error: %v", err)
 		return
 	}
+
 	listResp, err := l.svcCtx.VideoRpc.GetVideoListInfo(l.ctx, &videorpc.GetVideoListInfoReq{
 		MeUserId:    userId,
 		VideoIdList: videoIdListResp.VideoIdList,
@@ -47,7 +48,7 @@ func (l *FavoriteListLogic) FavoriteList(req *types.FavoriteListRequest) (resp *
 		return
 	}
 
-	resp = new(types.FavoriteListResponse)
+	resp = new(types.CollectioneListResponse)
 	resp.VideoList = make([]*types.Video, 0, len(listResp.VideoList))
 	_ = copier.Copy(&resp.VideoList, &listResp.VideoList)
 

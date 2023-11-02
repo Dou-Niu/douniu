@@ -12,6 +12,46 @@ service FavoriteRpc {
     rpc GetUserFavoritedCount(GetUserFavoritedCountRequest) returns (GetUserFavoritedCountResponse) {}
     rpc IsFavorite(IsFavoriteRequest) returns (IsFavoriteResponse) {}
     rpc GetFavoriteVideoIdList(GetFavoriteVideoIdListRequest) returns (GetFavoriteVideoListIdResponse) {}
+
+    rpc AddCollection(AddCollectionRequest) returns (AddCollectionResponse) {}
+    rpc DelCollection(DelCollectionRequest) returns (DelCollectionResponse) {}
+    rpc GetUserCollectionList(GetUserCollectionIdListRequest) returns (GetUserCollectionIdListResponse) {}
+    rpc GetUserCollectionCount(GetUserCollectionCountRequest) returns (GetUserCollectionCountResponse) {}
+}
+
+message AddCollectionRequest {
+    int64 user_id = 1;
+    int64 video_id = 2;
+}
+
+message AddCollectionResponse {
+
+}
+
+message DelCollectionRequest {
+    int64 user_id = 1;
+    int64 video_id = 2;
+}
+
+message DelCollectionResponse {
+
+}
+
+message GetUserCollectionIdListRequest {
+    int64 user_id = 1;
+    int64 page_num = 2;
+}
+
+message GetUserCollectionIdListResponse {
+    repeated int64 video_id_list = 1;
+}
+
+message GetUserCollectionCountRequest {
+    int64 user_id = 1;
+}
+
+message GetUserCollectionCountResponse {
+    int64 count = 1;
 }
 
 message GetFavoriteVideoIdListRequest {

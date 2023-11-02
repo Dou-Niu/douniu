@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"douniu/server/common/consts"
-	"douniu/server/video/videorpc"
+	"douniu/server/video/rpc/videorpc"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"strconv"
@@ -33,7 +33,7 @@ func (l *DelFavoriteLogic) DelFavorite(in *pb.DelFavoriteRequest) (resp *pb.DelF
 	userIdStr := strconv.Itoa(int(in.UserId))
 	videoIdStr := strconv.Itoa(int(in.VideoId))
 	// 判断是否已经点赞
-	isFavorited, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserFavoriteIdPrefix+userIdStr, videoIdStr)
+	isFavorited, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserCollectPrefix+userIdStr, videoIdStr)
 	if err != nil && !errors.Is(err, redis.Nil) {
 		l.Errorf("RedisClient ZscoreCtx error: %v", err)
 		return

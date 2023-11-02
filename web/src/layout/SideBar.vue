@@ -4,8 +4,8 @@
     <el-menu active-text-color="white" text-color="rgba(255, 255, 255, 0.5)" background-color="#060716"
       class="h-full border-none! flex flex-col items-center">
       <template v-for="(item, index) in HomeRoutes" :key="index">
-        <el-menu-item :index="index.toString()" @click="router.push(item.path)" :class="{
-          'is-active': route.path === item.path && route.path !=='/err/404'
+        <el-menu-item v-if="!item.meta?.dontShow" :index="index.toString()" @click="router.push(item.path)" :class="{
+          'is-active': route.path === item.path && route.path !== '/err/404'
         }">
           <el-icon>
             <document />

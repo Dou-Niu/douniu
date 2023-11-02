@@ -1,6 +1,5 @@
 <template>
   <div class="w-full h-full container flex">
-    <!-- <video src="@/assets/1.mp4" autoplay controls poster="@/assets/logo.png" class="w-full h-150" ref="videoRef"></video> -->
     <div id="video">
       <div class="info fw-600 text-6">
         <h1>视频信息</h1>
@@ -62,11 +61,9 @@
     </div>
     <div v-if="showComments">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="TA的作品" name="ta">TA的作品</el-tab-pane>
         <el-tab-pane label="评论" name="comments">
           <Comments />
         </el-tab-pane>
-        <el-tab-pane label="相关推荐" name="recommend">相关推荐</el-tab-pane>
       </el-tabs>
     </div>
   </div>

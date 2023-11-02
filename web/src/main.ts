@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import "uno.css";
 import App from "./App.vue";
 import router from "./router";
+import 'element-plus/dist/index.css';
 // 引入elementPlus图标
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 

@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center my-6">
-    <el-avatar :size="30" src=""/>
+    <el-avatar :size="30" src="" />
     <div class="flex justify-center items-center text-2xl loader">斗牛</div>
   </div>
 </template>
@@ -11,7 +11,9 @@
 
 <style scoped>
 @keyframes animate8345 {
-  0%,100% {
+
+  0%,
+  100% {
     filter: hue-rotate(0deg);
   }
 

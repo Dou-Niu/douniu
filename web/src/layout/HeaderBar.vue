@@ -1,6 +1,6 @@
 <template>
   <el-menu default-active="1" class="w-full!" mode="horizontal" background-color="bg-#131314" :ellipsis="false"
-    text-color="rgba(255,255,255,0.6)" active-text-color="rgba(255,255,255,1)">
+    text-color="rgba(255,255,255,0.6)" active-text-color="rgba(255,255,255,1)" router>
     <div class="user flex justify-center items-center px-4 py-4">
       <el-button type="success" round v-if="!isLogin" @click="dialogVisible = true">
         登录
@@ -20,12 +20,13 @@
                 <Search />
               </el-icon>
               <span class="fw-600 ml-2 text-4">搜索</span>
-              </el-button>
+            </el-button>
           </div>
         </template>
       </el-input>
     </div>
     <!-- <el-menu-item index="1">首页</el-menu-item> -->
+    <el-menu-item index="/upload">投稿</el-menu-item>
   </el-menu>
   <LoginCard :dialogVisible="dialogVisible" @update:dialogVisible="setDialogVisible" />
 </template>
@@ -52,34 +53,38 @@ const setDialogVisible = (v: boolean) => {
   background-color: #141E1F !important;
 }
 
-.el-input{
+.el-input {
   border-color: white !important;
 }
 
-:deep(.el-input__wrapper){
+:deep(.el-input__wrapper) {
   background-color: #131314 !important;
 }
 
-:deep(.el-input__inner){
+:deep(.el-input__inner) {
   color: white !important;
 }
 
-.el-button.btn{
-  color:white!important;
+.el-button.btn {
+  color: white !important;
   border-radius: 0%;
-  border-left:none;
-  position: absolute;  /* 绝对定位图标 */  
-  right: 0;  /* 将图标放置在搜索框的右侧 */  
-  top: 50%;  /* 将图标垂直居中 */  
-  transform: translateY(-50%);  /* 垂直居中图标 */  
+  border-left: none;
+  position: absolute;
+  /* 绝对定位图标 */
+  right: 0;
+  /* 将图标放置在搜索框的右侧 */
+  top: 50%;
+  /* 将图标垂直居中 */
+  transform: translateY(-50%);
+  /* 垂直居中图标 */
 }
 
-.el-button:hover{
-  background-color: white!important;
-  color:black!important;
+.el-button:hover {
+  background-color: white !important;
+  color: black !important;
 }
 
-:deep(.is-focus){
+:deep(.is-focus) {
   border-color: red !important;
   box-shadow: 0 0 0 1px white !important;
 }

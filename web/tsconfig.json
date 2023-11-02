@@ -8,9 +8,9 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "types": [
-      "element-plus/global"
-    ],
+    // "types": [
+    //   "element-plus/global"
+    // ],
     "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "bundler",

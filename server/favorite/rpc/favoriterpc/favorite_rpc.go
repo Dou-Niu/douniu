@@ -31,6 +31,8 @@ type (
 	GetUserFavoriteCountResponse    = pb.GetUserFavoriteCountResponse
 	GetUserFavoritedCountRequest    = pb.GetUserFavoritedCountRequest
 	GetUserFavoritedCountResponse   = pb.GetUserFavoritedCountResponse
+	GetVideoCollectionCountRequest  = pb.GetVideoCollectionCountRequest
+	GetVideoCollectionCountResponse = pb.GetVideoCollectionCountResponse
 	GetVideoFavoriteCountRequest    = pb.GetVideoFavoriteCountRequest
 	GetVideoFavoriteCountResponse   = pb.GetVideoFavoriteCountResponse
 	IsFavoriteRequest               = pb.IsFavoriteRequest
@@ -48,6 +50,7 @@ type (
 		DelCollection(ctx context.Context, in *DelCollectionRequest, opts ...grpc.CallOption) (*DelCollectionResponse, error)
 		GetUserCollectionList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error)
 		GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error)
+		GetVideoCollectionCount(ctx context.Context, in *GetVideoCollectionCountRequest, opts ...grpc.CallOption) (*GetVideoCollectionCountResponse, error)
 	}
 
 	defaultFavoriteRpc struct {
@@ -114,4 +117,9 @@ func (m *defaultFavoriteRpc) GetUserCollectionList(ctx context.Context, in *GetU
 func (m *defaultFavoriteRpc) GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error) {
 	client := pb.NewFavoriteRpcClient(m.cli.Conn())
 	return client.GetUserCollectionCount(ctx, in, opts...)
+}
+
+func (m *defaultFavoriteRpc) GetVideoCollectionCount(ctx context.Context, in *GetVideoCollectionCountRequest, opts ...grpc.CallOption) (*GetVideoCollectionCountResponse, error) {
+	client := pb.NewFavoriteRpcClient(m.cli.Conn())
+	return client.GetVideoCollectionCount(ctx, in, opts...)
 }

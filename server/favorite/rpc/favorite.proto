@@ -17,6 +17,15 @@ service FavoriteRpc {
     rpc DelCollection(DelCollectionRequest) returns (DelCollectionResponse) {}
     rpc GetUserCollectionList(GetUserCollectionIdListRequest) returns (GetUserCollectionIdListResponse) {}
     rpc GetUserCollectionCount(GetUserCollectionCountRequest) returns (GetUserCollectionCountResponse) {}
+    rpc GetVideoCollectionCount(GetVideoCollectionCountRequest) returns (GetVideoCollectionCountResponse) {}
+}
+
+message GetVideoCollectionCountRequest {
+    int64 video_id = 1;
+}
+
+message GetVideoCollectionCountResponse {
+    int64 count = 1;
 }
 
 message AddCollectionRequest {

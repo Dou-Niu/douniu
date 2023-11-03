@@ -37,16 +37,17 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			// TODO 调用其他rpc
 		}
 		res = append(res, &pb.Video{
-			Id:            oneVideo.Id,
-			User:          nil,
-			PlayUrl:       oneVideo.PlayUrl,
-			CoverUrl:      oneVideo.CoverUrl,
-			FavoriteCount: 0,
-			CommentCount:  0,
-			IsFavorite:    false,
-			Title:         oneVideo.Title,
-			Partition:     oneVideo.Partition,
-			CreateTime:    oneVideo.CreateTime.Unix(),
+			Id:              oneVideo.Id,
+			User:            nil,
+			PlayUrl:         oneVideo.PlayUrl,
+			CoverUrl:        oneVideo.CoverUrl,
+			FavoriteCount:   0,
+			CollectionCount: 0,
+			CommentCount:    0,
+			IsFavorite:      false,
+			Title:           oneVideo.Title,
+			Partition:       oneVideo.Partition,
+			CreateTime:      oneVideo.CreateTime.Unix(),
 		})
 	}
 

@@ -16,16 +16,17 @@ type AuthorInfo struct {
 }
 
 type VideoInfo struct {
-	VideoID       int64      `json:"video_id"`
-	Author        AuthorInfo `json:"author"`
-	PlayURL       string     `json:"play_url"`
-	CoverURL      string     `json:"cover_url"`
-	FavoriteCount int64      `json:"favorite_count"`
-	CommentCount  int64      `json:"comment_count"`
-	IsFavorite    bool       `json:"is_favorite"`
-	Title         string     `json:"title"`
-	Partition     int64      `json:"partition"`
-	CreateTime    string     `json:"create_time"`
+	VideoID         int64      `json:"video_id"`
+	Author          AuthorInfo `json:"author"`
+	PlayURL         string     `json:"play_url"`
+	CoverURL        string     `json:"cover_url"`
+	FavoriteCount   int64      `json:"favorite_count"`
+	CollectionCount int64      `json:"collection_count"`
+	CommentCount    int64      `json:"comment_count"`
+	IsFavorite      bool       `json:"is_favorite"`
+	Title           string     `json:"title"`
+	Partition       int64      `json:"partition"`
+	CreateTime      string     `json:"create_time"`
 }
 
 type VideoList struct {

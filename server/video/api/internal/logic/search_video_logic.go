@@ -65,14 +65,15 @@ func (l *SearchVideoLogic) SearchVideo(req *types.SearchVideoReq) (resp *types.F
 				//FavoriteCount:   v.User.FavoriteCount,
 
 			},
-			PlayURL:       v.PlayUrl,
-			CoverURL:      v.CoverUrl,
-			FavoriteCount: v.FavoriteCount,
-			CommentCount:  v.CommentCount,
-			IsFavorite:    v.IsFavorite,
-			Title:         v.Title,
-			Partition:     v.Partition,
-			CreateTime:    time.Unix(v.CreateTime, 0).Format(time.DateTime),
+			PlayURL:         v.PlayUrl,
+			CoverURL:        v.CoverUrl,
+			FavoriteCount:   v.FavoriteCount,
+			CollectionCount: v.CollectionCount,
+			CommentCount:    v.CommentCount,
+			IsFavorite:      v.IsFavorite,
+			Title:           v.Title,
+			Partition:       v.Partition,
+			CreateTime:      time.Unix(v.CreateTime, 0).Format(time.DateTime),
 		})
 	}
 	return &types.FeedResp{

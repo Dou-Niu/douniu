@@ -28,6 +28,7 @@ type VideoInfo {
 	PlayURL string `json:"play_url"`
 	CoverURL string `json:"cover_url"`
 	FavoriteCount int64 `json:"favorite_count"`
+	CollectionCount int64 `json:"collection_count"`
 	CommentCount int64 `json:"comment_count"`
 	IsFavorite bool `json:"is_favorite"`
 	Title string `json:"title"`
@@ -77,8 +78,7 @@ type (
 	}
 		// 关注的的视频流
 	FeedFollowReq {
-		Sort int64 `form:"sort" validate:"gte=1,lte=2"`
-		MaxValue int64 `form:"max_value"`
+		LatestTime int64 `form:"latest_time"`
 	}
 
 		// 分区视频流

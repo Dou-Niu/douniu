@@ -31,14 +31,18 @@ type (
 	SearchVideoReq       = pb.SearchVideoReq
 	User                 = pb.User
 	Video                = pb.Video
+	WorkCountReq         = pb.WorkCountReq
+	WorkCountResp        = pb.WorkCountResp
 
 	VideoRpc interface {
 		GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error)
+		GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error)
 		GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error)
 		PublishVideo(ctx context.Context, in *PublishVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
 		FeedHome(ctx context.Context, in *FeedHomeReq, opts ...grpc.CallOption) (*FeedHomeResp, error)
 		FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error)
 		FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error)
+		FeedFollow(ctx context.Context, in *FeedFollowReq, opts ...grpc.CallOption) (*FeedResp, error)
 		FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error)
 		SearchVideo(ctx context.Context, in *SearchVideoReq, opts ...grpc.CallOption) (*FeedResp, error)
 		DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
@@ -58,6 +62,11 @@ func NewVideoRpc(cli zrpc.Client) VideoRpc {
 func (m *defaultVideoRpc) GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error) {
 	client := pb.NewVideoRpcClient(m.cli.Conn())
 	return client.GetAuthorId(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.GetWorkCount(ctx, in, opts...)
 }
 
 func (m *defaultVideoRpc) GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error) {
@@ -83,6 +92,11 @@ func (m *defaultVideoRpc) FeedHot(ctx context.Context, in *FeedHotReq, opts ...g
 func (m *defaultVideoRpc) FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error) {
 	client := pb.NewVideoRpcClient(m.cli.Conn())
 	return client.FeedUser(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) FeedFollow(ctx context.Context, in *FeedFollowReq, opts ...grpc.CallOption) (*FeedResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.FeedFollow(ctx, in, opts...)
 }
 
 func (m *defaultVideoRpc) FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error) {

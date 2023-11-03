@@ -20,11 +20,13 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	VideoRpc_GetAuthorId_FullMethodName      = "/video.VideoRpc/GetAuthorId"
+	VideoRpc_GetWorkCount_FullMethodName     = "/video.VideoRpc/GetWorkCount"
 	VideoRpc_GetVideoListInfo_FullMethodName = "/video.VideoRpc/GetVideoListInfo"
 	VideoRpc_PublishVideo_FullMethodName     = "/video.VideoRpc/PublishVideo"
 	VideoRpc_FeedHome_FullMethodName         = "/video.VideoRpc/FeedHome"
 	VideoRpc_FeedHot_FullMethodName          = "/video.VideoRpc/FeedHot"
 	VideoRpc_FeedUser_FullMethodName         = "/video.VideoRpc/FeedUser"
+	VideoRpc_FeedFollow_FullMethodName       = "/video.VideoRpc/FeedFollow"
 	VideoRpc_FeedPartition_FullMethodName    = "/video.VideoRpc/FeedPartition"
 	VideoRpc_SearchVideo_FullMethodName      = "/video.VideoRpc/SearchVideo"
 	VideoRpc_DeleteVideo_FullMethodName      = "/video.VideoRpc/DeleteVideo"
@@ -35,11 +37,13 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type VideoRpcClient interface {
 	GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error)
+	GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error)
 	GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error)
 	PublishVideo(ctx context.Context, in *PublishVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
 	FeedHome(ctx context.Context, in *FeedHomeReq, opts ...grpc.CallOption) (*FeedHomeResp, error)
 	FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error)
 	FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error)
+	FeedFollow(ctx context.Context, in *FeedFollowReq, opts ...grpc.CallOption) (*FeedResp, error)
 	FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error)
 	SearchVideo(ctx context.Context, in *SearchVideoReq, opts ...grpc.CallOption) (*FeedResp, error)
 	DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
@@ -56,6 +60,15 @@ func NewVideoRpcClient(cc grpc.ClientConnInterface) VideoRpcClient {
 func (c *videoRpcClient) GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error) {
 	out := new(GetAuthorIdResp)
 	err := c.cc.Invoke(ctx, VideoRpc_GetAuthorId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoRpcClient) GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error) {
+	out := new(WorkCountResp)
+	err := c.cc.Invoke(ctx, VideoRpc_GetWorkCount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,6 +120,15 @@ func (c *videoRpcClient) FeedUser(ctx context.Context, in *FeedUserReq, opts ...
 	return out, nil
 }
 
+func (c *videoRpcClient) FeedFollow(ctx context.Context, in *FeedFollowReq, opts ...grpc.CallOption) (*FeedResp, error) {
+	out := new(FeedResp)
+	err := c.cc.Invoke(ctx, VideoRpc_FeedFollow_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *videoRpcClient) FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error) {
 	out := new(FeedResp)
 	err := c.cc.Invoke(ctx, VideoRpc_FeedPartition_FullMethodName, in, out, opts...)
@@ -139,11 +161,13 @@ func (c *videoRpcClient) DeleteVideo(ctx context.Context, in *DeleteVideoReq, op
 // for forward compatibility
 type VideoRpcServer interface {
 	GetAuthorId(context.Context, *GetAuthorIdReq) (*GetAuthorIdResp, error)
+	GetWorkCount(context.Context, *WorkCountReq) (*WorkCountResp, error)
 	GetVideoListInfo(context.Context, *GetVideoListInfoReq) (*GetVideoListInfoResp, error)
 	PublishVideo(context.Context, *PublishVideoReq) (*CommonResp, error)
 	FeedHome(context.Context, *FeedHomeReq) (*FeedHomeResp, error)
 	FeedHot(context.Context, *FeedHotReq) (*FeedHotResp, error)
 	FeedUser(context.Context, *FeedUserReq) (*FeedResp, error)
+	FeedFollow(context.Context, *FeedFollowReq) (*FeedResp, error)
 	FeedPartition(context.Context, *FeedPartitionReq) (*FeedResp, error)
 	SearchVideo(context.Context, *SearchVideoReq) (*FeedResp, error)
 	DeleteVideo(context.Context, *DeleteVideoReq) (*CommonResp, error)
@@ -156,6 +180,9 @@ type UnimplementedVideoRpcServer struct {
 
 func (UnimplementedVideoRpcServer) GetAuthorId(context.Context, *GetAuthorIdReq) (*GetAuthorIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAuthorId not implemented")
+}
+func (UnimplementedVideoRpcServer) GetWorkCount(context.Context, *WorkCountReq) (*WorkCountResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWorkCount not implemented")
 }
 func (UnimplementedVideoRpcServer) GetVideoListInfo(context.Context, *GetVideoListInfoReq) (*GetVideoListInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVideoListInfo not implemented")
@@ -171,6 +198,9 @@ func (UnimplementedVideoRpcServer) FeedHot(context.Context, *FeedHotReq) (*FeedH
 }
 func (UnimplementedVideoRpcServer) FeedUser(context.Context, *FeedUserReq) (*FeedResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FeedUser not implemented")
+}
+func (UnimplementedVideoRpcServer) FeedFollow(context.Context, *FeedFollowReq) (*FeedResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FeedFollow not implemented")
 }
 func (UnimplementedVideoRpcServer) FeedPartition(context.Context, *FeedPartitionReq) (*FeedResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FeedPartition not implemented")
@@ -208,6 +238,24 @@ func _VideoRpc_GetAuthorId_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(VideoRpcServer).GetAuthorId(ctx, req.(*GetAuthorIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoRpc_GetWorkCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WorkCountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoRpcServer).GetWorkCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoRpc_GetWorkCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoRpcServer).GetWorkCount(ctx, req.(*WorkCountReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -302,6 +350,24 @@ func _VideoRpc_FeedUser_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoRpc_FeedFollow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeedFollowReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoRpcServer).FeedFollow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoRpc_FeedFollow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoRpcServer).FeedFollow(ctx, req.(*FeedFollowReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _VideoRpc_FeedPartition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FeedPartitionReq)
 	if err := dec(in); err != nil {
@@ -368,6 +434,10 @@ var VideoRpc_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _VideoRpc_GetAuthorId_Handler,
 		},
 		{
+			MethodName: "GetWorkCount",
+			Handler:    _VideoRpc_GetWorkCount_Handler,
+		},
+		{
 			MethodName: "GetVideoListInfo",
 			Handler:    _VideoRpc_GetVideoListInfo_Handler,
 		},
@@ -386,6 +456,10 @@ var VideoRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FeedUser",
 			Handler:    _VideoRpc_FeedUser_Handler,
+		},
+		{
+			MethodName: "FeedFollow",
+			Handler:    _VideoRpc_FeedFollow_Handler,
 		},
 		{
 			MethodName: "FeedPartition",

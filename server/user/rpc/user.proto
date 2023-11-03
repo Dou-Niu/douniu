@@ -85,6 +85,7 @@ message UserInfoItem {
   int64 total_favorited = 8;
   int64 work_count = 9;
   int64 favorite_count = 10;
+  int64 collection_count = 15;
   int64 follow_count = 11;
   int64 follower_count = 12;
 }

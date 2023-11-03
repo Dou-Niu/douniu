@@ -27,6 +27,11 @@ func (s *VideoRpcServer) GetAuthorId(ctx context.Context, in *pb.GetAuthorIdReq)
 	return l.GetAuthorId(in)
 }
 
+func (s *VideoRpcServer) GetWorkCount(ctx context.Context, in *pb.WorkCountReq) (*pb.WorkCountResp, error) {
+	l := logic.NewGetWorkCountLogic(ctx, s.svcCtx)
+	return l.GetWorkCount(in)
+}
+
 func (s *VideoRpcServer) GetVideoListInfo(ctx context.Context, in *pb.GetVideoListInfoReq) (*pb.GetVideoListInfoResp, error) {
 	l := logic.NewGetVideoListInfoLogic(ctx, s.svcCtx)
 	return l.GetVideoListInfo(in)
@@ -50,6 +55,11 @@ func (s *VideoRpcServer) FeedHot(ctx context.Context, in *pb.FeedHotReq) (*pb.Fe
 func (s *VideoRpcServer) FeedUser(ctx context.Context, in *pb.FeedUserReq) (*pb.FeedResp, error) {
 	l := logic.NewFeedUserLogic(ctx, s.svcCtx)
 	return l.FeedUser(in)
+}
+
+func (s *VideoRpcServer) FeedFollow(ctx context.Context, in *pb.FeedFollowReq) (*pb.FeedResp, error) {
+	l := logic.NewFeedFollowLogic(ctx, s.svcCtx)
+	return l.FeedFollow(in)
 }
 
 func (s *VideoRpcServer) FeedPartition(ctx context.Context, in *pb.FeedPartitionReq) (*pb.FeedResp, error) {

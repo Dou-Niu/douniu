@@ -1,0 +1,38 @@
+Name: video-mq
+# kafka
+Log:
+  Encoding: plain
+KqConsumerConf:
+  Name: kqConsumer
+  Brokers:
+    - 106.15.58.0:9092
+  Group: video-topic-consume
+  Topic: video-topic
+  # Mysql配置
+MysqlConf:
+  DataSource: root:liuyt777@tcp(106.15.58.0:3306)/douniu_video?charset=utf8mb4&parseTime=True&loc=Local
+# redis 配置
+CacheRedis:
+  - Host: 106.15.58.0:6379
+    Pass: liuyt777
+    Type: node
+# redis 配置
+RedisConf:
+  Host: 106.15.58.0:6379
+  Password: liuyt777
+# ES配置
+ESConf:
+  Host: http://106.15.58.0:6379:9200
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7024
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: video-mq
+  Endpoint: http://localhost:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

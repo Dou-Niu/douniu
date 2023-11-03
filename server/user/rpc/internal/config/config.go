@@ -7,6 +7,9 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
+	FavoriteRpcConf zrpc.RpcClientConf
+	VideoRpcConf    zrpc.RpcClientConf
+	RelationRpcConf zrpc.RpcClientConf
 
 	JWTAuth struct {
 		AccessSecret       string

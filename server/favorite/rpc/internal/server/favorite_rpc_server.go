@@ -72,6 +72,11 @@ func (s *FavoriteRpcServer) GetUserCollectionList(ctx context.Context, in *pb.Ge
 	return l.GetUserCollectionList(in)
 }
 
+func (s *FavoriteRpcServer) GetUserCollectionIdList(ctx context.Context, in *pb.GetUserCollectionIdListRequest) (*pb.GetUserCollectionIdListResponse, error) {
+	l := logic.NewGetUserCollectionIdListLogic(ctx, s.svcCtx)
+	return l.GetUserCollectionIdList(in)
+}
+
 func (s *FavoriteRpcServer) GetUserCollectionCount(ctx context.Context, in *pb.GetUserCollectionCountRequest) (*pb.GetUserCollectionCountResponse, error) {
 	l := logic.NewGetUserCollectionCountLogic(ctx, s.svcCtx)
 	return l.GetUserCollectionCount(in)

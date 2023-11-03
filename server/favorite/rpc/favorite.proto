@@ -16,6 +16,7 @@ service FavoriteRpc {
     rpc AddCollection(AddCollectionRequest) returns (AddCollectionResponse) {}
     rpc DelCollection(DelCollectionRequest) returns (DelCollectionResponse) {}
     rpc GetUserCollectionList(GetUserCollectionIdListRequest) returns (GetUserCollectionIdListResponse) {}
+    rpc GetUserCollectionIdList(GetUserCollectionIdListRequest) returns (GetUserCollectionIdListResponse) {}
     rpc GetUserCollectionCount(GetUserCollectionCountRequest) returns (GetUserCollectionCountResponse) {}
     rpc GetVideoCollectionCount(GetVideoCollectionCountRequest) returns (GetVideoCollectionCountResponse) {}
     rpc IsCollection(IsCollectionRequest) returns (IsCollectionResponse) {}

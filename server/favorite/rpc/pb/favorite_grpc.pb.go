@@ -29,6 +29,7 @@ const (
 	FavoriteRpc_AddCollection_FullMethodName           = "/favorite.FavoriteRpc/AddCollection"
 	FavoriteRpc_DelCollection_FullMethodName           = "/favorite.FavoriteRpc/DelCollection"
 	FavoriteRpc_GetUserCollectionList_FullMethodName   = "/favorite.FavoriteRpc/GetUserCollectionList"
+	FavoriteRpc_GetUserCollectionIdList_FullMethodName = "/favorite.FavoriteRpc/GetUserCollectionIdList"
 	FavoriteRpc_GetUserCollectionCount_FullMethodName  = "/favorite.FavoriteRpc/GetUserCollectionCount"
 	FavoriteRpc_GetVideoCollectionCount_FullMethodName = "/favorite.FavoriteRpc/GetVideoCollectionCount"
 	FavoriteRpc_IsCollection_FullMethodName            = "/favorite.FavoriteRpc/IsCollection"
@@ -48,6 +49,7 @@ type FavoriteRpcClient interface {
 	AddCollection(ctx context.Context, in *AddCollectionRequest, opts ...grpc.CallOption) (*AddCollectionResponse, error)
 	DelCollection(ctx context.Context, in *DelCollectionRequest, opts ...grpc.CallOption) (*DelCollectionResponse, error)
 	GetUserCollectionList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error)
+	GetUserCollectionIdList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error)
 	GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error)
 	GetVideoCollectionCount(ctx context.Context, in *GetVideoCollectionCountRequest, opts ...grpc.CallOption) (*GetVideoCollectionCountResponse, error)
 	IsCollection(ctx context.Context, in *IsCollectionRequest, opts ...grpc.CallOption) (*IsCollectionResponse, error)
@@ -151,6 +153,15 @@ func (c *favoriteRpcClient) GetUserCollectionList(ctx context.Context, in *GetUs
 	return out, nil
 }
 
+func (c *favoriteRpcClient) GetUserCollectionIdList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error) {
+	out := new(GetUserCollectionIdListResponse)
+	err := c.cc.Invoke(ctx, FavoriteRpc_GetUserCollectionIdList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *favoriteRpcClient) GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error) {
 	out := new(GetUserCollectionCountResponse)
 	err := c.cc.Invoke(ctx, FavoriteRpc_GetUserCollectionCount_FullMethodName, in, out, opts...)
@@ -192,6 +203,7 @@ type FavoriteRpcServer interface {
 	AddCollection(context.Context, *AddCollectionRequest) (*AddCollectionResponse, error)
 	DelCollection(context.Context, *DelCollectionRequest) (*DelCollectionResponse, error)
 	GetUserCollectionList(context.Context, *GetUserCollectionIdListRequest) (*GetUserCollectionIdListResponse, error)
+	GetUserCollectionIdList(context.Context, *GetUserCollectionIdListRequest) (*GetUserCollectionIdListResponse, error)
 	GetUserCollectionCount(context.Context, *GetUserCollectionCountRequest) (*GetUserCollectionCountResponse, error)
 	GetVideoCollectionCount(context.Context, *GetVideoCollectionCountRequest) (*GetVideoCollectionCountResponse, error)
 	IsCollection(context.Context, *IsCollectionRequest) (*IsCollectionResponse, error)
@@ -231,6 +243,9 @@ func (UnimplementedFavoriteRpcServer) DelCollection(context.Context, *DelCollect
 }
 func (UnimplementedFavoriteRpcServer) GetUserCollectionList(context.Context, *GetUserCollectionIdListRequest) (*GetUserCollectionIdListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserCollectionList not implemented")
+}
+func (UnimplementedFavoriteRpcServer) GetUserCollectionIdList(context.Context, *GetUserCollectionIdListRequest) (*GetUserCollectionIdListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserCollectionIdList not implemented")
 }
 func (UnimplementedFavoriteRpcServer) GetUserCollectionCount(context.Context, *GetUserCollectionCountRequest) (*GetUserCollectionCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserCollectionCount not implemented")
@@ -434,6 +449,24 @@ func _FavoriteRpc_GetUserCollectionList_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FavoriteRpc_GetUserCollectionIdList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserCollectionIdListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteRpcServer).GetUserCollectionIdList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FavoriteRpc_GetUserCollectionIdList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteRpcServer).GetUserCollectionIdList(ctx, req.(*GetUserCollectionIdListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FavoriteRpc_GetUserCollectionCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserCollectionCountRequest)
 	if err := dec(in); err != nil {
@@ -534,6 +567,10 @@ var FavoriteRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserCollectionList",
 			Handler:    _FavoriteRpc_GetUserCollectionList_Handler,
+		},
+		{
+			MethodName: "GetUserCollectionIdList",
+			Handler:    _FavoriteRpc_GetUserCollectionIdList_Handler,
 		},
 		{
 			MethodName: "GetUserCollectionCount",

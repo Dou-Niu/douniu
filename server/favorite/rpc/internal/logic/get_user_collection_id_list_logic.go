@@ -12,22 +12,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetUserCollectionListLogic struct {
+type GetUserCollectionIdListLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetUserCollectionListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserCollectionListLogic {
-	return &GetUserCollectionListLogic{
+func NewGetUserCollectionIdListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserCollectionIdListLogic {
+	return &GetUserCollectionIdListLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetUserCollectionListLogic) GetUserCollectionList(in *pb.GetUserCollectionListRequest) (resp *pb.GetUserCollectionListResponse, err error) {
-	resp = new(pb.GetUserCollectionListResponse)
+func (l *GetUserCollectionIdListLogic) GetUserCollectionIdList(in *pb.GetUserCollectionIdListRequest) (resp *pb.GetUserCollectionIdListResponse, err error) {
+	resp = new(pb.GetUserCollectionIdListResponse)
 	//idListStr, err := l.svcCtx.RedisClient.ZrevrangeCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1)
 	idListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts.UserCollectPrefix+strconv.Itoa(int(in.UserId)), 0, time.Now().Unix(), int(in.PageNum), consts.DefaultSize)
 	if err != nil {
@@ -45,6 +45,5 @@ func (l *GetUserCollectionListLogic) GetUserCollectionList(in *pb.GetUserCollect
 		idList = append(idList, int64(id))
 	}
 	resp.VideoIdList = idList
-
 	return
 }

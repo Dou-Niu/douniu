@@ -7,6 +7,8 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
+	VideoRpcConf zrpc.RpcClientConf
+
 	MySQLConf struct {
 		DataSource string
 	}

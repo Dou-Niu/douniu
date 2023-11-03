@@ -11,6 +11,7 @@ service VideoRpc {
   rpc FeedHome(FeedHomeReq)returns(FeedHomeResp);
   rpc FeedHot(FeedHotReq)returns(FeedHotResp);
   rpc FeedUser(FeedUserReq)returns(FeedResp);
+  rpc FeedFollow(FeedFollowReq)returns(FeedResp);
   rpc FeedPartition(FeedPartitionReq)returns(FeedResp);
   rpc SearchVideo(SearchVideoReq)returns(FeedResp);
   rpc DeleteVideo(DeleteVideoReq)returns(CommonResp);
@@ -109,10 +110,8 @@ message FeedResp {
 
 
 message FeedFollowReq {
-  int64 sort = 1;
-  int64 max_value = 2;
-  int64 me_user_id = 4;
-
+  int64 latest_time = 1;
+  int64 me_user_id = 2;
 }
 
 message FeedPartitionReq {

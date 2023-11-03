@@ -71,8 +71,7 @@ type FeedHomeResp struct {
 }
 
 type FeedFollowReq struct {
-	Sort     int64 `form:"sort" validate:"gte=1,lte=2"`
-	MaxValue int64 `form:"max_value"`
+	LatestTime int64 `form:"latest_time"`
 }
 
 type FeedPartitionReq struct {

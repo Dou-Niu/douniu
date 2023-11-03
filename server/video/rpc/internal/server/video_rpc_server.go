@@ -52,6 +52,11 @@ func (s *VideoRpcServer) FeedUser(ctx context.Context, in *pb.FeedUserReq) (*pb.
 	return l.FeedUser(in)
 }
 
+func (s *VideoRpcServer) FeedFollow(ctx context.Context, in *pb.FeedFollowReq) (*pb.FeedResp, error) {
+	l := logic.NewFeedFollowLogic(ctx, s.svcCtx)
+	return l.FeedFollow(in)
+}
+
 func (s *VideoRpcServer) FeedPartition(ctx context.Context, in *pb.FeedPartitionReq) (*pb.FeedResp, error) {
 	l := logic.NewFeedPartitionLogic(ctx, s.svcCtx)
 	return l.FeedPartition(in)

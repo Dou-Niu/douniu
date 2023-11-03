@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"douniu/server/common/response"
 	"net/http"
 
 	"douniu/server/favorite/api/internal/logic"
@@ -19,10 +20,6 @@ func CollectionListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		l := logic.NewCollectionListLogic(r.Context(), svcCtx)
 		resp, err := l.CollectionList(&req)
-		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
-		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
-		}
+		response.Response(r, w, resp, err)
 	}
 }

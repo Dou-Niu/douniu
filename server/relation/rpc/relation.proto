@@ -93,7 +93,6 @@ message User {
 }
 
 
-
 message FriendUser {
     int64 id = 1;
     string username = 2;

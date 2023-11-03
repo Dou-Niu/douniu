@@ -45,7 +45,7 @@ type FavoriteRpcClient interface {
 	GetFavoriteVideoIdList(ctx context.Context, in *GetFavoriteVideoIdListRequest, opts ...grpc.CallOption) (*GetFavoriteVideoListIdResponse, error)
 	AddCollection(ctx context.Context, in *AddCollectionRequest, opts ...grpc.CallOption) (*AddCollectionResponse, error)
 	DelCollection(ctx context.Context, in *DelCollectionRequest, opts ...grpc.CallOption) (*DelCollectionResponse, error)
-	GetUserCollectionList(ctx context.Context, in *GetUserCollectionListRequest, opts ...grpc.CallOption) (*GetUserCollectionListResponse, error)
+	GetUserCollectionList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error)
 	GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error)
 }
 
@@ -138,8 +138,8 @@ func (c *favoriteRpcClient) DelCollection(ctx context.Context, in *DelCollection
 	return out, nil
 }
 
-func (c *favoriteRpcClient) GetUserCollectionList(ctx context.Context, in *GetUserCollectionListRequest, opts ...grpc.CallOption) (*GetUserCollectionListResponse, error) {
-	out := new(GetUserCollectionListResponse)
+func (c *favoriteRpcClient) GetUserCollectionList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error) {
+	out := new(GetUserCollectionIdListResponse)
 	err := c.cc.Invoke(ctx, FavoriteRpc_GetUserCollectionList_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -169,7 +169,7 @@ type FavoriteRpcServer interface {
 	GetFavoriteVideoIdList(context.Context, *GetFavoriteVideoIdListRequest) (*GetFavoriteVideoListIdResponse, error)
 	AddCollection(context.Context, *AddCollectionRequest) (*AddCollectionResponse, error)
 	DelCollection(context.Context, *DelCollectionRequest) (*DelCollectionResponse, error)
-	GetUserCollectionList(context.Context, *GetUserCollectionListRequest) (*GetUserCollectionListResponse, error)
+	GetUserCollectionList(context.Context, *GetUserCollectionIdListRequest) (*GetUserCollectionIdListResponse, error)
 	GetUserCollectionCount(context.Context, *GetUserCollectionCountRequest) (*GetUserCollectionCountResponse, error)
 	mustEmbedUnimplementedFavoriteRpcServer()
 }
@@ -205,7 +205,7 @@ func (UnimplementedFavoriteRpcServer) AddCollection(context.Context, *AddCollect
 func (UnimplementedFavoriteRpcServer) DelCollection(context.Context, *DelCollectionRequest) (*DelCollectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelCollection not implemented")
 }
-func (UnimplementedFavoriteRpcServer) GetUserCollectionList(context.Context, *GetUserCollectionListRequest) (*GetUserCollectionListResponse, error) {
+func (UnimplementedFavoriteRpcServer) GetUserCollectionList(context.Context, *GetUserCollectionIdListRequest) (*GetUserCollectionIdListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserCollectionList not implemented")
 }
 func (UnimplementedFavoriteRpcServer) GetUserCollectionCount(context.Context, *GetUserCollectionCountRequest) (*GetUserCollectionCountResponse, error) {
@@ -387,7 +387,7 @@ func _FavoriteRpc_DelCollection_Handler(srv interface{}, ctx context.Context, de
 }
 
 func _FavoriteRpc_GetUserCollectionList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserCollectionListRequest)
+	in := new(GetUserCollectionIdListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -399,7 +399,7 @@ func _FavoriteRpc_GetUserCollectionList_Handler(srv interface{}, ctx context.Con
 		FullMethod: FavoriteRpc_GetUserCollectionList_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FavoriteRpcServer).GetUserCollectionList(ctx, req.(*GetUserCollectionListRequest))
+		return srv.(FavoriteRpcServer).GetUserCollectionList(ctx, req.(*GetUserCollectionIdListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

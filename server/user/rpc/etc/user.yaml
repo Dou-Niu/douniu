@@ -53,8 +53,8 @@ RedisConf:
 #  SecretKey: xxxxx
 # 腾讯云 SMS 配置
 Credential:
-  SecretId: AKIDHTUhkaEfuwlO5e3Pl6VxPm272nNmy7vZ
-  SecretKey: UnvwlS8VbXFvRp4I4e4IKAsYH6mLm2BD
+  SecretId: xxxxx
+  SecretKey: xxxxxx
 Salt: f9b0b6kV9eWHjLyFN3Xs
 
 #监控

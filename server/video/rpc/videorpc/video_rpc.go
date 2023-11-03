@@ -31,9 +31,12 @@ type (
 	SearchVideoReq       = pb.SearchVideoReq
 	User                 = pb.User
 	Video                = pb.Video
+	WorkCountReq         = pb.WorkCountReq
+	WorkCountResp        = pb.WorkCountResp
 
 	VideoRpc interface {
 		GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error)
+		GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error)
 		GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error)
 		PublishVideo(ctx context.Context, in *PublishVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
 		FeedHome(ctx context.Context, in *FeedHomeReq, opts ...grpc.CallOption) (*FeedHomeResp, error)
@@ -59,6 +62,11 @@ func NewVideoRpc(cli zrpc.Client) VideoRpc {
 func (m *defaultVideoRpc) GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error) {
 	client := pb.NewVideoRpcClient(m.cli.Conn())
 	return client.GetAuthorId(ctx, in, opts...)
+}
+
+func (m *defaultVideoRpc) GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error) {
+	client := pb.NewVideoRpcClient(m.cli.Conn())
+	return client.GetWorkCount(ctx, in, opts...)
 }
 
 func (m *defaultVideoRpc) GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error) {

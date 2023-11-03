@@ -27,6 +27,11 @@ func (s *VideoRpcServer) GetAuthorId(ctx context.Context, in *pb.GetAuthorIdReq)
 	return l.GetAuthorId(in)
 }
 
+func (s *VideoRpcServer) GetWorkCount(ctx context.Context, in *pb.WorkCountReq) (*pb.WorkCountResp, error) {
+	l := logic.NewGetWorkCountLogic(ctx, s.svcCtx)
+	return l.GetWorkCount(in)
+}
+
 func (s *VideoRpcServer) GetVideoListInfo(ctx context.Context, in *pb.GetVideoListInfoReq) (*pb.GetVideoListInfoResp, error) {
 	l := logic.NewGetVideoListInfoLogic(ctx, s.svcCtx)
 	return l.GetVideoListInfo(in)

@@ -3,11 +3,13 @@ package svc
 import (
 	"douniu/server/common/consts"
 	"douniu/server/common/init_db"
+	"douniu/server/favorite/rpc/favoriterpc"
 	"douniu/server/user/rpc/userrpc"
 	"douniu/server/video/model"
 	"douniu/server/video/rpc/internal/config"
 	"github.com/bwmarrin/snowflake"
 	"github.com/olivere/elastic/v7"
+	"github.com/zeromicro/go-zero/zrpc"
 
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-queue/kq"
@@ -22,7 +24,9 @@ type ServiceContext struct {
 	VideoModel     model.VideoModel
 	KqPusherClient *kq.Pusher
 	UserRpc        userrpc.UserRpc
-	ESClient       *elastic.Client
+	FavoriteRpc    favoriterpc.FavoriteRpc
+
+	ESClient *elastic.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -35,7 +39,9 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Snowflake:      snowflakeNode,
 		RedisClient:    init_db.InitRedis(c.RedisConf.Host, c.RedisConf.Password),
 		KqPusherClient: kq.NewPusher(c.KqPusherConf.Brokers, c.KqPusherConf.Topic),
-		//UserRpc:  userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
+		UserRpc:        userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
+		FavoriteRpc:    favoriterpc.NewFavoriteRpc(zrpc.MustNewClient(c.FavoriteRpcConf)),
+
 		ESClient: init_db.GetESClient(c.ESConf.Host),
 	}
 }

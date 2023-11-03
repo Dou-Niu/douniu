@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	VideoRpc_GetAuthorId_FullMethodName      = "/video.VideoRpc/GetAuthorId"
+	VideoRpc_GetWorkCount_FullMethodName     = "/video.VideoRpc/GetWorkCount"
 	VideoRpc_GetVideoListInfo_FullMethodName = "/video.VideoRpc/GetVideoListInfo"
 	VideoRpc_PublishVideo_FullMethodName     = "/video.VideoRpc/PublishVideo"
 	VideoRpc_FeedHome_FullMethodName         = "/video.VideoRpc/FeedHome"
@@ -36,6 +37,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type VideoRpcClient interface {
 	GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error)
+	GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error)
 	GetVideoListInfo(ctx context.Context, in *GetVideoListInfoReq, opts ...grpc.CallOption) (*GetVideoListInfoResp, error)
 	PublishVideo(ctx context.Context, in *PublishVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
 	FeedHome(ctx context.Context, in *FeedHomeReq, opts ...grpc.CallOption) (*FeedHomeResp, error)
@@ -58,6 +60,15 @@ func NewVideoRpcClient(cc grpc.ClientConnInterface) VideoRpcClient {
 func (c *videoRpcClient) GetAuthorId(ctx context.Context, in *GetAuthorIdReq, opts ...grpc.CallOption) (*GetAuthorIdResp, error) {
 	out := new(GetAuthorIdResp)
 	err := c.cc.Invoke(ctx, VideoRpc_GetAuthorId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoRpcClient) GetWorkCount(ctx context.Context, in *WorkCountReq, opts ...grpc.CallOption) (*WorkCountResp, error) {
+	out := new(WorkCountResp)
+	err := c.cc.Invoke(ctx, VideoRpc_GetWorkCount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,6 +161,7 @@ func (c *videoRpcClient) DeleteVideo(ctx context.Context, in *DeleteVideoReq, op
 // for forward compatibility
 type VideoRpcServer interface {
 	GetAuthorId(context.Context, *GetAuthorIdReq) (*GetAuthorIdResp, error)
+	GetWorkCount(context.Context, *WorkCountReq) (*WorkCountResp, error)
 	GetVideoListInfo(context.Context, *GetVideoListInfoReq) (*GetVideoListInfoResp, error)
 	PublishVideo(context.Context, *PublishVideoReq) (*CommonResp, error)
 	FeedHome(context.Context, *FeedHomeReq) (*FeedHomeResp, error)
@@ -168,6 +180,9 @@ type UnimplementedVideoRpcServer struct {
 
 func (UnimplementedVideoRpcServer) GetAuthorId(context.Context, *GetAuthorIdReq) (*GetAuthorIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAuthorId not implemented")
+}
+func (UnimplementedVideoRpcServer) GetWorkCount(context.Context, *WorkCountReq) (*WorkCountResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWorkCount not implemented")
 }
 func (UnimplementedVideoRpcServer) GetVideoListInfo(context.Context, *GetVideoListInfoReq) (*GetVideoListInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVideoListInfo not implemented")
@@ -223,6 +238,24 @@ func _VideoRpc_GetAuthorId_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(VideoRpcServer).GetAuthorId(ctx, req.(*GetAuthorIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoRpc_GetWorkCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WorkCountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoRpcServer).GetWorkCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoRpc_GetWorkCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoRpcServer).GetWorkCount(ctx, req.(*WorkCountReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -399,6 +432,10 @@ var VideoRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAuthorId",
 			Handler:    _VideoRpc_GetAuthorId_Handler,
+		},
+		{
+			MethodName: "GetWorkCount",
+			Handler:    _VideoRpc_GetWorkCount_Handler,
 		},
 		{
 			MethodName: "GetVideoListInfo",

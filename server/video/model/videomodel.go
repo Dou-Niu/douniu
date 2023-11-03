@@ -24,12 +24,23 @@ type (
 		videoModel
 		FindByTimeOrHot(ctx context.Context, rdb *redis.Client, key string, max int64) ([]int64, error)
 		FindFollowFeed(ctx context.Context, followIds []int64, leastTime time.Time) ([]int64, error)
+		GetZsetCount(ctx context.Context, rdb *redis.Client, key string) (int64, error)
 	}
 
 	customVideoModel struct {
 		*defaultVideoModel
 	}
 )
+
+func (m *customVideoModel) GetZsetCount(ctx context.Context, rdb *redis.Client, key string) (int64, error) {
+	// 使用ZCARD命令获取有序集合的元素个数
+	count, err := rdb.ZCard(ctx, key).Result()
+	if err != nil {
+		logx.Error("获取有序集合元素个数出错:", err)
+		return 0, err
+	}
+	return count, nil
+}
 
 func (m *customVideoModel) FindFollowFeed(ctx context.Context, followIds []int64, leastTime time.Time) ([]int64, error) {
 	placeholders := make([]interface{}, len(followIds))

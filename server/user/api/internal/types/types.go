@@ -47,6 +47,7 @@ type UserInfoItem struct {
 	BackgroundImage string `json:"background_image"`
 	Signature       string `json:"signature"`
 	TotalFavorited  int64  `json:"total_favorited"`
+	CollectionCount int64  `json:"collection_count"`
 	WorkCount       int64  `json:"work_count"`
 	FavoriteCount   int64  `json:"favorite_count"`
 	FollowCount     int64  `json:"follow_count"`

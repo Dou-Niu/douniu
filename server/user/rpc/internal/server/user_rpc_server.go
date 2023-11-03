@@ -41,7 +41,7 @@ func (s *UserRpcServer) RegisterOrLoginByPassword(ctx context.Context, in *pb.Re
 }
 
 // 忘记密码并重置密码
-func (s *UserRpcServer) ForgetPassword(ctx context.Context, in *pb.ResetPassword) (*pb.CommonResp, error) {
+func (s *UserRpcServer) ForgetPassword(ctx context.Context, in *pb.ForgetPasswordReq) (*pb.CommonResp, error) {
 	l := logic.NewForgetPasswordLogic(ctx, s.svcCtx)
 	return l.ForgetPassword(in)
 }

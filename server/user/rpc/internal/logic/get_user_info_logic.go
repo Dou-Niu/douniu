@@ -38,7 +38,7 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 		return nil, errors.Wrapf(errorx.NewDefaultError("查询用户信息失败,err:"+err.Error()), "redis查询手机号是否已经注册时候失败 RegisterOrLoginByPhoneReq：%v", in)
 	}
 	// TODO 调用其他服务rpc
-	var favoriteCount, totalFavorited, collectionCount, workCount, followCount, followerCount int64
+	favoriteCount, totalFavorited, collectionCount, workCount, followCount, followerCount := int64(0), int64(0), int64(0), int64(0), int64(0), int64(0)
 	var isFollow bool
 	err = mr.Finish(func() error {
 		// 获取用户总的点赞数

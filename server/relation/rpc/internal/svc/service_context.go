@@ -28,7 +28,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		FollowModel: model.NewFollowModel(sqlx.NewMysql(c.MySQLConf.DataSource)),
 		RedisClient: redis.MustNewRedis(c.RedisConf),
 		//UserRpc:     userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
-		UserRpc: mock.UserRpc{},
+		//UserRpc: mock.UserRpc{},
 		//ChatRpc:     chatrpc.NewChatRpc(zrpc.MustNewClient(c.ChatRpcConf)),
 		ChatRpc:   mock.ChatRpc{},
 		Snowflake: snowflakeNode,

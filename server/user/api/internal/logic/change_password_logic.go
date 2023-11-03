@@ -2,9 +2,11 @@ package logic
 
 import (
 	"context"
+	"douniu/server/common/consts"
 	"douniu/server/common/errorx"
 	"douniu/server/common/utils"
 	"douniu/server/user/rpc/types/pb"
+	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
 
@@ -28,13 +30,15 @@ func NewChangePasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ch
 	}
 }
 
-func (l *ChangePasswordLogic) ChangePassword(req *types.ResetPassword) error {
+func (l *ChangePasswordLogic) ChangePassword(req *types.ChangePasswordReq) error {
 	err := utils.DefaultGetValidParams(l.ctx, req)
 	if err != nil {
 		return errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
 	}
+	meId, err := l.ctx.Value(consts.UserId).(json.Number).Int64()
+
 	_, err = l.svcCtx.UserRpc.ChangePassword(l.ctx, &pb.ResetPassword{
-		UserId:      req.UserId,
+		UserId:      meId,
 		NewPassword: req.NewPassword,
 	})
 	if err != nil {

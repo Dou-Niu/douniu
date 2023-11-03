@@ -14,6 +14,7 @@ import (
 
 type (
 	CommonResp                   = pb.CommonResp
+	ForgetPasswordReq            = pb.ForgetPasswordReq
 	ModifyUserInfoReq            = pb.ModifyUserInfoReq
 	RegisterOrLoginByPasswordReq = pb.RegisterOrLoginByPasswordReq
 	RegisterOrLoginByPhoneReq    = pb.RegisterOrLoginByPhoneReq
@@ -34,7 +35,7 @@ type (
 		// 使用密码进行手机号注册或登录
 		RegisterOrLoginByPassword(ctx context.Context, in *RegisterOrLoginByPasswordReq, opts ...grpc.CallOption) (*RegisterOrLoginResp, error)
 		// 忘记密码并重置密码
-		ForgetPassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error)
+		ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*CommonResp, error)
 		// 修改密码
 		ChangePassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error)
 		// 获取用户信息
@@ -73,7 +74,7 @@ func (m *defaultUserRpc) RegisterOrLoginByPassword(ctx context.Context, in *Regi
 }
 
 // 忘记密码并重置密码
-func (m *defaultUserRpc) ForgetPassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error) {
+func (m *defaultUserRpc) ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*CommonResp, error) {
 	client := pb.NewUserRpcClient(m.cli.Conn())
 	return client.ForgetPassword(ctx, in, opts...)
 }

@@ -31,11 +31,13 @@ func (l *IsFollowLogic) IsFollow(in *pb.IsFollowRequest) (resp *pb.IsFollowRespo
 	isFollow, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserFollowPrefix+userIdStr, ToUserIdStr)
 	if err != nil {
 		l.Errorf("redis sismember err: %v", err)
-		return nil, err
+		// return nil, err
 	}
 
 	resp = new(pb.IsFollowResponse)
 	resp.IsFollow = isFollow != 0
 
-	return
+	return &pb.IsFollowResponse{
+		IsFollow: resp.IsFollow,
+	}, nil
 }

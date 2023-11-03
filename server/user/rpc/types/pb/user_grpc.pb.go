@@ -39,7 +39,7 @@ type UserRpcClient interface {
 	// 使用密码进行手机号注册或登录
 	RegisterOrLoginByPassword(ctx context.Context, in *RegisterOrLoginByPasswordReq, opts ...grpc.CallOption) (*RegisterOrLoginResp, error)
 	// 忘记密码并重置密码
-	ForgetPassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error)
+	ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*CommonResp, error)
 	// 修改密码
 	ChangePassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error)
 	// 获取用户信息
@@ -83,7 +83,7 @@ func (c *userRpcClient) RegisterOrLoginByPassword(ctx context.Context, in *Regis
 	return out, nil
 }
 
-func (c *userRpcClient) ForgetPassword(ctx context.Context, in *ResetPassword, opts ...grpc.CallOption) (*CommonResp, error) {
+func (c *userRpcClient) ForgetPassword(ctx context.Context, in *ForgetPasswordReq, opts ...grpc.CallOption) (*CommonResp, error) {
 	out := new(CommonResp)
 	err := c.cc.Invoke(ctx, UserRpc_ForgetPassword_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -130,7 +130,7 @@ type UserRpcServer interface {
 	// 使用密码进行手机号注册或登录
 	RegisterOrLoginByPassword(context.Context, *RegisterOrLoginByPasswordReq) (*RegisterOrLoginResp, error)
 	// 忘记密码并重置密码
-	ForgetPassword(context.Context, *ResetPassword) (*CommonResp, error)
+	ForgetPassword(context.Context, *ForgetPasswordReq) (*CommonResp, error)
 	// 修改密码
 	ChangePassword(context.Context, *ResetPassword) (*CommonResp, error)
 	// 获取用户信息
@@ -153,7 +153,7 @@ func (UnimplementedUserRpcServer) RegisterOrLoginByPhone(context.Context, *Regis
 func (UnimplementedUserRpcServer) RegisterOrLoginByPassword(context.Context, *RegisterOrLoginByPasswordReq) (*RegisterOrLoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterOrLoginByPassword not implemented")
 }
-func (UnimplementedUserRpcServer) ForgetPassword(context.Context, *ResetPassword) (*CommonResp, error) {
+func (UnimplementedUserRpcServer) ForgetPassword(context.Context, *ForgetPasswordReq) (*CommonResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ForgetPassword not implemented")
 }
 func (UnimplementedUserRpcServer) ChangePassword(context.Context, *ResetPassword) (*CommonResp, error) {
@@ -233,7 +233,7 @@ func _UserRpc_RegisterOrLoginByPassword_Handler(srv interface{}, ctx context.Con
 }
 
 func _UserRpc_ForgetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ResetPassword)
+	in := new(ForgetPasswordReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -245,7 +245,7 @@ func _UserRpc_ForgetPassword_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: UserRpc_ForgetPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserRpcServer).ForgetPassword(ctx, req.(*ResetPassword))
+		return srv.(UserRpcServer).ForgetPassword(ctx, req.(*ForgetPasswordReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

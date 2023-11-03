@@ -25,8 +25,12 @@ type RegisterOrLoginByPasswordReq struct {
 	Password string `json:"password" validate:"required,max=32,min=6"` // 用户密码，MD5加密
 }
 
-type ResetPassword struct {
-	UserId      int64  `json:"user_id"` // 用户id
+type ForgetPasswordReq struct {
+	Phone       string `json:"phone" validate:"required,phone"`
+	NewPassword string `json:"new_password" validate:"required,max=32,min=6"`
+}
+
+type ChangePasswordReq struct {
 	NewPassword string `json:"new_password" validate:"required,max=32,min=6"`
 }
 

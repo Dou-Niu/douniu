@@ -32,7 +32,7 @@ RelationRpcConf:
 
 # jwt
 JWTAuth:
-  AccessSecret: nG70GvDfA1yehsfN3y1Z
+  AccessSecret: abcdefghi
   AccessTokenExpire: 604800 # 1 week
   RefreshTokenExpire: 2592000 # 1 mouth
 
@@ -47,11 +47,14 @@ CacheRedis:
 RedisConf:
   Host: 106.15.58.0:6379
   Password: liuyt777
+## 腾讯云 SMS 配置
+#Credential:
+#  SecretId: xxxxxxxx
+#  SecretKey: xxxxx
 # 腾讯云 SMS 配置
 Credential:
-  SecretId: xxxxxxxx
-  SecretKey: xxxxx
-
+  SecretId: AKIDHTUhkaEfuwlO5e3Pl6VxPm272nNmy7vZ
+  SecretKey: UnvwlS8VbXFvRp4I4e4IKAsYH6mLm2BD
 Salt: f9b0b6kV9eWHjLyFN3Xs
 
 #监控

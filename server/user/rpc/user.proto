@@ -16,7 +16,7 @@ service UserRpc {
   rpc RegisterOrLoginByPassword (RegisterOrLoginByPasswordReq) returns (RegisterOrLoginResp);
 
   // 忘记密码并重置密码
-  rpc ForgetPassword (ResetPassword) returns (CommonResp);
+  rpc ForgetPassword (ForgetPasswordReq) returns (CommonResp);
 
   // 修改密码
   rpc ChangePassword (ResetPassword) returns (CommonResp);
@@ -56,7 +56,12 @@ message RegisterOrLoginByPasswordReq {
   string password = 2;
 }
 
-// 重置密码的请求
+// 忘记密码
+message ForgetPasswordReq{
+  string phone = 1;
+  string new_password = 2;
+}
+// 修改密码的请求
 message ResetPassword {
   string new_password = 1;
   int64 user_id = 2;

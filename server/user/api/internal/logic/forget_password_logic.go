@@ -28,14 +28,14 @@ func NewForgetPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Fo
 	}
 }
 
-func (l *ForgetPasswordLogic) ForgetPassword(req *types.ResetPassword) error {
+func (l *ForgetPasswordLogic) ForgetPassword(req *types.ForgetPasswordReq) error {
 	err := utils.DefaultGetValidParams(l.ctx, req)
 	if err != nil {
 		return errors.Wrapf(errorx.NewCodeError(1, fmt.Sprintf("validate校验错误: %v", err)), "validate校验错误err :%v", err)
 	}
-	_, err = l.svcCtx.UserRpc.ChangePassword(l.ctx, &pb.ResetPassword{
-		UserId:      req.UserId,
+	_, err = l.svcCtx.UserRpc.ForgetPassword(l.ctx, &pb.ForgetPasswordReq{
 		NewPassword: req.NewPassword,
+		Phone:       req.Phone,
 	})
 	if err != nil {
 		return errors.Wrapf(err, "req: %+v", req)

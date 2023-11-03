@@ -40,7 +40,7 @@ KqPusherConf:
   Topic: video-topic
 # jwt
 JWTAuth:
-  AccessSecret: nG70GvDfA1yehsfN3y1Z
+  AccessSecret: abcdefghi
   AccessTokenExpire: 604800 # 1 week
   RefreshTokenExpire: 2592000 # 1 mouth
 

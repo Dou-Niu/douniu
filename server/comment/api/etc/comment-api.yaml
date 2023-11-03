@@ -1,0 +1,17 @@
+Name: favorite-api
+Host: 0.0.0.0
+Port: 6001
+
+Log:
+    Encoding: plain
+    Stat: false
+Auth:
+    AccessSecret: abcdefghi
+    AccessExpire: 3600000
+
+CommentRpcConf:
+    Etcd:
+        Hosts:
+            - 106.15.58.0:2379
+        Key: comment.rpc
+    NonBlock: true

@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/logc"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"strconv"
@@ -31,10 +32,18 @@ type (
 )
 
 func (m *customVideoModel) FindFollowFeed(ctx context.Context, followIds []int64, leastTime time.Time) ([]int64, error) {
-	query := fmt.Sprintf("select id from %s where user_id in ? and create_time < ? order by create_time DESC limit %v", m.table, consts.DefaultSizeOfPage)
+	placeholders := make([]interface{}, len(followIds))
+	for i, id := range followIds {
+		placeholders[i] = id
+	}
+
+	query := fmt.Sprintf("select id from %s where user_id IN (?) and create_time < ? order by create_time DESC limit %v", m.table, consts.DefaultSizeOfPage)
+	placeholders = append(placeholders, leastTime)
+
 	var resp []int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, followIds, leastTime)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, placeholders...)
 	if len(resp) == 0 {
+		logx.Error(err)
 		err = errors.New("查不到数据了")
 	}
 	return resp, err

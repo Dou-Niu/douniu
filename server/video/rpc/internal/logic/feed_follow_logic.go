@@ -32,7 +32,7 @@ func NewFeedFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FeedFo
 
 func (l *FeedFollowLogic) FeedFollow(in *pb.FeedFollowReq) (*pb.FeedResp, error) {
 	// TODO 调用获取用户关注列表id的rpc
-	followIds := []int64{1, 2}
+	followIds := []int64{1718147821338624000}
 	videoIds, err := l.svcCtx.VideoModel.FindFollowFeed(l.ctx, followIds, time.Unix(in.LatestTime, 0))
 	if err != nil {
 		logc.Error(l.ctx, fmt.Sprintf("根据follow_id查询video_id错误,err:%v", err))

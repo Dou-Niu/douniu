@@ -10,7 +10,8 @@ type CollectionActionResponse struct {
 }
 
 type CollectioneListRequest struct {
-	UserId int64 `form:"user_id" vd:"$>0;msg:'user_id error'"`
+	UserId  int64 `form:"user_id" vd:"$>0;msg:'user_id error'"`
+	PageNum int64 `form:"page_num" vd:"$>0;msg:'page_num error'"`
 }
 
 type CollectioneListResponse struct {
@@ -26,7 +27,8 @@ type FavoriteLikeResponse struct {
 }
 
 type FavoriteListRequest struct {
-	UserId int64 `form:"user_id" vd:"$>0;msg:'user_id error'"`
+	UserId  int64 `form:"user_id" vd:"$>0;msg:'user_id error'"`
+	PageNum int64 `form:"page_num" vd:"$>0;msg:'page_num error'"`
 }
 
 type FavoriteListResponse struct {

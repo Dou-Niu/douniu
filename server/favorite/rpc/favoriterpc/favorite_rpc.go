@@ -13,28 +13,28 @@ import (
 )
 
 type (
-	AddCollectionRequest           = pb.AddCollectionRequest
-	AddCollectionResponse          = pb.AddCollectionResponse
-	AddFavoriteRequest             = pb.AddFavoriteRequest
-	AddFavoriteResponse            = pb.AddFavoriteResponse
-	DelCollectionRequest           = pb.DelCollectionRequest
-	DelCollectionResponse          = pb.DelCollectionResponse
-	DelFavoriteRequest             = pb.DelFavoriteRequest
-	DelFavoriteResponse            = pb.DelFavoriteResponse
-	GetFavoriteVideoIdListRequest  = pb.GetFavoriteVideoIdListRequest
-	GetFavoriteVideoListIdResponse = pb.GetFavoriteVideoListIdResponse
-	GetUserCollectionCountRequest  = pb.GetUserCollectionCountRequest
-	GetUserCollectionCountResponse = pb.GetUserCollectionCountResponse
-	GetUserCollectionListRequest   = pb.GetUserCollectionListRequest
-	GetUserCollectionListResponse  = pb.GetUserCollectionListResponse
-	GetUserFavoriteCountRequest    = pb.GetUserFavoriteCountRequest
-	GetUserFavoriteCountResponse   = pb.GetUserFavoriteCountResponse
-	GetUserFavoritedCountRequest   = pb.GetUserFavoritedCountRequest
-	GetUserFavoritedCountResponse  = pb.GetUserFavoritedCountResponse
-	GetVideoFavoriteCountRequest   = pb.GetVideoFavoriteCountRequest
-	GetVideoFavoriteCountResponse  = pb.GetVideoFavoriteCountResponse
-	IsFavoriteRequest              = pb.IsFavoriteRequest
-	IsFavoriteResponse             = pb.IsFavoriteResponse
+	AddCollectionRequest            = pb.AddCollectionRequest
+	AddCollectionResponse           = pb.AddCollectionResponse
+	AddFavoriteRequest              = pb.AddFavoriteRequest
+	AddFavoriteResponse             = pb.AddFavoriteResponse
+	DelCollectionRequest            = pb.DelCollectionRequest
+	DelCollectionResponse           = pb.DelCollectionResponse
+	DelFavoriteRequest              = pb.DelFavoriteRequest
+	DelFavoriteResponse             = pb.DelFavoriteResponse
+	GetFavoriteVideoIdListRequest   = pb.GetFavoriteVideoIdListRequest
+	GetFavoriteVideoListIdResponse  = pb.GetFavoriteVideoListIdResponse
+	GetUserCollectionCountRequest   = pb.GetUserCollectionCountRequest
+	GetUserCollectionCountResponse  = pb.GetUserCollectionCountResponse
+	GetUserCollectionIdListRequest  = pb.GetUserCollectionIdListRequest
+	GetUserCollectionIdListResponse = pb.GetUserCollectionIdListResponse
+	GetUserFavoriteCountRequest     = pb.GetUserFavoriteCountRequest
+	GetUserFavoriteCountResponse    = pb.GetUserFavoriteCountResponse
+	GetUserFavoritedCountRequest    = pb.GetUserFavoritedCountRequest
+	GetUserFavoritedCountResponse   = pb.GetUserFavoritedCountResponse
+	GetVideoFavoriteCountRequest    = pb.GetVideoFavoriteCountRequest
+	GetVideoFavoriteCountResponse   = pb.GetVideoFavoriteCountResponse
+	IsFavoriteRequest               = pb.IsFavoriteRequest
+	IsFavoriteResponse              = pb.IsFavoriteResponse
 
 	FavoriteRpc interface {
 		AddFavorite(ctx context.Context, in *AddFavoriteRequest, opts ...grpc.CallOption) (*AddFavoriteResponse, error)
@@ -46,7 +46,7 @@ type (
 		GetFavoriteVideoIdList(ctx context.Context, in *GetFavoriteVideoIdListRequest, opts ...grpc.CallOption) (*GetFavoriteVideoListIdResponse, error)
 		AddCollection(ctx context.Context, in *AddCollectionRequest, opts ...grpc.CallOption) (*AddCollectionResponse, error)
 		DelCollection(ctx context.Context, in *DelCollectionRequest, opts ...grpc.CallOption) (*DelCollectionResponse, error)
-		GetUserCollectionList(ctx context.Context, in *GetUserCollectionListRequest, opts ...grpc.CallOption) (*GetUserCollectionListResponse, error)
+		GetUserCollectionList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error)
 		GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error)
 	}
 
@@ -106,7 +106,7 @@ func (m *defaultFavoriteRpc) DelCollection(ctx context.Context, in *DelCollectio
 	return client.DelCollection(ctx, in, opts...)
 }
 
-func (m *defaultFavoriteRpc) GetUserCollectionList(ctx context.Context, in *GetUserCollectionListRequest, opts ...grpc.CallOption) (*GetUserCollectionListResponse, error) {
+func (m *defaultFavoriteRpc) GetUserCollectionList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error) {
 	client := pb.NewFavoriteRpcClient(m.cli.Conn())
 	return client.GetUserCollectionList(ctx, in, opts...)
 }

@@ -67,7 +67,7 @@ func (s *FavoriteRpcServer) DelCollection(ctx context.Context, in *pb.DelCollect
 	return l.DelCollection(in)
 }
 
-func (s *FavoriteRpcServer) GetUserCollectionList(ctx context.Context, in *pb.GetUserCollectionListRequest) (*pb.GetUserCollectionListResponse, error) {
+func (s *FavoriteRpcServer) GetUserCollectionList(ctx context.Context, in *pb.GetUserCollectionIdListRequest) (*pb.GetUserCollectionIdListResponse, error) {
 	l := logic.NewGetUserCollectionListLogic(ctx, s.svcCtx)
 	return l.GetUserCollectionList(in)
 }

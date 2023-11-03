@@ -32,7 +32,8 @@ func (l *FavoriteListLogic) FavoriteList(req *types.FavoriteListRequest) (resp *
 	userId, _ := l.ctx.Value(consts.UserId).(json.Number).Int64()
 
 	videoIdListResp, err := l.svcCtx.FavoriteRpc.GetFavoriteVideoIdList(l.ctx, &favoriterpc.GetFavoriteVideoIdListRequest{
-		UserId: req.UserId,
+		UserId:  req.UserId,
+		PageNum: req.PageNum,
 	})
 	if err != nil {
 		l.Errorf("FavoriteRpc GetFavoriteVideoIdList error: %v", err)

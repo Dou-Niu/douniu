@@ -12,3 +12,5 @@
 /server/video/api/etc
 /server/video/rpc/etc
 /server/video/mq/etc
+/server/favorite/api/etc
+/server/favorite/rpc/etc

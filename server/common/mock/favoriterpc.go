@@ -15,8 +15,7 @@ func (r RelationRpc) FollowAction(ctx context.Context, in *relationrpc.FollowAct
 }
 
 func (r RelationRpc) GetFollowList(ctx context.Context, in *relationrpc.GetFollowListRequest, opts ...grpc.CallOption) (*relationrpc.GetFollowListResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	return &relationrpc.GetFollowListResponse{}, nil
 }
 
 func (r RelationRpc) GetFollowerList(ctx context.Context, in *relationrpc.GetFollowerListRequest, opts ...grpc.CallOption) (*relationrpc.GetFollowerListResponse, error) {

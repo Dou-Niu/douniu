@@ -25,6 +25,7 @@ const (
 	VideoRpc_FeedHome_FullMethodName         = "/video.VideoRpc/FeedHome"
 	VideoRpc_FeedHot_FullMethodName          = "/video.VideoRpc/FeedHot"
 	VideoRpc_FeedUser_FullMethodName         = "/video.VideoRpc/FeedUser"
+	VideoRpc_FeedFollow_FullMethodName       = "/video.VideoRpc/FeedFollow"
 	VideoRpc_FeedPartition_FullMethodName    = "/video.VideoRpc/FeedPartition"
 	VideoRpc_SearchVideo_FullMethodName      = "/video.VideoRpc/SearchVideo"
 	VideoRpc_DeleteVideo_FullMethodName      = "/video.VideoRpc/DeleteVideo"
@@ -40,6 +41,7 @@ type VideoRpcClient interface {
 	FeedHome(ctx context.Context, in *FeedHomeReq, opts ...grpc.CallOption) (*FeedHomeResp, error)
 	FeedHot(ctx context.Context, in *FeedHotReq, opts ...grpc.CallOption) (*FeedHotResp, error)
 	FeedUser(ctx context.Context, in *FeedUserReq, opts ...grpc.CallOption) (*FeedResp, error)
+	FeedFollow(ctx context.Context, in *FeedFollowReq, opts ...grpc.CallOption) (*FeedResp, error)
 	FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error)
 	SearchVideo(ctx context.Context, in *SearchVideoReq, opts ...grpc.CallOption) (*FeedResp, error)
 	DeleteVideo(ctx context.Context, in *DeleteVideoReq, opts ...grpc.CallOption) (*CommonResp, error)
@@ -107,6 +109,15 @@ func (c *videoRpcClient) FeedUser(ctx context.Context, in *FeedUserReq, opts ...
 	return out, nil
 }
 
+func (c *videoRpcClient) FeedFollow(ctx context.Context, in *FeedFollowReq, opts ...grpc.CallOption) (*FeedResp, error) {
+	out := new(FeedResp)
+	err := c.cc.Invoke(ctx, VideoRpc_FeedFollow_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *videoRpcClient) FeedPartition(ctx context.Context, in *FeedPartitionReq, opts ...grpc.CallOption) (*FeedResp, error) {
 	out := new(FeedResp)
 	err := c.cc.Invoke(ctx, VideoRpc_FeedPartition_FullMethodName, in, out, opts...)
@@ -144,6 +155,7 @@ type VideoRpcServer interface {
 	FeedHome(context.Context, *FeedHomeReq) (*FeedHomeResp, error)
 	FeedHot(context.Context, *FeedHotReq) (*FeedHotResp, error)
 	FeedUser(context.Context, *FeedUserReq) (*FeedResp, error)
+	FeedFollow(context.Context, *FeedFollowReq) (*FeedResp, error)
 	FeedPartition(context.Context, *FeedPartitionReq) (*FeedResp, error)
 	SearchVideo(context.Context, *SearchVideoReq) (*FeedResp, error)
 	DeleteVideo(context.Context, *DeleteVideoReq) (*CommonResp, error)
@@ -171,6 +183,9 @@ func (UnimplementedVideoRpcServer) FeedHot(context.Context, *FeedHotReq) (*FeedH
 }
 func (UnimplementedVideoRpcServer) FeedUser(context.Context, *FeedUserReq) (*FeedResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FeedUser not implemented")
+}
+func (UnimplementedVideoRpcServer) FeedFollow(context.Context, *FeedFollowReq) (*FeedResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FeedFollow not implemented")
 }
 func (UnimplementedVideoRpcServer) FeedPartition(context.Context, *FeedPartitionReq) (*FeedResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FeedPartition not implemented")
@@ -302,6 +317,24 @@ func _VideoRpc_FeedUser_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoRpc_FeedFollow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeedFollowReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoRpcServer).FeedFollow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoRpc_FeedFollow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoRpcServer).FeedFollow(ctx, req.(*FeedFollowReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _VideoRpc_FeedPartition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FeedPartitionReq)
 	if err := dec(in); err != nil {
@@ -386,6 +419,10 @@ var VideoRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FeedUser",
 			Handler:    _VideoRpc_FeedUser_Handler,
+		},
+		{
+			MethodName: "FeedFollow",
+			Handler:    _VideoRpc_FeedFollow_Handler,
 		},
 		{
 			MethodName: "FeedPartition",

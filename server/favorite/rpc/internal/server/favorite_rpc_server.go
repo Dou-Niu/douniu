@@ -81,3 +81,8 @@ func (s *FavoriteRpcServer) GetVideoCollectionCount(ctx context.Context, in *pb.
 	l := logic.NewGetVideoCollectionCountLogic(ctx, s.svcCtx)
 	return l.GetVideoCollectionCount(in)
 }
+
+func (s *FavoriteRpcServer) IsCollection(ctx context.Context, in *pb.IsCollectionRequest) (*pb.IsCollectionResponse, error) {
+	l := logic.NewIsCollectionLogic(ctx, s.svcCtx)
+	return l.IsCollection(in)
+}

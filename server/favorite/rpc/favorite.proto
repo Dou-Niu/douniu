@@ -18,6 +18,16 @@ service FavoriteRpc {
     rpc GetUserCollectionList(GetUserCollectionIdListRequest) returns (GetUserCollectionIdListResponse) {}
     rpc GetUserCollectionCount(GetUserCollectionCountRequest) returns (GetUserCollectionCountResponse) {}
     rpc GetVideoCollectionCount(GetVideoCollectionCountRequest) returns (GetVideoCollectionCountResponse) {}
+    rpc IsCollection(IsCollectionRequest) returns (IsCollectionResponse) {}
+}
+
+message IsCollectionRequest {
+    int64 user_id = 1;
+    int64 video_id = 2;
+}
+
+message IsCollectionResponse {
+    bool is_collection = 1;
 }
 
 message GetVideoCollectionCountRequest {

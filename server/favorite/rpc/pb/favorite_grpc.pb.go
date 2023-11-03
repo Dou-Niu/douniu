@@ -31,6 +31,7 @@ const (
 	FavoriteRpc_GetUserCollectionList_FullMethodName   = "/favorite.FavoriteRpc/GetUserCollectionList"
 	FavoriteRpc_GetUserCollectionCount_FullMethodName  = "/favorite.FavoriteRpc/GetUserCollectionCount"
 	FavoriteRpc_GetVideoCollectionCount_FullMethodName = "/favorite.FavoriteRpc/GetVideoCollectionCount"
+	FavoriteRpc_IsCollection_FullMethodName            = "/favorite.FavoriteRpc/IsCollection"
 )
 
 // FavoriteRpcClient is the client API for FavoriteRpc service.
@@ -49,6 +50,7 @@ type FavoriteRpcClient interface {
 	GetUserCollectionList(ctx context.Context, in *GetUserCollectionIdListRequest, opts ...grpc.CallOption) (*GetUserCollectionIdListResponse, error)
 	GetUserCollectionCount(ctx context.Context, in *GetUserCollectionCountRequest, opts ...grpc.CallOption) (*GetUserCollectionCountResponse, error)
 	GetVideoCollectionCount(ctx context.Context, in *GetVideoCollectionCountRequest, opts ...grpc.CallOption) (*GetVideoCollectionCountResponse, error)
+	IsCollection(ctx context.Context, in *IsCollectionRequest, opts ...grpc.CallOption) (*IsCollectionResponse, error)
 }
 
 type favoriteRpcClient struct {
@@ -167,6 +169,15 @@ func (c *favoriteRpcClient) GetVideoCollectionCount(ctx context.Context, in *Get
 	return out, nil
 }
 
+func (c *favoriteRpcClient) IsCollection(ctx context.Context, in *IsCollectionRequest, opts ...grpc.CallOption) (*IsCollectionResponse, error) {
+	out := new(IsCollectionResponse)
+	err := c.cc.Invoke(ctx, FavoriteRpc_IsCollection_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FavoriteRpcServer is the server API for FavoriteRpc service.
 // All implementations must embed UnimplementedFavoriteRpcServer
 // for forward compatibility
@@ -183,6 +194,7 @@ type FavoriteRpcServer interface {
 	GetUserCollectionList(context.Context, *GetUserCollectionIdListRequest) (*GetUserCollectionIdListResponse, error)
 	GetUserCollectionCount(context.Context, *GetUserCollectionCountRequest) (*GetUserCollectionCountResponse, error)
 	GetVideoCollectionCount(context.Context, *GetVideoCollectionCountRequest) (*GetVideoCollectionCountResponse, error)
+	IsCollection(context.Context, *IsCollectionRequest) (*IsCollectionResponse, error)
 	mustEmbedUnimplementedFavoriteRpcServer()
 }
 
@@ -225,6 +237,9 @@ func (UnimplementedFavoriteRpcServer) GetUserCollectionCount(context.Context, *G
 }
 func (UnimplementedFavoriteRpcServer) GetVideoCollectionCount(context.Context, *GetVideoCollectionCountRequest) (*GetVideoCollectionCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVideoCollectionCount not implemented")
+}
+func (UnimplementedFavoriteRpcServer) IsCollection(context.Context, *IsCollectionRequest) (*IsCollectionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IsCollection not implemented")
 }
 func (UnimplementedFavoriteRpcServer) mustEmbedUnimplementedFavoriteRpcServer() {}
 
@@ -455,6 +470,24 @@ func _FavoriteRpc_GetVideoCollectionCount_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FavoriteRpc_IsCollection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IsCollectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteRpcServer).IsCollection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FavoriteRpc_IsCollection_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteRpcServer).IsCollection(ctx, req.(*IsCollectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FavoriteRpc_ServiceDesc is the grpc.ServiceDesc for FavoriteRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -509,6 +542,10 @@ var FavoriteRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetVideoCollectionCount",
 			Handler:    _FavoriteRpc_GetVideoCollectionCount_Handler,
+		},
+		{
+			MethodName: "IsCollection",
+			Handler:    _FavoriteRpc_IsCollection_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

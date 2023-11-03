@@ -2,13 +2,13 @@ package svc
 
 import (
 	"douniu/server/common/consts"
-	"douniu/server/common/mock"
 	"douniu/server/favorite/model"
 	"douniu/server/favorite/rpc/internal/config"
 	"douniu/server/video/rpc/videorpc"
 	"github.com/bwmarrin/snowflake"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
@@ -26,7 +26,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		FavoriteModel: model.NewFavoriteModel(sqlx.NewMysql(c.MySQLConf.DataSource)),
 		RedisClient:   redis.MustNewRedis(c.RedisConf),
 		Snowflake:     snowflakeNode,
-		//VideoRpc:    videorpc.NewVideoRpc(zrpc.MustNewClient(c.VideoRpcConf)),
-		VideoRpc: mock.NewVideoRpc(),
+		VideoRpc:      videorpc.NewVideoRpc(zrpc.MustNewClient(c.VideoRpcConf)),
+		//VideoRpc: mock.NewVideoRpc(),
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"douniu/server/favorite/rpc/favoriterpc"
 	"douniu/server/user/rpc/userrpc"
+	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/core/mr"
 
@@ -37,10 +38,9 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			// 这里不直接return 防止因为某一个id没查到导致全部卡死
 			continue
 			//return nil, errors.Wrapf(errorx.NewDefaultError("mysql查询视频失败"+err.Error()), "更改用户密码失败ResetPassword：%v", in)
-
 		}
 		var userInfo *userrpc.UserInfoItem
-		var favoriteCount int64
+		var favoriteCount, collectionCount int64
 		var isFavorite bool
 		err = mr.Finish(func() error {
 			// 获取视频作者信息
@@ -58,9 +58,13 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			favoriteCount = res.Count
 			return err
 		}, func() error {
-			// TODO 获取视频收藏数
-			//res,err:=l.svcCtx.FavoriteRpc
-			return nil
+			// 获取视频收藏数
+			res, err := l.svcCtx.FavoriteRpc.GetVideoCollectionCount(l.ctx, &favoriterpc.GetVideoCollectionCountRequest{
+				VideoId: oneVideo.Id,
+			})
+			collectionCount = res.Count
+
+			return err
 		}, func() error {
 			// 是否对视频点赞
 			res, err := l.svcCtx.FavoriteRpc.IsFavorite(l.ctx, &favoriterpc.IsFavoriteRequest{
@@ -70,7 +74,12 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			isFavorite = res.IsFavorite
 			return err
 		})
-		// TODO 调用其他rpc
+		if err != nil {
+			// Handle the error, log, and return if needed
+			logc.Error(l.ctx, err, "RPC call error")
+			return nil, errors.Wrapf(err, "req: %+v", in)
+
+		}
 		res = append(res, &pb.Video{
 			Id: oneVideo.Id,
 			User: &pb.User{
@@ -90,12 +99,13 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			PlayUrl:         oneVideo.PlayUrl,
 			CoverUrl:        oneVideo.CoverUrl,
 			FavoriteCount:   favoriteCount,
-			CollectionCount: 0,
-			CommentCount:    0,
-			IsFavorite:      isFavorite,
-			Title:           oneVideo.Title,
-			Partition:       oneVideo.Partition,
-			CreateTime:      oneVideo.CreateTime.Unix(),
+			CollectionCount: collectionCount,
+			// TODO 评论总数
+			CommentCount: 0,
+			IsFavorite:   isFavorite,
+			Title:        oneVideo.Title,
+			Partition:    oneVideo.Partition,
+			CreateTime:   oneVideo.CreateTime.Unix(),
 		})
 	}
 

@@ -23,5 +23,8 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-drag: none;
+
+  --el-input-focus-border-color:none;
+  --el-input-text-color:white;
 }
 </style>

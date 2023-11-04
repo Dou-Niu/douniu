@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="visible" width="45%" destroy-on-close center style="background-color:#141414;">
+  <el-dialog v-model="visible" width="30%" destroy-on-close center style="background-color:rgb(37,38,50)">
     <template #header>
       <el-tabs v-model="activeName">
         <el-tab-pane label="登录" name="login"></el-tab-pane>
@@ -14,9 +14,6 @@
         <el-form-item label="密码" v-if="loginType === '1'">
           <el-input :maxlength="32" type="password" show-password v-model="formLabelAlign.pwd" />
         </el-form-item>
-        <el-form-item v-if="activeName === 'register'" label="重复">
-          <el-input :maxlength="32" type="password" show-password v-model="formLabelAlign.pwd2" />
-        </el-form-item>
         <el-form-item v-if="loginType === '2'" label="验证码">
           <div class="flex justify-center items-center">
             <el-input :maxlength="8" type="text" v-model="formLabelAlign.code" />
@@ -24,10 +21,13 @@
           </div>
         </el-form-item>
         <div v-if="activeName === 'login'">
-          <el-radio-group v-model="loginType" class="ml-4">
-            <el-radio label="1" size="large">密码登录</el-radio>
-            <el-radio label="2" size="large">验证码登录</el-radio>
-          </el-radio-group>
+          <div>
+            <el-radio-group v-model="loginType" class="ml-4">
+              <el-radio label="1" size="large">密码登录</el-radio>
+              <el-radio label="2" size="large">验证码登录</el-radio>
+            </el-radio-group>
+          </div>
+          <div>忘记密码</div>
         </div>
       </el-form>
     </div>
@@ -48,7 +48,7 @@ const props = defineProps<{
   dialogVisible: boolean,
 }>()
 
-const emits=defineEmits(["update:dialogVisible"])
+const emits = defineEmits(["update:dialogVisible"])
 // 登录框tab
 const activeName = ref("login")
 // 登录方式
@@ -66,7 +66,7 @@ const visible = computed({
     return props.dialogVisible
   },
   set(v: boolean) {
-    emits("update:dialogVisible",v)
+    emits("update:dialogVisible", v)
   }
 })
 
@@ -78,6 +78,12 @@ const visible = computed({
   justify-content: center !important;
   align-items: center !important;
   border-bottom: 1px solid #4c4d4f;
+}
+
+:deep(.el-input__wrapper) {
+  --el-input-border-color: none;
+  background-color: rgb(51, 52, 63);
+  color: white;
 }
 
 :deep(.el-form-item__label) {
@@ -107,8 +113,7 @@ const visible = computed({
 }
 
 :deep(.is-active) {
-  color: #CFD3DC;
+  color: #CFD3DC !important;
   font-size: 18px;
 }
-
 </style>

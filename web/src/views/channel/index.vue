@@ -6,9 +6,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import VideoList from '@/components/Video/VideoList.vue';
-import { ref, onMounted } from 'vue';
 import { Video } from '../../types/index';
+import { getPartVideos } from "@/services/video"
+const route = useRoute()
 
 let finished = ref(false);
 let bottomRef = ref<HTMLElement>();
@@ -4985,6 +4988,12 @@ let observeBottom = () => {
   let bottomDom = bottomRef.value as HTMLElement;
   observer.observe(bottomDom);
 }
+
+watch(() => route.params.id, async(newVal) => {
+  console.log(newVal);
+  const res = await getPartVideos(newVal);
+  console.log(res);
+})
 
 onMounted(() => {
   observeBottom();

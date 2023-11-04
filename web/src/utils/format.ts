@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 const formatSeconds:(number)=>string=(time:number)=>{
   time = parseFloat(time.toFixed(2))
   let minutes:string | number = Math.floor(time / 60);
@@ -13,4 +14,8 @@ const formatSeconds:(number)=>string=(time:number)=>{
   return minutes + ":" + seconds;
 }
 
-export {formatSeconds}
+const formatTime = (timestamp:any)=>{
+  return dayjs(timestamp).format('YYYY-MM-DD')
+}
+
+export {formatSeconds,formatTime}

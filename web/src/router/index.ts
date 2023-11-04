@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory} from "vue-router";
-import {HomeRoutes,ErrRoutes} from "./routes";
+import {HomeRoutes,ErrRoutes,ChannelRoutes} from "./routes";
 
 const router = createRouter({
 	history: createWebHashHistory(),
-	routes: [...HomeRoutes,...ErrRoutes]
+	routes: [...HomeRoutes,...ErrRoutes,...ChannelRoutes]
 });
 
 // 路由守卫
@@ -16,8 +16,6 @@ router.beforeEach(async (to, _, next) => {
 		next();
 	}
 });
-
-// router.afterEach(async (to, from, failure) => {});
 
 router.onError((error) => {
 	console.log(error, "路由错误");

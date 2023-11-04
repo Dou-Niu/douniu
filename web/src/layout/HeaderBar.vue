@@ -12,10 +12,10 @@
       </div>
     </div>
     <div class="grow-1 flex items-center justify-center">
-      <el-input v-model="search" placeholder="" class="w-120!">
+      <el-input v-model="keyWords" placeholder="" class="w-120!">
         <template #suffix>
           <div>
-            <el-button plain class="bg-#131314! btn">
+            <el-button plain class="bg-#131314! btn" @click="handleSearch">
               <el-icon size="18">
                 <Search />
               </el-icon>
@@ -26,22 +26,43 @@
       </el-input>
     </div>
     <!-- <el-menu-item index="1">首页</el-menu-item> -->
-    <el-menu-item index="/upload">投稿</el-menu-item>
+    <div class="flex justify-center items-center">
+      <el-menu-item index="/upload">投稿</el-menu-item>
+      <el-divider class="h-8! border-#4C4D4F!" direction="vertical" />
+      <el-popover placement="top-start" :width="200" trigger="hover"
+        popper-class="bg-#33343F! border-none! text-white! ">
+        <template #reference>
+          <el-avatar :size="40" :src="avatar" class="mr-4" />
+        </template>
+        <template #default>
+          <div>弹出</div>
+        </template>
+      </el-popover>
+    </div>
   </el-menu>
   <LoginCard :dialogVisible="dialogVisible" @update:dialogVisible="setDialogVisible" />
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue"
-import LoginCard from "@/components/LoginCard/LoginCard.vue"
+import { useRouter } from "vue-router"
+const router = useRouter()
 // 搜索框
-const search = ref("")
+const keyWords = ref("")
 const isLogin = ref(false)
+const handleSearch = () => {
+  router.push(`/search/${keyWords.value}`)
+}
+
 // 登录框
 const dialogVisible = ref(false)
 const setDialogVisible = (v: boolean) => {
   dialogVisible.value = v
 }
+
+// 头像
+const avatar = ref("")
+
 </script>
 
 <style scoped>

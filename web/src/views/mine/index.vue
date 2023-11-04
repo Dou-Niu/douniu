@@ -2,10 +2,8 @@
   <el-scrollbar>
     <div class="my_container">
       <div class="header">
-        <div class="header-left">
-          <img
-            src="https://p6-pc-sign.douyinpic.com/aweme-avatar/tos-cn-i-0813_ogr9sAA3yCAsxYjwCOfhgtzlAWAeCsAIEotsNH~tplv-8yspqt5zfm-300x300.webp?x-expires=1698847200&x-signature=HgAaiu%2FtFCV3nLnBe%2Bykwe9mT1Y%3D&from=2480802190"
-            alt="avatar">
+        <div>
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="110" />
         </div>
         <div class="header-mid">
           <div class="name">{{ "星野露比" }}</div>
@@ -26,27 +24,93 @@
 
         </div>
         <div class="header-right">
-          <div class="btn editor">编辑资料</div>
+          <div class="btn editor" @click="dialogVisible = true">编辑资料</div>
         </div>
       </div>
       <div class="mid_nav">
-        <div class="nav-item active">作品 <span class="data">{{ 13 }}</span></div>
-        <div class="nav-item">喜欢 <span class="data">{{ 13 }}</span></div>
-        <div class="nav-item">收藏 <span class="data">{{ 13 }}</span></div>
+        <div class="nav-item" :class="{ 'active': activeName === 'works' }" @click="activeName = 'works'">作品 <span
+            class="data">{{ 13 }}</span></div>
+        <div class="nav-item" :class="{ 'active': activeName === 'like' }" @click="activeName = 'like'">喜欢 <span
+            class="data">{{ 13 }}</span></div>
+        <div class="nav-item" :class="{ 'active': activeName === 'collect' }" @click="activeName = 'collect'">收藏 <span
+            class="data">{{ 13 }}</span></div>
       </div>
-      <div class="line"></div>
-      <div class="footer_list">
-        <!-- 视频列表，暂未开发 -->
-        <!-- <video-list></video-list> -->
+      <div class="line mb-6"></div>
+      <div class="footer_list w-80%">
+        <div v-if="activeName === 'works'">
+          <showVideoList />
+        </div>
+        <div v-else-if="activeName === 'like'">
+          <showVideoList />
+        </div>
+        <div v-else>
+          <showVideoList />
+        </div>
       </div>
     </div>
+    <el-dialog v-model="dialogVisible" title="编辑资料" width="30%" center align-center destroy-on-close
+      style="background-color:rgb(37,38,50);color:red;height:auto;">
+      <div class="my-4 text-white flex justify-center flex-col items-center">
+        <div class="mb-4 text-4">头像</div>
+        <el-upload class="" :show-file-list="false">
+          <el-avatar :src="userInfo.avatar" :size="100" />
+        </el-upload>
+      </div>
+      <div class="my-4 flex justify-center flex-col items-center">
+        <div class="mb-4 text-4 text-white">背景图片</div>
+        <el-upload class="w-full" drag>
+          <el-icon :size="50"><upload-filled /></el-icon>
+        </el-upload>
+      </div>
+      <div class="my-4 text-white text-4">
+        <span>名字</span>
+        <el-input type="text" v-model="userInfo.name" />
+      </div>
+      <div class="mt-8 text-white text-4">
+        <span class="mb-2">简介</span>
+        <el-input type="textarea" v-model="userInfo.description" :rows="4" :maxlength="40" />
+      </div>
+      <template #footer>
+        <span>
+          <el-button type="primary" size="large" @click="dialogVisible = false" color="rgb(124,101,109)">
+            保存
+          </el-button>
+          <el-button @click="dialogVisible = false" size="large" color="rgb(60,62,73)">取消</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
+import { ref, reactive } from "vue"
+import showVideoList from "@/components/Video/showVideoList.vue";
+const activeName = ref<string>("works")
+const dialogVisible = ref<boolean>(false)
+// 修改个人信息
+const userInfo = reactive({
+  name: "",
+  description: "",
+  avatar: "",
+  background: ""
+})
 </script>
 
 <style scoped lang="less">
+:deep(.el-textarea__inner) {
+  --el-input-border-color: none;
+  background-color: rgb(51, 52, 63);
+}
+
+:deep(.el-input__wrapper) {
+  --el-input-border-color: none;
+  background-color: rgb(51, 52, 63);
+}
+
+:deep(.el-dialog__title) {
+  color: white;
+}
+
 .my_container {
   min-width: 540px;
   box-sizing: border-box;
@@ -66,19 +130,6 @@
       color: rgba(255, 255, 255, .9);
       font-size: 16px;
       line-height: 24px;
-    }
-
-    .header-left {
-      width: 112px;
-      height: 112px;
-      border-radius: 100%;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
     }
 
     .header-mid {

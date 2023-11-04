@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center my-6">
-    <el-avatar :size="30" src="" />
+    <el-avatar :size="40" src="https://www.kecat.top/DCIM/beautiful/1656324779859.jpg" class="mr-4"/>
     <div class="flex justify-center items-center text-2xl loader">斗牛</div>
   </div>
 </template>

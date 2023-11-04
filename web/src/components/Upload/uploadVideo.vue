@@ -14,7 +14,7 @@
                 </template>
             </el-progress>
         </div>
-        <video controls v-else-if="status === 'uploaded'" class="pre-video" :src="videoSrc"></video>
+        <video controls v-else-if="status === 'uploaded'" class="pre-video" :src="video_url"></video>
     </div>
 </template>
 
@@ -25,7 +25,7 @@ import { ref, defineExpose } from 'vue';
 
 type Status = 'beforeUpload' | 'uploaded' | 'uploading';
 let status = ref<Status>('beforeUpload');
-let videoSrc = ref('');
+let video_url = ref('');
 
 const handleUpload = async (file: File) => {
     try {
@@ -36,7 +36,7 @@ const handleUpload = async (file: File) => {
         status.value = 'uploading';
         const { videoURL } = await uploadVideo(file);
         status.value = 'uploaded';
-        videoSrc.value = videoURL;
+        video_url.value = videoURL;
     } catch (error: any) {
         ElMessage.error(error);
     }

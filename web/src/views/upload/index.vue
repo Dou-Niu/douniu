@@ -10,13 +10,19 @@
             <upload-video ref="uploader"></upload-video>
             <div class="upload_title">
                 <div class="title">视频标题</div>
-                <el-input :rows="5" placeholder="写一个合适的标题，能让更多人看到" v-model="videoTitle" type="textarea" :max="30"
+                <el-input :rows="5" placeholder="写一个合适的标题，能让更多人看到" v-model="title" type="textarea" :max="30"
                     :show-word-limit="true"></el-input>
             </div>
             <select-cover></select-cover>
             <div class="upload_category">
-                <div class="title">视频分类</div>
-                <el-select></el-select>
+                <div class="title">视频分区</div>
+                <el-select  v-model="partition">
+                    <el-option label="游戏" :value="1" />
+                    <el-option label="生活" :value="2" />
+                    <el-option label="影视" :value="3" />
+                    <el-option label="动漫" :value="4" />
+                    <el-option label="知识" :value="5" />
+                </el-select>
             </div>
             <div class="upload_publish">
                 <el-button type="success" @click="handlePublish">发布</el-button>
@@ -32,7 +38,9 @@ import { ref } from 'vue';
 import { curCover, videoCovers, curVideoURL } from '@/utils/upload';
 import selectCover from '@/components/Upload/selectCover.vue'
 import { uploadVideo as uploadFile, curCoverFile } from '../../utils/upload/uploadVideo';
-const videoTitle = ref('');
+// 分区
+const partition = ref(1);
+const title = ref('');
 
 const uploader = ref();
 const inputRef = ref();

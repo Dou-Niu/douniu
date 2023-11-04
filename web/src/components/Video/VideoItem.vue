@@ -1,5 +1,5 @@
 <template>
-    <div ref="videoRef" class="video-item">
+    <div ref="videoRef" class="video-item" @click="handlePlay">
         <div class="video-item-top">
             <img @load="handleImgLoad" :src="videoItem.videoCoverURL">
             <div class="video-item-likeCount">{{ videoItem.likeCount }}</div>
@@ -9,7 +9,7 @@
             <div class="video-item-title">{{ videoItem.videoTile }}</div>
             <div class="video-item-other">
                 <div class="video-item-user">{{ videoItem.username }}</div>
-                <div class="video-item-time">{{ videoItem.publishTime }}</div>
+                <div class="video-item-time">{{ formatTime(videoItem.publishTime) }}</div>
             </div>
         </div>
     </div>
@@ -19,6 +19,9 @@
 import { Video } from '../../types/index';
 import { ref } from 'vue'
 import { flowList } from '../../utils/flowList/index';
+import { formatTime } from '@/utils/format';
+import { useRouter } from "vue-router"
+const router = useRouter()
 
 let videoRef = ref<HTMLElement>();
 
@@ -29,6 +32,17 @@ let props = defineProps<{
 
 let handleImgLoad = () => {
     props.listInstance.setPosition(props.videoItem, (videoRef.value?.parentElement as HTMLElement));
+}
+
+const handlePlay = () => {
+    router.push({
+        "path": "/play",
+        query: {
+            // id: props.videoItem.id
+            id:1,
+            url:props.videoItem.videoURL
+        }
+    })
 }
 
 </script>

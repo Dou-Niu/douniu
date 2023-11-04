@@ -28,4 +28,4 @@ WORKDIR /app
 COPY --from=builder /app/user /app/user
 COPY --from=builder /app/etc /app/etc
 
-CMD ["./user", "-f", "etc/user-api.yaml"]
+CMD ["./user", "-f", "etc/user.yaml"]

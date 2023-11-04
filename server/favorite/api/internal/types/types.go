@@ -4,7 +4,7 @@ package types
 type CollectionActionRequest struct {
 	VideoId    int64 `json:"video_id" vd vd:"$>0;msg:'video_id error'"`
 	ActionType int64 `json:"action_type" vd:"$==1||$==2;msg:'action_type error'"`
-	Partition  int64 `json:"partition" vd:"$>0;msg:'partition error'"`
+	Partition  int64 `json:"partition" vd:"$>=0;msg:'partition error'"`
 }
 
 type CollectionActionResponse struct {
@@ -12,7 +12,7 @@ type CollectionActionResponse struct {
 
 type CollectioneListRequest struct {
 	UserId  int64 `form:"user_id" vd:"$>0;msg:'user_id error'"`
-	PageNum int64 `form:"page_num" vd:"$>0;msg:'page_num error'"`
+	PageNum int64 `form:"page_num" vd:"$>=0;msg:'page_num error'"`
 }
 
 type CollectioneListResponse struct {
@@ -30,7 +30,7 @@ type FavoriteLikeResponse struct {
 
 type FavoriteListRequest struct {
 	UserId  int64 `form:"user_id" vd:"$>0;msg:'user_id error'"`
-	PageNum int64 `form:"page_num" vd:"$>0;msg:'page_num error'"`
+	PageNum int64 `form:"page_num" vd:"$>=0;msg:'page_num error'"`
 }
 
 type FavoriteListResponse struct {

@@ -13,7 +13,7 @@ Etcd:
   Key: favorite.rpc
 
 MySQLConf:
-  DataSource: root:liuyt777@tcp(106.15.58.0:3306)/douniu_comment
+  DataSource: root:liuyt777@tcp(106.15.58.0:3306)/douniu_favorite
 
 UserRpcConf:
   Etcd:

@@ -93,7 +93,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./server/video/kmq/Dockerfile
+          file: ./server/video/mq/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}video-mq:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像

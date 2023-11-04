@@ -39,20 +39,9 @@ type Comment struct {
 	User       *User  `json:"user"`
 }
 
-type Video struct {
-	Id            int64  `json:"id"`
-	Author        *User  `json:"author" copier:"User"`
-	Title         string `json:"title"`
-	PlayUrl       string `json:"play_url"`
-	CoverUrl      string `json:"cover_url"`
-	FavoriteCount int64  `json:"favorite_count"`
-	CommentCount  int64  `json:"comment_count"`
-	IsFavorite    bool   `json:"is_favorite"`
-}
-
 type User struct {
 	Id              int64  `json:"id"`
-	Username        string `json:"name"`
+	Username        string `json:"nickname"`
 	Avatar          string `json:"avatar"`
 	FollowCount     int64  `json:"follow_count"`
 	TotalFavorited  int64  `json:"total_favorited"`
@@ -62,4 +51,5 @@ type User struct {
 	WorkCount       int64  `json:"work_count"`
 	FavoriteCount   int64  `json:"favorite_count"`
 	IsFollow        bool   `json:"is_follow"`
+	CollectionCount int64  `json:"collection_count"`
 }

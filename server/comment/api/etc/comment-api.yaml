@@ -1,6 +1,6 @@
 Name: favorite-api
 Host: 0.0.0.0
-Port: 6001
+Port: 6007
 
 Log:
     Encoding: plain

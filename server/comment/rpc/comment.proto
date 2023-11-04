@@ -63,6 +63,7 @@ message User {
     int64 total_favorited = 9;
     int64 work_count = 10;
     int64 favorite_count = 11;
+    int64 collection_count = 13;
 }
 
 message GetCommentListRequest {

@@ -9,6 +9,11 @@ import (
 type VideoRpc struct {
 }
 
+func (v VideoRpc) GetWorkCount(ctx context.Context, in *videorpc.WorkCountReq, opts ...grpc.CallOption) (*videorpc.WorkCountResp, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (v VideoRpc) PublishVideo(ctx context.Context, in *videorpc.PublishVideoReq, opts ...grpc.CallOption) (*videorpc.CommonResp, error) {
 	//TODO implement me
 	panic("implement me")
@@ -25,6 +30,11 @@ func (v VideoRpc) FeedHot(ctx context.Context, in *videorpc.FeedHotReq, opts ...
 }
 
 func (v VideoRpc) FeedUser(ctx context.Context, in *videorpc.FeedUserReq, opts ...grpc.CallOption) (*videorpc.FeedResp, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (v VideoRpc) FeedFollow(ctx context.Context, in *videorpc.FeedFollowReq, opts ...grpc.CallOption) (*videorpc.FeedResp, error) {
 	//TODO implement me
 	panic("implement me")
 }

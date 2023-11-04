@@ -4,6 +4,7 @@ package types
 type CollectionActionRequest struct {
 	VideoId    int64 `json:"video_id" vd vd:"$>0;msg:'video_id error'"`
 	ActionType int64 `json:"action_type" vd:"$==1||$==2;msg:'action_type error'"`
+	Partition  int64 `json:"partition" vd:"$>0;msg:'partition error'"`
 }
 
 type CollectionActionResponse struct {
@@ -21,6 +22,7 @@ type CollectioneListResponse struct {
 type FavoriteLikeRequest struct {
 	VideoId    int64 `json:"video_id" vd vd:"$>0;msg:'video_id error'"`
 	ActionType int64 `json:"action_type" vd:"$==1||$==2;msg:'action_type error'"`
+	Partition  int64 `json:"partition" vd:"$>0;msg:'partition error'"`
 }
 
 type FavoriteLikeResponse struct {
@@ -36,19 +38,20 @@ type FavoriteListResponse struct {
 }
 
 type Video struct {
-	Id            int64  `json:"id"`
-	Author        *User  `json:"author" copier:"User"`
-	Title         string `json:"title"`
-	PlayUrl       string `json:"play_url"`
-	CoverUrl      string `json:"cover_url"`
-	FavoriteCount int64  `json:"favorite_count"`
-	CommentCount  int64  `json:"comment_count"`
-	IsFavorite    bool   `json:"is_favorite"`
+	Id              int64  `json:"id"`
+	Author          *User  `json:"author" copier:"User"`
+	Title           string `json:"title"`
+	PlayUrl         string `json:"play_url"`
+	CoverUrl        string `json:"cover_url"`
+	FavoriteCount   int64  `json:"favorite_count"`
+	CommentCount    int64  `json:"comment_count"`
+	IsFavorite      bool   `json:"is_favorite"`
+	CollectionCount int64  `json:"collection_count"`
 }
 
 type User struct {
 	Id              int64  `json:"id"`
-	Username        string `json:"name"`
+	Username        string `json:"nickname"`
 	Avatar          string `json:"avatar"`
 	FollowCount     int64  `json:"follow_count"`
 	TotalFavorited  int64  `json:"total_favorited"`
@@ -58,4 +61,5 @@ type User struct {
 	WorkCount       int64  `json:"work_count"`
 	FavoriteCount   int64  `json:"favorite_count"`
 	IsFollow        bool   `json:"is_follow"`
+	CollectionCount int64  `json:"collection_count"`
 }

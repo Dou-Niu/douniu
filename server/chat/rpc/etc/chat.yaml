@@ -1,5 +1,5 @@
 Name: chat.rpc
-ListenOn: 0.0.0.0:20005
+ListenOn: 0.0.0.0:20006
 
 Mode: dev
 

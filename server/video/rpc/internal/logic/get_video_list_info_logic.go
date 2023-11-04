@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"douniu/server/comment/rpc/commentrpc"
 	"douniu/server/favorite/rpc/favoriterpc"
 	"douniu/server/user/rpc/userrpc"
 	"github.com/pkg/errors"
@@ -40,7 +41,7 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			//return nil, errors.Wrapf(errorx.NewDefaultError("mysql查询视频失败"+err.Error()), "更改用户密码失败ResetPassword：%v", in)
 		}
 		var userInfo *userrpc.UserInfoItem
-		var favoriteCount, collectionCount int64
+		var favoriteCount, collectionCount, commentCount int64
 		var isFavorite bool
 		err = mr.Finish(func() error {
 			// 获取视频作者信息
@@ -73,6 +74,13 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			})
 			isFavorite = res.IsFavorite
 			return err
+		}, func() error {
+			// 获取视频的评论数
+			res, err := l.svcCtx.CommentRpc.GetCommentCount(l.ctx, &commentrpc.GetCommentCountRequest{
+				VideoId: oneVideo.Id,
+			})
+			commentCount = res.Count
+			return err
 		})
 		if err != nil {
 			// Handle the error, log, and return if needed
@@ -100,12 +108,11 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			CoverUrl:        oneVideo.CoverUrl,
 			FavoriteCount:   favoriteCount,
 			CollectionCount: collectionCount,
-			// TODO 评论总数
-			CommentCount: 0,
-			IsFavorite:   isFavorite,
-			Title:        oneVideo.Title,
-			Partition:    oneVideo.Partition,
-			CreateTime:   oneVideo.CreateTime.Unix(),
+			CommentCount:    commentCount,
+			IsFavorite:      isFavorite,
+			Title:           oneVideo.Title,
+			Partition:       oneVideo.Partition,
+			CreateTime:      oneVideo.CreateTime.Unix(),
 		})
 	}
 

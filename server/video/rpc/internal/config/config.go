@@ -9,6 +9,7 @@ type Config struct {
 	zrpc.RpcServerConf
 	UserRpcConf     zrpc.RpcClientConf
 	FavoriteRpcConf zrpc.RpcClientConf
+	CommentRpcConf  zrpc.RpcClientConf
 
 	MysqlConf struct {
 		DataSource string

@@ -47,19 +47,19 @@ func (l *FeedFollowLogic) FeedFollow(req *types.FeedFollowReq) (resp *types.Feed
 
 		videoList = append(videoList, &types.VideoInfo{
 			VideoID: v.Id,
-			Author:  types.AuthorInfo{
-				//ID:              v.User.Id,
-				//NickName:        v.User.Nickname,
-				//FollowCount:     v.User.FollowCount,
-				//FollowerCount:   v.User.FollowerCount,
-				//IsFollow:        v.User.IsFollow,
-				//Avatar:          v.User.Avatar,
-				//BackgroundImage: v.User.BackgroundImage,
-				//Signature:       v.User.Signature,
-				//TotalFavorited:  v.User.TotalFavorited,
-				//WorkCount:       v.User.WorkCount,
-				//FavoriteCount:   v.User.FavoriteCount,
-
+			Author: types.AuthorInfo{
+				ID:              v.User.Id,
+				NickName:        v.User.Nickname,
+				FollowCount:     v.User.FollowCount,
+				FollowerCount:   v.User.FollowerCount,
+				IsFollow:        v.User.IsFollow,
+				Avatar:          v.User.Avatar,
+				BackgroundImage: v.User.BackgroundImage,
+				Signature:       v.User.Signature,
+				TotalFavorited:  v.User.TotalFavorited,
+				WorkCount:       v.User.WorkCount,
+				FavoriteCount:   v.User.FavoriteCount,
+				CollectionCount: v.CollectionCount,
 			},
 			PlayURL:       v.PlayUrl,
 			CoverURL:      v.CoverUrl,

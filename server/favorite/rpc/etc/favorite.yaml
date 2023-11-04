@@ -21,7 +21,7 @@ UserRpcConf:
       - 106.15.58.0:2379
     Key: user.rpc
   NonBlock: true
-# VideoRpc
+
 VideoRpcConf:
   Etcd:
     Hosts:
@@ -31,3 +31,8 @@ VideoRpcConf:
 RedisConf:
   Host: 106.15.58.0:6379
   Pass: "liuyt777"
+
+KafkaConf:
+  Addrs:
+    - 106.15.58.0:9092
+  Topic: favorite-topic

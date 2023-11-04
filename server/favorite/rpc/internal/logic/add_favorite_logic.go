@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 	"douniu/server/common/consts"
-	"douniu/server/favorite/model"
 	"douniu/server/video/rpc/videorpc"
+	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/mr"
 
 	"errors"
@@ -109,35 +109,45 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 	resp = new(pb.AddFavoriteResponse)
 	err = nil
 
-	// 查询点赞记录
-	favorite, err := l.svcCtx.FavoriteModel.FindByUserIdVideoId(l.ctx, in.UserId, in.VideoId)
+	// 丢到kafka里落库
+	inStr, err := jsonx.MarshalToString(in)
 	if err != nil {
-		l.Errorf("FavoriteModel FindByUserIdVideoId error: %v", err)
-		return
+		l.Errorf("MarshalToString err：%v", err)
+	}
+	err = l.svcCtx.KafkaPusher.Push(inStr)
+	if err != nil {
+		l.Errorf("KafkaPusher Push error: %v", err)
 	}
 
-	// 创建或更新点赞记录
-	if favorite != nil {
-		favorite.Status = 1
-		favorite.UpdateTime = time.Now().Unix()
-		err := l.svcCtx.FavoriteModel.Update(l.ctx, favorite)
-		if err != nil {
-			l.Errorf("FavoriteModel Update error: %v", err)
-		}
-
-	} else {
-		_, err := l.svcCtx.FavoriteModel.Insert(l.ctx, &model.Favorite{
-			Id:         l.svcCtx.Snowflake.Generate().Int64(),
-			UserId:     in.UserId,
-			VideoId:    in.VideoId,
-			AuthorId:   authorId,
-			Status:     1,
-			UpdateTime: time.Now().Unix(),
-		})
-		if err != nil {
-			l.Errorf("FavoriteModel Insert error: %v", err)
-		}
-	}
+	//// 查询点赞记录
+	//favorite, err := l.svcCtx.FavoriteModel.FindByUserIdVideoId(l.ctx, in.UserId, in.VideoId)
+	//if err != nil {
+	//	l.Errorf("FavoriteModel FindByUserIdVideoId error: %v", err)
+	//	return
+	//}
+	//
+	//// 创建或更新点赞记录
+	//if favorite != nil {
+	//	favorite.Status = 1
+	//	favorite.UpdateTime = time.Now().Unix()
+	//	err := l.svcCtx.FavoriteModel.Update(l.ctx, favorite)
+	//	if err != nil {
+	//		l.Errorf("FavoriteModel Update error: %v", err)
+	//	}
+	//
+	//} else {
+	//	_, err := l.svcCtx.FavoriteModel.Insert(l.ctx, &model.Favorite{
+	//		Id:         l.svcCtx.Snowflake.Generate().Int64(),
+	//		UserId:     in.UserId,
+	//		VideoId:    in.VideoId,
+	//		AuthorId:   authorId,
+	//		Status:     1,
+	//		UpdateTime: time.Now().Unix(),
+	//	})
+	//	if err != nil {
+	//		l.Errorf("FavoriteModel Insert error: %v", err)
+	//	}
+	//}
 
 	return
 

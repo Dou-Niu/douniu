@@ -6,6 +6,7 @@ import (
 	"douniu/server/favorite/rpc/internal/config"
 	"douniu/server/video/rpc/videorpc"
 	"github.com/bwmarrin/snowflake"
+	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -17,6 +18,7 @@ type ServiceContext struct {
 	RedisClient   *redis.Redis
 	VideoRpc      videorpc.VideoRpc
 	Snowflake     *snowflake.Node
+	KafkaPusher   *kq.Pusher
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -27,6 +29,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		RedisClient:   redis.MustNewRedis(c.RedisConf),
 		Snowflake:     snowflakeNode,
 		VideoRpc:      videorpc.NewVideoRpc(zrpc.MustNewClient(c.VideoRpcConf)),
+		KafkaPusher:   kq.NewPusher(c.KafkaConf.Addrs, c.KafkaConf.Topic),
 		//VideoRpc: mock.NewVideoRpc(),
 	}
 }

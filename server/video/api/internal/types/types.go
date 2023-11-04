@@ -13,6 +13,7 @@ type AuthorInfo struct {
 	TotalFavorited  int64  `json:"total_favorited"`
 	WorkCount       int64  `json:"work_count"`
 	FavoriteCount   int64  `json:"favorite_count"`
+	CollectionCount int64  `json:"collection_count"`
 }
 
 type VideoInfo struct {

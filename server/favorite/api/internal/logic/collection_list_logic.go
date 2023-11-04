@@ -31,7 +31,7 @@ func NewCollectionListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Co
 func (l *CollectionListLogic) CollectionList(req *types.CollectioneListRequest) (resp *types.CollectioneListResponse, err error) {
 	userId, _ := l.ctx.Value(consts.UserId).(json.Number).Int64()
 
-	videoIdListResp, err := l.svcCtx.FavoriteRpc.GetUserCollectionList(l.ctx, &favoriterpc.GetUserCollectionIdListRequest{
+	videoIdListResp, err := l.svcCtx.FavoriteRpc.GetUserCollectionIdList(l.ctx, &favoriterpc.GetUserCollectionIdListRequest{
 		UserId:  req.UserId,
 		PageNum: req.PageNum,
 	})

@@ -4,7 +4,6 @@ import (
 	"douniu/server/comment/model"
 	"douniu/server/comment/rpc/internal/config"
 	"douniu/server/common/consts"
-	"douniu/server/common/mock"
 	"douniu/server/common/utils"
 	"douniu/server/relation/rpc/relationrpc"
 	"douniu/server/user/rpc/userrpc"
@@ -12,6 +11,7 @@ import (
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
@@ -37,8 +37,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config:       c,
 		CommentModel: model.NewCommentModel(sqlx.NewMysql(c.MySQLConf.DataSource)),
 		Snowflake:    snowflakeNode,
-		UserRpc:      mock.UserRpc{},
-		//UserRpc:             userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
+		//UserRpc:      mock.UserRpc{},
+		UserRpc:             userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
 		SensitiveWordFilter: trie,
 		KafkaPusher:         kq.NewPusher(c.KafkaConf.Addrs, c.KafkaConf.Topic),
 		RedisClient:         redis.MustNewRedis(c.RedisConf),

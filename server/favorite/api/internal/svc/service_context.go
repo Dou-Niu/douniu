@@ -1,7 +1,6 @@
 package svc
 
 import (
-	"douniu/server/common/mock"
 	"douniu/server/favorite/api/internal/config"
 	"douniu/server/favorite/rpc/favoriterpc"
 	"douniu/server/video/rpc/videorpc"
@@ -18,7 +17,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:      c,
 		FavoriteRpc: favoriterpc.NewFavoriteRpc(zrpc.MustNewClient(c.FavoriteRpcConf)),
-		//VideoRpc:     videorpc.NewVideoRpc(zrpc.MustNewClient(c.VideoRpcConf)),
-		VideoRpc: mock.NewVideoRpc(),
+		VideoRpc:    videorpc.NewVideoRpc(zrpc.MustNewClient(c.VideoRpcConf)),
 	}
 }

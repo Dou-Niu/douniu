@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"douniu/server/common/consts"
+	"douniu/server/common/errorx"
 	"douniu/server/video/rpc/types/pb"
 	"encoding/json"
 	"github.com/pkg/errors"
@@ -39,6 +40,10 @@ func (l *LookOneVideoLogic) LookOneVideo(req *types.LookOneVideoReq) (resp *type
 		return nil, errors.Wrapf(err, "req: %+v", req)
 	}
 	list := res.VideoList
+	if len(list) == 0 {
+		return nil, errors.Wrapf(errorx.NewDefaultError("查不到数据了"), "req: %+v", req)
+
+	}
 	videoList := make([]*types.VideoInfo, 0)
 	for _, v := range list {
 

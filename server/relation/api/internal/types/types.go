@@ -37,7 +37,7 @@ type FriendListResponse struct {
 
 type User struct {
 	Id              int64  `json:"id"`
-	Username        string `json:"nickname"`
+	Nickname        string `json:"nickname"`
 	Avatar          string `json:"avatar"`
 	FollowCount     int64  `json:"follow_count"`
 	TotalFavorited  int64  `json:"total_favorited"`

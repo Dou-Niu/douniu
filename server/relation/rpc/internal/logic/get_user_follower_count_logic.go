@@ -28,12 +28,12 @@ func NewGetUserFollowerCountLogic(ctx context.Context, svcCtx *svc.ServiceContex
 func (l *GetUserFollowerCountLogic) GetUserFollowerCount(in *pb.GetUserFollowerCountRequest) (resp *pb.GetUserFollowerCountResponse, err error) {
 	resp = new(pb.GetUserFollowerCountResponse)
 	userIdStr := strconv.FormatInt(in.UserId, 10)
-	count, err := l.svcCtx.RedisClient.ScardCtx(l.ctx, consts.UserFollowerPrefix+userIdStr)
+	count, err := l.svcCtx.RedisClient.ZcardCtx(l.ctx, consts.UserFollowerPrefix+userIdStr)
 	if err != nil {
-		l.Errorf("redis scard err: %v", err)
+		l.Errorf("redis zcard err: %v", err)
 		return nil, err
 	}
-	resp.Count = count
+	resp.Count = int64(count)
 
 	return
 }

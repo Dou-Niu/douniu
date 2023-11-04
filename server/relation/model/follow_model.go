@@ -26,7 +26,7 @@ type (
 func (m *customFollowModel) FindFriendIdList(ctx context.Context, userId int64) ([]int64, error) {
 	query := `SELECT DISTINCT f1.follow_id FROM follow f1
          INNER JOIN follow f2 ON f1.follow_id = f2.user_id
-		WHERE f1.user_id = ? AND f2.follow_id = ? order by update_time desc ;`
+		WHERE f1.user_id = ? AND f2.follow_id = ?  ;`
 	idList := make([]int64, 0)
 	err := m.conn.QueryRowsCtx(ctx, &idList, query, userId, userId)
 	return idList, err

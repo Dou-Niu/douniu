@@ -45,13 +45,22 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 		res, err := l.svcCtx.FavoriteRpc.GetUserFavoriteCount(l.ctx, &favoriterpc.GetUserFavoriteCountRequest{
 			UserId: in.UserId,
 		})
+		if err != nil {
+			l.Errorf("获取用户总的点赞数 error：%v", err)
+			return err
+		}
 		favoriteCount = res.Count
+
 		return err
 	}, func() error {
 		// 获取用户被点赞数
 		res, err := l.svcCtx.FavoriteRpc.GetUserFavoritedCount(l.ctx, &favoriterpc.GetUserFavoritedCountRequest{
 			UserId: in.UserId,
 		})
+		if err != nil {
+			l.Errorf("获取用户被点赞数 error：%v", err)
+			return err
+		}
 		totalFavorited = res.Count
 		return err
 	}, func() error {
@@ -59,6 +68,10 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 		res, err := l.svcCtx.FavoriteRpc.GetUserCollectionCount(l.ctx, &favoriterpc.GetUserCollectionCountRequest{
 			UserId: in.UserId,
 		})
+		if err != nil {
+			l.Errorf("获取用户用户总的收藏数 error：%v", err)
+			return err
+		}
 		collectionCount = res.Count
 		return err
 	}, func() error {
@@ -67,6 +80,10 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 			UserId:       in.FromUserId,
 			TargetUserId: in.UserId,
 		})
+		if err != nil {
+			l.Errorf("获取是否关注该用户 error：%v", err)
+			return err
+		}
 		isFollow = res.IsFollow
 		return err
 	}, func() error {
@@ -74,6 +91,10 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 		res, err := l.svcCtx.VideoRpc.GetWorkCount(l.ctx, &videorpc.WorkCountReq{
 			UserId: in.UserId,
 		})
+		if err != nil {
+			l.Errorf("获取用户视频总数 error：%v", err)
+			return err
+		}
 		workCount = res.WorkCount
 		return err
 	}, func() error {
@@ -81,6 +102,10 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 		res, err := l.svcCtx.RelationRpc.GetUserFollowCount(l.ctx, &relationrpc.GetUserFollowCountRequest{
 			UserId: in.UserId,
 		})
+		if err != nil {
+			l.Errorf("获取关注总数 error：%v", err)
+			return err
+		}
 		followCount = res.Count
 		return err
 	}, func() error {
@@ -88,6 +113,10 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 		res, err := l.svcCtx.RelationRpc.GetUserFollowerCount(l.ctx, &relationrpc.GetUserFollowerCountRequest{
 			UserId: in.UserId,
 		})
+		if err != nil {
+			l.Errorf("获取粉丝数 error：%v", err)
+			return err
+		}
 		followerCount = res.Count
 		return err
 	})
@@ -95,7 +124,6 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.UserInfoReq) (*pb.UserInfoResp, er
 		// Handle the error, log, and return if needed
 		logc.Error(l.ctx, err, "RPC call error")
 		return nil, errors.Wrapf(err, "req: %+v", in)
-
 	}
 	return &pb.UserInfoResp{
 		Userinfo: &pb.UserInfoItem{

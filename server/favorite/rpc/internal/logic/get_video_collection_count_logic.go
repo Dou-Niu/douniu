@@ -28,12 +28,13 @@ func NewGetVideoCollectionCountLogic(ctx context.Context, svcCtx *svc.ServiceCon
 func (l *GetVideoCollectionCountLogic) GetVideoCollectionCount(in *pb.GetVideoCollectionCountRequest) (resp *pb.GetVideoCollectionCountResponse, err error) {
 	videoIdStr := strconv.Itoa(int(in.VideoId))
 	resp = new(pb.GetVideoCollectionCountResponse)
-	count, err := l.svcCtx.RedisClient.ZcardCtx(l.ctx, consts.VideoCollectCountPrefix+videoIdStr)
+	count, err := l.svcCtx.RedisClient.GetCtx(l.ctx, consts.VideoCollectCountPrefix+videoIdStr)
 	if err != nil {
 		l.Errorf("RedisClient ZcardCtx error: %v", err)
 		return
 	}
-	resp.Count = int64(count)
+	countInt, _ := strconv.Atoi(count)
+	resp.Count = int64(countInt)
 
 	return
 }

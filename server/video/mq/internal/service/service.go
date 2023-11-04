@@ -156,7 +156,6 @@ func (s *Service) consume(ch chan *model.Video) {
 		_, err = s.ESClient.Index().
 			Index(consts.EsVideoIndex).
 			BodyJson(vJson).
-			Type(consts.EsVideoIndex).
 			Do(s.ctx)
 		if err != nil {
 			logx.Error("video同步到es错误，err:", err)

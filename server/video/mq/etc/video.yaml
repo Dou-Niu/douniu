@@ -22,7 +22,7 @@ RedisConf:
   Password: liuyt777
 # ES配置
 ESConf:
-  Host: http://106.15.58.0:6379:9200
+  Host: http://106.15.58.0:9200
 
 #监控
 Prometheus:

@@ -54,7 +54,7 @@ func (l *SearchVideoLogic) SearchVideo(in *pb.SearchVideoReq) (*pb.FeedResp, err
 	}
 	/* until this block */
 
-	searchService := esclient.Search().Index(consts.EsVideoIndex).SearchSource(searchSource).Type(consts.EsVideoIndex)
+	searchService := esclient.Search().Index(consts.EsVideoIndex).SearchSource(searchSource)
 	searchResult, err := searchService.Do(l.ctx)
 	if err != nil {
 		logc.Error(l.ctx, "[ProductsES][GetPIds]Error=", err)

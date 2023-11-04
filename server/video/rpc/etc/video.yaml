@@ -46,7 +46,7 @@ JWTAuth:
 
 # ES配置
 ESConf:
-  Host: http://localhost:9200
+  Host: http://106.15.58.0:9200
 
 #监控
 Prometheus:

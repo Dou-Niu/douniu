@@ -64,7 +64,7 @@ func SMS(phone, secretId, secretKey string, ctx context.Context, rdb *redis.Clie
 	// 处理异常
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		fmt.Printf("An API error has returned: %s", err)
-		return ""
+		return code1
 	}
 	// 非SDK异常，直接失败。实际代码中可以加入其他的处理。
 	if err != nil {

@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"douniu/server/comment/rpc/commentrpc"
 	"douniu/server/common/consts"
 	"douniu/server/common/init_db"
 	"douniu/server/favorite/rpc/favoriterpc"
@@ -25,8 +26,8 @@ type ServiceContext struct {
 	KqPusherClient *kq.Pusher
 	UserRpc        userrpc.UserRpc
 	FavoriteRpc    favoriterpc.FavoriteRpc
-
-	ESClient *elastic.Client
+	CommentRpc     commentrpc.CommentRpc
+	ESClient       *elastic.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -41,7 +42,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		KqPusherClient: kq.NewPusher(c.KqPusherConf.Brokers, c.KqPusherConf.Topic),
 		UserRpc:        userrpc.NewUserRpc(zrpc.MustNewClient(c.UserRpcConf)),
 		FavoriteRpc:    favoriterpc.NewFavoriteRpc(zrpc.MustNewClient(c.FavoriteRpcConf)),
-
-		ESClient: init_db.GetESClient(c.ESConf.Host),
+		CommentRpc:     commentrpc.NewCommentRpc(zrpc.MustNewClient(c.CommentRpcConf)),
+		ESClient:       init_db.GetESClient(c.ESConf.Host),
 	}
 }

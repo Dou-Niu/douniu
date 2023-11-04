@@ -1,0 +1,296 @@
+version: '3.5'
+# 网络配置
+networks:
+  douniu:
+    driver: bridge
+# 服务容器配置
+services:
+  # Traefik网关
+  traefik:
+    image: traefik:latest
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.douniu.address=:8000"  # 暴露端口
+      - "--api=true"               # 启用Traefik的API
+      - "--api.insecure=true"      # 启用Traefik的Web UI
+      - "--providers.docker"
+    ports:
+      - "8070:8080"  # Traefik dashboard
+      - "8000:8000"  # douniu 服务端口
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    #     - "./deploy/traefik/traefik.toml:/etc/traefik/traefik.toml"
+    networks:
+      - douniu
+
+  # user服务
+  user-rpc: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}user-rpc:latest
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    ports:
+      - "6002:6002"
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  user-api: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}user-api:latest
+    #    container_name: douniu-user-api
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports: # 设置端口映射
+      - "6001:6001"  # user服务api端口
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.douniu-user-api.rule=Host(`localhost:8000`) && PathPrefix(`/douniu/user`)" # 转发规则
+      - "traefik.http.routers.douniu-user-api.entrypoints=douniu"
+      - "traefik.http.services.douniu-user-api.loadbalancer.server.port=6001"    # 实例的端口
+      - "traefik.docker.network=douniu"
+      - "traefik.http.services.douniu-user-api.loadbalancer.server.scheme=http"
+      - "traefik.http.services.douniu-user-api.loadbalancer.passhostheader=true"
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+
+  # video服务
+  video-rpc: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}video-rpc:latest
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    ports:
+      - "6004:6004"
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  video-api: # 自定义容器名称
+    #image: video-api-0:latest
+    image: ${DOCKERHUB_IMAGE}video-api:latest
+    #    container_name: douniu-user-api
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    ports:
+      - "6003:6003"
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+    labels:
+      - "traefik.enable=true"        # localhost:8000
+      - "traefik.http.routers.douniu-video-api.rule=Host(`localhost:8000`) && PathPrefix(`/douniu/video`)" # 转发规则
+      - "traefik.http.routers.douniu-video-api.entrypoints=douniu"
+      - "traefik.http.services.douniu-video-api.loadbalancer.server.port=6003"    # 实例的端口
+      - "traefik.docker.network=douniu"
+      - "traefik.http.services.douniu-video-api.loadbalancer.server.scheme=http"
+      - "traefik.http.services.douniu-video-api.loadbalancer.passhostheader=true"
+  #
+  #
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  video-mq: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}video-mq:latest
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+
+
+  # chat服务
+  chat-rpc: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}chat-rpc:latest
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    ports:
+      - "20006:20006"
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  chat-api: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}chat-api:latest
+    #    container_name: douniu-user-api
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+    ports:
+      - "6008:6008"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.douniu-chat-api.rule=Host(`localhost:8000`) && PathPrefix(`/douniu/message`)" # 转发规则
+      - "traefik.http.routers.douniu-chat-api.entrypoints=douniu"
+      - "traefik.http.services.douniu-chat-api.loadbalancer.server.port=6008"    # 实例的端口
+      - "traefik.docker.network=douniu"
+      - "traefik.http.services.douniu-chat-api.loadbalancer.server.scheme=http"
+      - "traefik.http.services.douniu-chat-api.loadbalancer.passhostheader=true"
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+
+  # comment服务
+  comment-rpc: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}comment-rpc:latest
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    ports:
+      - "20004:20004"
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  comment-api: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}comment-api:latest
+    #    container_name: douniu-user-api
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "6007:6007"
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.douniu-comment-api.rule=Host(`localhost:8000`) && PathPrefix(`/douniu/comment`)" # 转发规则
+      - "traefik.http.routers.douniu-comment-api.entrypoints=douniu"
+      - "traefik.http.services.douniu-comment-api.loadbalancer.server.port=6007"    # 实例的端口
+      - "traefik.docker.network=douniu"
+      - "traefik.http.services.douniu-comment-api.loadbalancer.server.scheme=http"
+      - "traefik.http.services.douniu-comment-api.loadbalancer.passhostheader=true"
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  # relation服务
+  relation-rpc: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}relation-rpc:latest
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    ports:
+      - "20005:20005"
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  relation-api: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}relation-api:latest
+    container_name: douniu-relation-api
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - "6005:6005"
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.douniu-relation-api.rule=Host(`localhost:8000`) && PathPrefix(`/douniu/relation`)" # 转发规则
+      - "traefik.http.routers.douniu-relation-api.entrypoints=douniu"
+      - "traefik.http.services.douniu-relation-api.loadbalancer.server.port=6005"    # 实例的端口
+      - "traefik.docker.network=douniu"
+      - "traefik.http.services.douniu-relation-api.loadbalancer.server.scheme=http"
+      - "traefik.http.services.douniu-relation-api.loadbalancer.passhostheader=true"
+  #
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+
+  # favorite服务
+  favorite-rpc: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}favorite-rpc:latest
+    container_name: douniu-favorite-rpc
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    ports:
+      - "20003:20003"
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+
+  favorite-api: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}favorite-api:latest
+    container_name: douniu-favorite-api
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    ports:
+      - "6006:6006"
+    tty: true
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.douniu-favorite-api.rule=Host(`localhost:8000`) && PathPrefix(`/douniu/favoriteite`)" # 转发规则
+      - "traefik.http.routers.douniu-favorite-api.entrypoints=douniu"
+      - "traefik.http.services.douniu-favorite-api.loadbalancer.server.port=6006"    # 实例的端口
+      - "traefik.docker.network=douniu"
+      - "traefik.http.services.douniu-favorite-api.loadbalancer.server.scheme=http"
+      - "traefik.http.services.douniu-favorite-api.loadbalancer.passhostheader=true"
+
+  #    deploy:
+  #      replicas: 1 # 启动三个实例
+  favorite-mq: # 自定义容器名称
+    image: ${DOCKERHUB_IMAGE}favorite-mq:latest
+    environment: # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - douniu
+    restart: always                      # 指定容器退出后的重启策略为始终重启

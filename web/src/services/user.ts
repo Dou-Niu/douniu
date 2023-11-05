@@ -1,35 +1,28 @@
-import request from '@/utils/request';
+import { post, get } from './method'
 
-/**
- * @param user_id
- * @description 用户信息
- */
-export const getUserInfo = (user_id: string) =>{
-  return request({
-    url:`/user/userinfo?user_id=${user_id}`,
-    method: "get",
-  })
+export type User = {
+    id: bigint,
+    phone: string,
+    nickname: string,
+    follow_count: number,
+    follower_count: number,
+    is_follow: boolean,
+    avatar: string,
+    background_image: string,
+    signature: string,
+    total_favorited: string,
+    work_count: number,
+    favorite_count: number,
+    collection_count: number
 }
 
-/**
- * @description 刷新token
- */
-export const refreshToken = () =>{
-  return request({
-    url:`/user/refreshToken}`,
-    method: "post",
-  })
-}
-
-/**
- * @param types 修改类型 1:昵称 2:个性签名 3:头像 4:背景图
- * @param value 值
- * @headers Authorization
- * @description 用户信息
- */
-export const modifyUserInfo = () =>{
-  return request({
-    url:`/user/userinfo/modify`,
-    method: "post",
-  })
-}
+// 修改用户信息
+export const changeUserInfo = (types: number, value: string): Promise<{ code: number, message: string }> => post('/user/userinfo/modify', { types, value }) as any
+// 获取用户信息
+export const getUserInfo =
+    (user_id: bigint): Promise<{
+        code: number, message: string,
+        data: {
+            userinfo: User
+        }
+    }> => get('/user/userinfo', { user_id }) as any;

@@ -1,52 +1,27 @@
-import request from "@/utils/request";
-
+import { post, get, Resp } from './method';
+import { User } from './user';
 /**
- * @param to_user_id 关注的人的id
- * @param action_type 操作类型 1为关注，2为取消关注
+ * 关注
+ * @param to_user_id 
+ * @param action_type 
+ * @returns 
  */
-export const followPeople = (to_user_id:any,action_type:any)=>{
-  return request({
-    url: "/relation/action",
-    method: "post",
-    data:{
-      to_user_id,
-      action_type
-    }
-  })
-}
-
+export const toFollow = (to_user_id : bigint, action_type: number) => post('/relation/action', { to_user_id, action_type })
 /**
- * @param user_id 用户id
- * @param page_num 页数
- * @description 关注列表
+ * 获取某人的关注列表
+ * @param user_id 
+ * @param page_num 
+ * @returns 
  */
-export const getFollowList = (user_id:any,page:any)=>{
-  return request({
-    url: `/relation/follow/list?user_id=${user_id}&page_num=${page}`,
-    method: "get",
-  })
-}
-
+export const getSbFollowList = (user_id : bigint, page_num: number) => get('/relation/follow/list', { user_id, page_num })
 /**
- * @param user_id 用户id
- * @param page_num 页数
- * @description 粉丝列表
+ * 获取某人的粉丝列表
+ * @param user_id 
+ * @param page_num 
+ * @returns 
  */
-export const getFollowerList = (user_id:string,page:number)=>{
-  return request({
-    url: `/relation/follower/list?user_id=${user_id}&page_num=${page}`,
-    method: "get",
-  })
-}
+export const getSbFollowerList = (user_id : bigint, page_num: number) => get('/relation/follower/list', { user_id, page_num })
 
-/**
- * @param user_id 用户id
- * @description 获取好友列表
- */
-export const getFriendList = (user_id:string)=>{
-  return request({
-    url: `/relation/friend/list?user_id=${user_id}`,
-    method: "get",
-  })
-}
-
+export const getFriendsList = (user_id : bigint): Resp<{
+    "user_list": User[]
+}> => get('/relation/friend/list', { user_id })

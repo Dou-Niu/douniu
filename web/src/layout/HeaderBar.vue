@@ -2,20 +2,22 @@
   <el-menu default-active="1" class="w-full!" mode="horizontal" background-color="bg-#131314" :ellipsis="false"
     text-color="rgba(255,255,255,0.6)" active-text-color="rgba(255,255,255,1)" router>
     <div class="user flex justify-center items-center px-4 py-4">
-      <el-button type="success" round v-if="!isLogin" @click="dialogVisible = true">
+      <el-button type="success" round v-if="!user_info" @click="dialogVisible = true">
         登录
       </el-button>
       <div v-else class="flex justify-center items-center">
-        <!-- <el-avatar :src="info?.avatar" />
-        <span>Hi,{{ info?.name }}</span>
-        <a @click="logout">注销</a> -->
+        <!-- <el-avatar :src="user_info?.avatar" /> -->
+        <span class="whitespace-nowrap">Hi,{{ user_info.nickname }}</span>
+        <!-- <el-button type="info" round>
+          注销
+        </el-button> -->
       </div>
     </div>
     <div class="grow-1 flex items-center justify-center">
-      <el-input v-model="keyWords" placeholder="" class="w-120!">
+      <el-input v-model="search" placeholder="" class="w-120!" @keyup.enter="handleSearch">
         <template #suffix>
           <div>
-            <el-button plain class="bg-#131314! btn" @click="handleSearch">
+            <el-button plain class="bg-#131314! btn" @click="handleSearch" >
               <el-icon size="18">
                 <Search />
               </el-icon>
@@ -26,33 +28,35 @@
       </el-input>
     </div>
     <!-- <el-menu-item index="1">首页</el-menu-item> -->
-    <div class="flex justify-center items-center">
-      <el-menu-item index="/upload">投稿</el-menu-item>
-      <el-divider class="h-8! border-#4C4D4F!" direction="vertical" />
-      <el-popover placement="top-start" :width="200" trigger="hover"
-        popper-class="bg-#33343F! border-none! text-white! ">
-        <template #reference>
-          <el-avatar :size="40" :src="avatar" class="mr-4" />
-        </template>
-        <template #default>
-          <div>弹出</div>
-        </template>
-      </el-popover>
-    </div>
+    <el-menu-item v-for="item in  HeaderRoutes " :key="item.name" :index="item.path">
+      <span :style="{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }"
+        v-if="item.path === '/mine'">
+        <el-avatar fit="contain" :src="user_info.avatar"></el-avatar>
+      </span>
+      <span v-else>{{ item.name }}</span>
+    </el-menu-item>
   </el-menu>
   <LoginCard :dialogVisible="dialogVisible" @update:dialogVisible="setDialogVisible" />
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue"
-import { useRouter } from "vue-router"
-const router = useRouter()
+import { HeaderRoutes } from "@/router/routes";
+import LoginCard from "@/components/LoginCard/LoginCard.vue"
+import { useRouter } from 'vue-router';
+import { user } from '@/store/user'
+import { video } from '@/store/video'
+import { storeToRefs } from 'pinia'
+import { video as videoApi } from "@/services"
+
+const { video_list } = storeToRefs(video())
+const { setVideoList } = video()
+
+const { user_info } = storeToRefs(user());
+const router = useRouter();
+
 // 搜索框
-const keyWords = ref("")
-const isLogin = ref(false)
-const handleSearch = () => {
-  router.push(`/search/${keyWords.value}`)
-}
+const search = ref("")
 
 // 登录框
 const dialogVisible = ref(false)
@@ -60,8 +64,15 @@ const setDialogVisible = (v: boolean) => {
   dialogVisible.value = v
 }
 
-// 头像
-const avatar = ref("")
+const handleSearch = () => {
+  videoApi.searchVideo(search.value, 1).then(res => {
+    setVideoList(res.data.video_list)
+  })
+  if (search.value) {
+    router.push(`/search?key_words=${search.value}`)
+  }
+  search.value = ""
+}
 
 </script>
 

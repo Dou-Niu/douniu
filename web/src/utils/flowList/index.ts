@@ -45,24 +45,27 @@ export class flowList {
     /**
      * 列表项初始化时，将列表项赋予top和left定位
      * @param item 列表项，通过它找到对应列表项下标
-     * @param height 列表项高度
+     * @param itemDom 列表项DOM元素
      */
     setPosition(item: any, itemDom: HTMLElement) {
-        itemDom.style.transition = 'none';
-        itemDom.style.transform = `translate(calc(${this.curContainerWidth / 2}px - 50%),${this.maxHeight.value}px)`;
-        setTimeout(() => {
-            itemDom.style.transition = 'transform .5s';
-            let ind = this.curRenderListInfo.value.indexOf(item);
-            let height = itemDom.offsetHeight;
-            const pos = getMin(this.heights);
-            this.curRenderListInfo.value[ind].top = this.heights[pos] === 0 ? 0 : this.heights[pos] + this.rowSpace;
-            this.heights[pos] += this.heights[pos] === 0 ? height : height + this.rowSpace;
-            this.curRenderListInfo.value[ind].left = pos === 0 ? 0 : pos * (this.itemWidth * this.curContainerWidth + this.rowSpace);
-            this.curRenderListInfo.value[ind].flow_index = this.curIndex;
-            this.curIndex++;
-            this.curRenderListInfo.value[ind].dom = itemDom;
-            this.maxHeight.value = Math.max(...this.heights);
-        }, 10);
+        return new Promise((resolve) => {
+            itemDom.style.transition = 'none';
+            itemDom.style.transform = `translate(calc(${this.curContainerWidth / 2}px - 50%),${this.maxHeight.value}px)`;
+            setTimeout(() => {
+                itemDom.style.transition = 'transform .8s';
+                let ind = this.curRenderListInfo.value.indexOf(item);
+                let height = itemDom.offsetHeight;
+                const pos = getMin(this.heights);
+                this.curRenderListInfo.value[ind].top = this.heights[pos] === 0 ? 0 : this.heights[pos] + this.rowSpace;
+                this.heights[pos] += this.heights[pos] === 0 ? height : height + this.rowSpace;
+                this.curRenderListInfo.value[ind].left = pos === 0 ? 0 : pos * (this.itemWidth * this.curContainerWidth + this.rowSpace);
+                this.curRenderListInfo.value[ind].flow_index = this.curIndex;
+                this.curIndex++;
+                this.curRenderListInfo.value[ind].dom = itemDom;
+                this.maxHeight.value = Math.max(...this.heights);
+                resolve('success');
+            }, 10);
+        })
     }
     updatePosition(item: any, itemDom: HTMLElement) {
         let ind = this.curRenderListInfo.value.indexOf(item);

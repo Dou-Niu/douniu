@@ -71,7 +71,7 @@ let listenResize = () => {
         nextTick(() => {
             listInstance.updateOnResize(containerWidth, tempWidth / 100);
         })
-    }, 500);
+    }, 200);
     window.addEventListener('resize', onResize);
 }
 
@@ -102,7 +102,6 @@ watch(() => props.list, () => {
     .flow-item {
         position: absolute;
         will-change: transform;
-        transition: transform .5s;
     }
 }
 </style>

@@ -3,9 +3,15 @@
 </template>
 
 <script setup>
-import VideoPlay from "@/components/Video/VideoPlay.vue"
+import {onMounted} from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
+onMounted(() => {
+    console.log(route.query.id);
+})
 </script>
 
 <style scoped>
+
 </style>

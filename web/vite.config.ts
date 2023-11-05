@@ -33,12 +33,52 @@ export default defineConfig({
 		}
 	},
 	server: {
+		host: '127.0.0.1',
+		port: 3000,
 		proxy: {
 			"/video": {
 				target: "https://www.kecat.top/",
 				ws: true,
 				changeOrigin: true,
 				rewrite: (path: any) => path.replace(/^\/video/, ""),
+			},
+			"/douniu/user": {
+				target: "http://43.139.195.17:8000",
+				ws: true,
+				changeOrigin: true,
+				// rewrite: (path: any) => path.replace(/^\/video/, ""),
+			},
+			"/douniu/video": {
+				target: "http://43.139.195.17:8000",
+				ws: true,
+				changeOrigin: true,
+				// rewrite: (path: any) => path.replace(/^\/video/, ""),
+			},
+			"/douniu/relation": {
+				target: "http://43.139.195.17:8000",
+				ws: true,
+				changeOrigin: true,
+				// rewrite: (path: any) => path.replace(/^\/video/, ""),
+			},
+			"/douniu/favourite": {
+				target: "http://43.139.195.17:8000",
+				ws: true,
+				changeOrigin: true,
+			},
+			"/douniu/collection": {
+				target: "http://43.139.195.17:8000",
+				ws: true,
+				changeOrigin: true,
+			},
+			"/douniu/comment": {
+				target: "http://43.139.195.17:8000",
+				ws: true,
+				changeOrigin: true,
+			},
+			"/douniu/chat": {
+				target: "http://43.139.195.17:8000",
+				ws: true,
+				changeOrigin: true,
 			},
 		},
 	},

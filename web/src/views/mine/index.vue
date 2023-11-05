@@ -3,23 +3,23 @@
     <div class="my_container">
       <div class="header">
         <div>
-          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="110" />
+          <el-avatar :src="user.avatar" :size="110" />
         </div>
         <div class="header-mid">
-          <div class="name">{{ "星野露比" }}</div>
+          <div class="name">{{ user.nickname }}</div>
           <div class="user-data">
-            <div class="user-data-item">关注 <span class="data">{{ 13 }}</span></div>
-            <div class="user-data-item">粉丝 <span class="data">{{ 13 }}</span></div>
-            <div class="user-data-item">获赞 <span class="data">{{ 444 }}</span></div>
+            <div class="user-data-item">关注 <span class="data">{{ user.follow_count }}</span></div>
+            <div class="user-data-item">粉丝 <span class="data">{{ user.follower_count }}</span></div>
+            <div class="user-data-item">获赞 <span class="data">{{ user.total_favorited }}</span></div>
           </div>
           <div class="user-info">
-            <div class="user-sign">斗牛号: {{ 213131313 }}</div>
+            <div class="user-sign">斗牛号: {{ user.id }}</div>
             <!-- <div class="user-year">{{ '男' }}{{ 20 }}岁</div>
             <div class="user-ip">{{ "江苏" }}·{{ "徐州" }}</div>
             <div class="user-others">{{ "中国矿业大学" }}</div> -->
           </div>
           <div class="user-produce">
-            {{ "矿大老学长" }}
+            {{ user.signature }}
           </div>
 
         </div>
@@ -29,50 +29,50 @@
       </div>
       <div class="mid_nav">
         <div class="nav-item" :class="{ 'active': activeName === 'works' }" @click="activeName = 'works'">作品 <span
-            class="data">{{ 13 }}</span></div>
-        <div class="nav-item" :class="{ 'active': activeName === 'like' }" @click="activeName = 'like'">喜欢 <span
-            class="data">{{ 13 }}</span></div>
+            class="data">{{ user.work_count }}</span></div>
+        <div class="nav-item" :class="{ 'active': activeName === 'favorite' }" @click="activeName = 'favorite'">喜欢 <span
+            class="data">{{ user.favorite_count }}</span></div>
         <div class="nav-item" :class="{ 'active': activeName === 'collect' }" @click="activeName = 'collect'">收藏 <span
-            class="data">{{ 13 }}</span></div>
+            class="data">{{ user.collection_count }}</span></div>
       </div>
       <div class="line mb-6"></div>
       <div class="footer_list w-80%">
         <div v-if="activeName === 'works'">
-          <showVideoList />
+          <showVideoList :videoList="videoList" />
         </div>
         <div v-else-if="activeName === 'like'">
-          <showVideoList />
+          <showVideoList :videoList="videoList" />
         </div>
         <div v-else>
-          <showVideoList />
+          <showVideoList :videoList="videoList" />
         </div>
       </div>
     </div>
     <el-dialog v-model="dialogVisible" title="编辑资料" width="30%" center align-center destroy-on-close
       style="background-color:rgb(37,38,50);color:red;height:auto;">
-      <div class="my-4 text-white flex justify-center flex-col items-center">
+      <!-- <div class="my-4 text-white flex justify-center flex-col items-center">
         <div class="mb-4 text-4">头像</div>
-        <el-upload class="" :show-file-list="false">
-          <el-avatar :src="userInfo.avatar" :size="100" />
+        <el-upload class="" :show-file-list="false" :on-success="handleAvatarSuccess">
+          <el-avatar :src="user.avatar" :size="100" />
         </el-upload>
-      </div>
-      <div class="my-4 flex justify-center flex-col items-center">
+      </div> -->
+      <!-- <div class="my-4 flex justify-center flex-col items-center">
         <div class="mb-4 text-4 text-white">背景图片</div>
-        <el-upload class="w-full" drag>
+        <el-upload class="w-full" drag :on-success="handleAvatarSuccess" action="">
           <el-icon :size="50"><upload-filled /></el-icon>
         </el-upload>
-      </div>
+      </div> -->
       <div class="my-4 text-white text-4">
         <span>名字</span>
-        <el-input type="text" v-model="userInfo.name" />
+        <el-input type="text" v-model="formUserInfo.nickname" />
       </div>
       <div class="mt-8 text-white text-4">
         <span class="mb-2">简介</span>
-        <el-input type="textarea" v-model="userInfo.description" :rows="4" :maxlength="40" />
+        <el-input type="textarea" v-model="formUserInfo.signature" :rows="4" :maxlength="40" />
       </div>
       <template #footer>
         <span>
-          <el-button type="primary" size="large" @click="dialogVisible = false" color="rgb(124,101,109)">
+          <el-button type="primary" size="large" @click="handleSubmit" color="rgb(124,101,109)">
             保存
           </el-button>
           <el-button @click="dialogVisible = false" size="large" color="rgb(60,62,73)">取消</el-button>
@@ -83,17 +83,146 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue"
+import { ref, reactive, onMounted, watch } from "vue"
+import type { UploadProps } from 'element-plus'
+import { storeToRefs } from 'pinia'
+import { type User } from "@/services/user";
 import showVideoList from "@/components/Video/showVideoList.vue";
+import { Video } from '@/types'
+import { user as userInfo } from '@/store/user';
+import { user as userApi, video as videoApi } from "@/services"
+
+const userStore = userInfo();
+const { user_info } = storeToRefs(userStore);
+
 const activeName = ref<string>("works")
 const dialogVisible = ref<boolean>(false)
-// 修改个人信息
-const userInfo = reactive({
-  name: "",
-  description: "",
-  avatar: "",
-  background: ""
+const videoList = ref<Video[]>([])
+//个人信息
+const user = reactive<User>({
+  id: BigInt(0),
+  phone: '',
+  nickname: '',
+  follow_count: 0,
+  follower_count: 0,
+  is_follow: false,
+  avatar: 'https://www.kecat.top/avatar.webp',
+  background_image: '',
+  signature: '',
+  total_favorited: '',
+  work_count: 0,
+  favorite_count: 0,
+  collection_count: 0
 })
+
+// 表单修改
+const formUserInfo = reactive({
+  nickname: '',
+  signature: '',
+  avatar: '',
+  background_image: '',
+})
+
+// 保存信息
+const handleSubmit = () => {
+  // 修改类型 1:昵称 2:个性签名 3:头像 4:背景图
+  if (formUserInfo.nickname) {
+    userApi.changeUserInfo(
+      1,
+      formUserInfo.nickname
+    ).then(() => {
+      initInfo()
+    })
+  }
+  if (formUserInfo.signature) {
+    userApi.changeUserInfo(
+      2,
+      formUserInfo.signature
+    ).then(() => {
+      initInfo()
+    })
+  }
+  if (formUserInfo.avatar) {
+    userApi.changeUserInfo(
+      3,
+      formUserInfo.avatar
+    ).then(() => {
+      initInfo()
+    })
+  }
+  if (formUserInfo.background_image) {
+    userApi.changeUserInfo(
+      4,
+      formUserInfo.background_image
+    ).then(() => {
+      initInfo()
+    })
+  }
+  dialogVisible.value = false
+}
+
+//获取个人信息
+const initInfo = () => {
+  user.id = user_info.value.id
+  userStore.getUserInfo().then(res=>{
+    console.log(res);
+    user.id = BigInt(res.id)
+    user.nickname = res.nickname
+    user.avatar = res.avatar
+    user.background_image = res.background_image
+    user.nickname = res.nickname
+    user.signature = res.signature
+    user.avatar = res.background_image
+    user.background_image = res.background_image
+    user.follow_count = res.follow_count
+    user.follower_count = res.follower_count
+    user.is_follow = res.is_follow
+    user.total_favorited = res.total_favorited
+    user.work_count = res.work_count
+    user.favorite_count = res.favorite_count
+    user.collection_count = res.collection_count
+    getVideos()
+  })
+}
+
+// 上传图片
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
+  response,
+  uploadFile
+) => {
+  console.log(response, uploadFile.raw);
+  formUserInfo.avatar = URL.createObjectURL(uploadFile.raw!)
+}
+
+
+const getVideos = () => {
+  if (activeName.value === 'works') {
+    videoList.value = []
+
+    videoApi.getUserAllVideo(BigInt(user.id), 9999999999999, 2).then(res => {
+      videoList.value = res.data.video_list
+    })
+  } else if (activeName.value === 'collect') {
+    videoList.value = []
+    videoApi.getCollectVideoList(BigInt(user.id), 1).then(res => {
+      videoList.value = res.data.video_list
+    })
+  } else if (activeName.value === 'favorite') {
+    videoList.value = []
+    videoApi.getLikeVideoList(BigInt(user.id), 1).then(res => {
+      videoList.value = res.data.video_list
+    })
+  }
+}
+
+watch(activeName, () => {
+  getVideos()
+})
+
+onMounted(() => {
+  initInfo()
+})
+
 </script>
 
 <style scoped lang="less">

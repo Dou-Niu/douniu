@@ -1,81 +1,31 @@
-import request from "@/utils/request";
+import { post } from './method'
 
-/**
- * @description 发送验证码
- */
-export const sendCode = (phone: string) =>{
-  return request({
-    url: "/login/sendcode",
-    method: "post",
-    data: {
-      phone,
-    },
-  });
-}
-
-/**
- * @param phone
- * @param code
- * @description 通过验证码登录
- */
-export const loginByCode = (phone: string, code: string) =>{
-  return request({
-    url: "/login/code",
-    method: "post",
-    data: {
-      phone,
-      code
-    },
-  });
-}
-
-/**
- * @param phone
- * @param password
- * @description 通过密码登录
- */
-export const loginByPassword = (phone: string, password: string) =>{
-  return request({
-    url: "/login/password",
-    method: "post",
-    data: {
-      phone,
-      password
-    },
-  });
-}
-
-/**
- * @param user_id
- * @param new_password
- * @description 修改密码
- */
-export const forgetPassword = (user_id: string, new_password: string) =>{
-  return request({
-    url:"/password/forget",
-    method: "post",
-    data: {
-      user_id,
-      new_password
-    }
-  })
-}
-
-/**
- * 
- * @param user_id 
- * @param new_password 
- * @headers Authorization
- * @description 修改密码
- */
-export const changePassword = (user_id: string, new_password: string) =>{
-  return request({
-    url:"/password/change",
-    method: "post",
-    data: {
-      user_id,
-      new_password
-    }
-  })
-}
-
+// 获取验证码
+export const getCode =
+    (phone: string): Promise<{ code: number, message: string, data: { verification_code: string } }> => post('/user/sendcode', { phone }) as any;
+// 手机号加验证码登录
+export const loginByCode =
+    (phone: string, verification_code: string): Promise<{
+        code: number,
+        message: string,
+        data: { user_id : bigint, access_token: string, refresh_token: string }
+    }> => post('/user/login/phone', { phone, verification_code }) as any
+// 手机号加密码登录
+export const loginByPass =
+    (phone: string, password: string): Promise<{ code: number, message: string, data: { user_id: string, access_token: string, refresh_token: string } }> => post('/user/login/password', { phone, password }) as any
+// 忘记密码
+export const setPasswordByCode =
+    (phone: string, new_password: string): Promise<{ code: number, message: string }> => post('/user/password/forget', { phone, new_password }) as any
+// 设置密码
+export const setPassord =
+    (new_password: string): Promise<{ code: number, message: string }> => post('/user/password/change', { new_password }) as any
+// 刷新token
+export const refreshToken =
+    (): Promise<{
+        code: number,
+        message: string,
+        "data": {
+            "access_token": string,
+            "refresh_token": string
+        }
+    }> => post('/user/refreshToken') as any;

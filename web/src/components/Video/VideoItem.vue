@@ -1,15 +1,15 @@
 <template>
     <div ref="videoRef" class="video-item" @click="handlePlay">
         <div class="video-item-top">
-            <img @load="handleImgLoad" :src="videoItem.videoCoverURL">
-            <div class="video-item-likeCount">{{ videoItem.likeCount }}</div>
-            <div class="video-item-duration">{{ "00:12" }}</div>
+            <img @load="handleImgLoad" :src="videoItem.cover_url">
+            <div class="video-item-likeCount">{{ videoItem.favorite_count }}</div>
+            <!-- <div class="video-item-duration">{{ "00:12" }}</div> -->
         </div>
         <div class="video-item-bottom">
-            <div class="video-item-title">{{ videoItem.videoTile }}</div>
+            <div class="video-item-title">{{ videoItem.title }}</div>
             <div class="video-item-other">
-                <div class="video-item-user">{{ videoItem.username }}</div>
-                <div class="video-item-time">{{ formatTime(videoItem.publishTime) }}</div>
+                <div class="elipsis">{{ videoItem.author.nickname }}</div>
+                <div class="video-item-time">{{ formatTime(videoItem.create_time) }}</div>
             </div>
         </div>
     </div>
@@ -36,11 +36,9 @@ let handleImgLoad = () => {
 
 const handlePlay = () => {
     router.push({
-        "path": "/play",
+        path: "/play",
         query: {
-            // id: props.videoItem.id
-            id:1,
-            url:props.videoItem.videoURL
+            id:BigInt(props.videoItem.video_id).toString(),
         }
     })
 }
@@ -48,6 +46,11 @@ const handlePlay = () => {
 </script>
 
 <style lang="less" scoped>
+.elipsis {
+    max-width:50%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 .video-item {
     position: relative;
     background-color: rgb(37, 38, 50);

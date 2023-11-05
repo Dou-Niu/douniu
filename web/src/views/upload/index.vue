@@ -38,6 +38,9 @@ import { ref } from 'vue';
 import { curCover, videoCovers, curVideoURL } from '@/utils/upload';
 import selectCover from '@/components/Upload/selectCover.vue'
 import { uploadVideo as uploadFile, curCoverFile } from '../../utils/upload/uploadVideo';
+import { video as videoApi } from '@/services';
+import {useRouter } from "vue-router"
+const router = useRouter()
 // 分区
 const partition = ref(1);
 const title = ref('');
@@ -54,10 +57,20 @@ const handleFileChange = (e: Event) => {
     uploader.value.handleUpload((target.files as FileList)[0])
     target.value = ""
 }
+
 const handlePublish = async () => {
     let file = curCoverFile.value as File;
     let videoURL = curVideoURL.value;
     let imgURL = await uploadFile(file);
+    videoApi.publishVideo(
+        videoURL,
+        imgURL.videoURL,
+        title.value,
+        partition.value,
+    ).then(res=>{
+        console.log(res);
+        router.push(`/channel/${partition.value}`)
+    })
     console.log('封面', imgURL.videoURL);
     console.log('视频地址', videoURL);
 }

@@ -1,4 +1,4 @@
-name: Docker Build and Push Favor
+name: Docker Build and Push Favorite
 on:
   workflow_dispatch:
     inputs:
@@ -37,7 +37,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}favorite-api:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop favorite-api
+            docker-compose.yaml rm -f favorite-api
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}favorite-api:latest
+            docker-compose -f docker-compose.yaml up -d favorite-api
 
 
   # favorite-rpc
@@ -67,7 +79,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}favorite-rpc:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop favorite-rpc
+            docker-compose.yaml rm -f favorite-rpc
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}favorite-rpc:latest
+            docker-compose -f docker-compose.yaml up -d favorite-rpc
   # favorite-mq
   build-and-push-favorite-mq:
     runs-on: ubuntu-latest
@@ -95,3 +119,16 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}favorite-rpc:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop favorite-mq
+            docker-compose.yaml rm -f favorite-mq
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}favorite-mq:latest
+            docker-compose -f docker-compose.yaml up -d favorite-mq

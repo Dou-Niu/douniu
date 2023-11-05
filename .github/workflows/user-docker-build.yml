@@ -37,6 +37,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}user-api:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop user-api
+            docker-compose.yaml rm -f user-api
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}user-api:latest
+            docker-compose -f docker-compose.yaml up -d user-api
 
   # user-rpc
   build-and-push-user-rpc:
@@ -65,3 +78,16 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}user-rpc:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop user-rpc
+            docker-compose.yaml rm -f user-rpc
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}user-rpc:latest
+            docker-compose -f docker-compose.yaml up -d user-rpc

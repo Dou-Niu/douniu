@@ -40,7 +40,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}video-rpc:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop video-rpc
+            docker-compose.yaml rm -f video-rpc
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}video-rpc:latest
+            docker-compose -f docker-compose.yaml up -d video-rpc
 
   # video-api
   build-and-push-video-api:
@@ -69,7 +81,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}video-api:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop video-api
+            docker-compose.yaml rm -f video-api
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}video-api:latest
+            docker-compose -f docker-compose.yaml up -d video-api
   # video-mq
   build-and-push-video-mq:
     runs-on: ubuntu-latest
@@ -97,3 +121,16 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}video-mq:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop video-mq
+            docker-compose.yaml rm -f video-mq
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}video-mq:latest
+            docker-compose -f docker-compose.yaml up -d video-mq

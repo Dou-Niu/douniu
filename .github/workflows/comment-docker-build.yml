@@ -34,7 +34,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}comment-rpc:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop comment-rpc
+            docker-compose.yaml rm -f comment-rpc
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}comment-rpc:latest
+            docker-compose -f docker-compose.yaml up -d comment-rpc
   # comment-api
   build-and-push-comment-api:
     runs-on: ubuntu-latest
@@ -62,4 +74,16 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_IMAGE }}comment-api:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/douniu
+            docker-compose.yaml stop comment-api
+            docker-compose.yaml rm -f comment-api
+            docker image rm ${{ secrets.DOCKERHUB_IMAGE }}comment-api:latest
+            docker-compose -f docker-compose.yaml up -d comment-api

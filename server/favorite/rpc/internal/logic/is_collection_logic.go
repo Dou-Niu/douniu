@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"errors"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"strconv"

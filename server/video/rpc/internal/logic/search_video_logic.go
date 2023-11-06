@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
-	"douniu/server/common/errorx"
+	"douniu/common/consts"
+	"douniu/common/errorx"
 	"douniu/server/video/model"
 	"encoding/json"
 	"fmt"

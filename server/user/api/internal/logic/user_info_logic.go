@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"douniu/server/user/rpc/types/pb"
 	"encoding/json"
 	"github.com/pkg/errors"

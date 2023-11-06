@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	consts2 "douniu/common/consts"
 	"errors"
 	"github.com/zeromicro/go-zero/core/mr"
 	"github.com/zeromicro/go-zero/core/stores/redis"
@@ -34,7 +34,7 @@ func (l *AddCollectionLogic) AddCollection(in *pb.AddCollectionRequest) (resp *p
 	videoIdStr := strconv.Itoa(int(in.VideoId))
 	partitionIdStr := strconv.Itoa(int(in.Partition))
 	// 判断是否已经收藏
-	isFavorited, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserCollectPrefix+userIdStr, videoIdStr)
+	isFavorited, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts2.UserCollectPrefix+userIdStr, videoIdStr)
 	if err != nil && !errors.Is(err, redis.Nil) {
 		l.Errorf("RedisClient ZscoreCtx error: %v", err)
 		return
@@ -45,7 +45,7 @@ func (l *AddCollectionLogic) AddCollection(in *pb.AddCollectionRequest) (resp *p
 
 	err = mr.Finish(func() error {
 		// 视频添加到用户的点收藏列表
-		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts.UserCollectPrefix+userIdStr, time.Now().Unix(), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts2.UserCollectPrefix+userIdStr, time.Now().Unix(), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZaddCtx error: %v", err)
 			return err
@@ -53,7 +53,7 @@ func (l *AddCollectionLogic) AddCollection(in *pb.AddCollectionRequest) (resp *p
 		return nil
 	}, func() error {
 		// 视频收藏数量+1
-		_, err = l.svcCtx.RedisClient.IncrbyCtx(l.ctx, consts.VideoCollectCountPrefix+videoIdStr, 1)
+		_, err = l.svcCtx.RedisClient.IncrbyCtx(l.ctx, consts2.VideoCollectCountPrefix+videoIdStr, 1)
 		if err != nil {
 			l.Errorf("RedisClient IncrbyCtx error: %v", err)
 			return err
@@ -61,7 +61,7 @@ func (l *AddCollectionLogic) AddCollection(in *pb.AddCollectionRequest) (resp *p
 		return nil
 	}, func() error {
 		// 视频热度增加
-		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, int64(consts.SingleHotScore), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoHotScore, int64(consts2.SingleHotScore), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 			return err
@@ -69,7 +69,7 @@ func (l *AddCollectionLogic) AddCollection(in *pb.AddCollectionRequest) (resp *p
 		return nil
 	}, func() error {
 		// 视频分区热度增加
-		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoPartitionHotScore+partitionIdStr, int64(consts.SingleHotScore), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoPartitionHotScore+partitionIdStr, int64(consts2.SingleHotScore), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 			return err
@@ -77,7 +77,7 @@ func (l *AddCollectionLogic) AddCollection(in *pb.AddCollectionRequest) (resp *p
 		return nil
 	}, func() error {
 		// 用户视频热度增加
-		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoEveryUserHotScore+userIdStr, int64(consts.SingleHotScore), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoEveryUserHotScore+userIdStr, int64(consts2.SingleHotScore), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 			return err

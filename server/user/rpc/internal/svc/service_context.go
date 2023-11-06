@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"douniu/server/common/consts"
-	"douniu/server/common/init_db"
+	"douniu/common/consts"
+	"douniu/common/init_db"
 	"douniu/server/favorite/rpc/favoriterpc"
 	"douniu/server/relation/rpc/relationrpc"
 	"douniu/server/user/model"

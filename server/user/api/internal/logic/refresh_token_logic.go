@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"encoding/json"
 	"github.com/golang-jwt/jwt/v4"
 	"time"

@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
+	"douniu/common/consts"
 	"douniu/server/chat/rpc/pb"
-	"douniu/server/common/consts"
 	"encoding/json"
 	"errors"
 

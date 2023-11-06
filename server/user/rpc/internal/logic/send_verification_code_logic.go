@@ -2,8 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/utils"
-
+	"douniu/common/utils"
 	"douniu/server/user/rpc/internal/svc"
 	"douniu/server/user/rpc/types/pb"
 

@@ -2,7 +2,7 @@ package model
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	consts2 "douniu/common/consts"
 	"github.com/pkg/errors"
 	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/logc"
@@ -34,13 +34,13 @@ func (m *customUserModel) ModifyUserInfo(ctx context.Context, userId int64, type
 		return err
 	}
 	switch int(types) {
-	case consts.ModifyNickname:
+	case consts2.ModifyNickname:
 		u.Nickname = value
-	case consts.ModifySignature:
+	case consts2.ModifySignature:
 		u.Signature = value
-	case consts.ModifyAvatar:
+	case consts2.ModifyAvatar:
 		u.Avatar = value
-	case consts.ModifyBackGroundImage:
+	case consts2.ModifyBackGroundImage:
 		u.BackgroundImage = value
 	default:
 		return errors.New("错误的types值")
@@ -65,7 +65,7 @@ func (m *customUserModel) ChangePassword(ctx context.Context, userId int64, newP
 
 func (m *customUserModel) IsCodeVerify(ctx context.Context, rdb *redis.Client, phone string, code string) error {
 
-	TrueCode, err := rdb.Get(ctx, consts.PhoneCode+phone).Result()
+	TrueCode, err := rdb.Get(ctx, consts2.PhoneCode+phone).Result()
 	if err != nil || TrueCode != code {
 		return errors.New("验证码错误")
 	}
@@ -73,7 +73,7 @@ func (m *customUserModel) IsCodeVerify(ctx context.Context, rdb *redis.Client, p
 }
 
 func (m *customUserModel) IsRegister(ctx context.Context, rdb *redis.Client, phone string) (is bool, err error) {
-	isExists, err := rdb.Exists(ctx, consts.UserIsRegister+phone).Result()
+	isExists, err := rdb.Exists(ctx, consts2.UserIsRegister+phone).Result()
 	if err != nil {
 		return false, err
 	}

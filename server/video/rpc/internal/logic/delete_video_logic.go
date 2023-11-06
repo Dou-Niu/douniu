@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
-	"douniu/server/common/errorx"
+	"douniu/common/consts"
+	"douniu/common/errorx"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/mr"

@@ -1,7 +1,7 @@
 package test
 
 import (
-	"douniu/server/common/utils"
+	"douniu/common/utils"
 	"fmt"
 	"testing"
 )

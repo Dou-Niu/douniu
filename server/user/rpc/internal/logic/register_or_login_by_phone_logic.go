@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
-	"douniu/server/common/errorx"
-	"douniu/server/common/utils"
+	"douniu/common/consts"
+	"douniu/common/errorx"
+	"douniu/common/utils"
 	"douniu/server/user/model"
 	"douniu/server/user/rpc/internal/svc"
 	"douniu/server/user/rpc/types/pb"

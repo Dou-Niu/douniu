@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
+	"douniu/common/consts"
 	"douniu/server/comment/rpc/internal/svc"
 	"douniu/server/comment/rpc/pb"
-	"douniu/server/common/consts"
 	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"

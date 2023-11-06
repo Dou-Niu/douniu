@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"douniu/server/favorite/rpc/favoriterpc"
 	"douniu/server/video/rpc/videorpc"
 	"encoding/json"

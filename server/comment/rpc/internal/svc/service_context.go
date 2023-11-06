@@ -1,10 +1,10 @@
 package svc
 
 import (
+	"douniu/common/consts"
+	"douniu/common/utils"
 	"douniu/server/comment/model"
 	"douniu/server/comment/rpc/internal/config"
-	"douniu/server/common/consts"
-	"douniu/server/common/utils"
 	"douniu/server/relation/rpc/relationrpc"
 	"douniu/server/user/rpc/userrpc"
 	"github.com/bwmarrin/snowflake"

@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
-	"douniu/server/common/errorx"
+	consts2 "douniu/common/consts"
+	"douniu/common/errorx"
 	"fmt"
 	"github.com/pkg/errors"
 
@@ -33,10 +33,10 @@ func (l *FeedPartitionLogic) FeedPartition(in *pb.FeedPartitionReq) (*pb.FeedRes
 	var key string
 	// 热度和最新排序
 	switch int(in.Sort) {
-	case consts.SortByHot:
-		key = consts.VideoPartitionHotScore
-	case consts.SortByTime:
-		key = consts.VideoPartitionTimeScore
+	case consts2.SortByHot:
+		key = consts2.VideoPartitionHotScore
+	case consts2.SortByTime:
+		key = consts2.VideoPartitionTimeScore
 	default:
 		return nil, errors.Wrapf(errorx.NewDefaultError("视频排序规则sort非法输入"), "视频排序规则sort非法输入 Req：%v", in)
 

@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	consts2 "douniu/common/consts"
 	"douniu/server/user/rpc/userrpc"
 	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/threading"
@@ -31,7 +31,7 @@ func NewGetFollowerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 
 func (l *GetFollowerListLogic) GetFollowerList(in *pb.GetFollowerListRequest) (resp *pb.GetFollowerListResponse, err error) {
 	toUserIdStr := strconv.FormatInt(in.ToUserId, 10)
-	userIdListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts.UserFollowerPrefix+toUserIdStr, 0, time.Now().Unix(), int(in.PageNum), consts.DefaultSize)
+	userIdListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts2.UserFollowerPrefix+toUserIdStr, 0, time.Now().Unix(), int(in.PageNum), consts2.DefaultSize)
 	if err != nil {
 		l.Errorf("redis smembers err: %v", err)
 		return nil, err

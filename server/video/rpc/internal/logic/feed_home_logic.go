@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"douniu/server/video/rpc/internal/svc"
 	"douniu/server/video/rpc/types/pb"
 

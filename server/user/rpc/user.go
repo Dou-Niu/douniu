@@ -1,7 +1,7 @@
 package main
 
 import (
-	"douniu/server/common/response/rpcserver"
+	"douniu/common/response/rpcserver"
 	"flag"
 	"fmt"
 

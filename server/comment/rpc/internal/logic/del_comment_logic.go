@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
+	consts2 "douniu/common/consts"
 	"douniu/server/comment/rpc/internal/svc"
 	"douniu/server/comment/rpc/pb"
-	"douniu/server/common/consts"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"strconv"
@@ -38,7 +38,7 @@ func (l *DelCommentLogic) DelComment(in *pb.DelCommentRequest) (resp *pb.DelComm
 		return
 	}
 
-	_, err = l.svcCtx.RedisClient.DecrCtx(l.ctx, consts.VideoCommentCountPrefix+strconv.Itoa(int(comment.VideoId)))
+	_, err = l.svcCtx.RedisClient.DecrCtx(l.ctx, consts2.VideoCommentCountPrefix+strconv.Itoa(int(comment.VideoId)))
 	if err != nil {
 		l.Errorf("Delete comment error: %v", err)
 		return
@@ -46,7 +46,7 @@ func (l *DelCommentLogic) DelComment(in *pb.DelCommentRequest) (resp *pb.DelComm
 
 	// 视频热度减少
 	videoIdStr := strconv.Itoa(int(in.VideoId))
-	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, -int64(consts.SingleHotScore), videoIdStr)
+	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoHotScore, -int64(consts2.SingleHotScore), videoIdStr)
 	if err != nil {
 		l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 		return

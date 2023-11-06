@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"douniu/server/favorite/api/internal/svc"
 	"douniu/server/favorite/api/internal/types"
 	"douniu/server/favorite/rpc/favoriterpc"

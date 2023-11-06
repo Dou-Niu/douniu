@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
+	consts2 "douniu/common/consts"
 	"douniu/server/chat/model"
-	"douniu/server/common/consts"
 	"google.golang.org/protobuf/proto"
 	"strconv"
 	"time"
@@ -53,15 +53,15 @@ func (l *MessageActionLogic) MessageAction(in *pb.MessageActionRequest) (resp *p
 	toUserID := strconv.Itoa(int(message.ToUserId))
 
 	lastMessage := &pb.LastMessage{Content: message.Content}
-	lastMessage.MsgType = consts.MsgTypeRecv
+	lastMessage.MsgType = consts2.MsgTypeRecv
 	lastMessageRecvBytes, _ := proto.Marshal(lastMessage)
 	//lastMessageRecvStr, _ := jsonx.MarshalToString(lastMessage)
-	lastMessage.MsgType = consts.MsgTypeSend
+	lastMessage.MsgType = consts2.MsgTypeSend
 	lastMessageSendBytes, _ := proto.Marshal(lastMessage)
 	//lastMessageSendStr, err := jsonx.MarshalToString(lastMessage)
 
-	_ = l.svcCtx.RedisClient.Hset(consts.LastMessagePrefix+fromUserID, toUserID, string(lastMessageSendBytes))
-	_ = l.svcCtx.RedisClient.Hset(consts.LastMessagePrefix+toUserID, fromUserID, string(lastMessageRecvBytes))
+	_ = l.svcCtx.RedisClient.Hset(consts2.LastMessagePrefix+fromUserID, toUserID, string(lastMessageSendBytes))
+	_ = l.svcCtx.RedisClient.Hset(consts2.LastMessagePrefix+toUserID, fromUserID, string(lastMessageRecvBytes))
 
 	resp = new(pb.MessageActionResponse)
 

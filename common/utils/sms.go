@@ -2,7 +2,7 @@ package utils
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"encoding/json"
 	"fmt"
 	"github.com/redis/go-redis/v9"

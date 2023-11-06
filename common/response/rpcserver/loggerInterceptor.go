@@ -2,8 +2,7 @@ package rpcserver
 
 import (
 	"context"
-	"douniu/server/common/errorx"
-
+	"douniu/common/errorx"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc"

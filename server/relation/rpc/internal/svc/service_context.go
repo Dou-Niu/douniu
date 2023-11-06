@@ -1,8 +1,8 @@
 package svc
 
 import (
+	"douniu/common/consts"
 	"douniu/server/chat/rpc/chatrpc"
-	"douniu/server/common/consts"
 	"douniu/server/relation/model"
 	"douniu/server/relation/rpc/internal/config"
 	"douniu/server/user/rpc/userrpc"

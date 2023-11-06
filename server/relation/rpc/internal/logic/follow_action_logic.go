@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
+	consts2 "douniu/common/consts"
 	"douniu/server/chat/rpc/chatrpc"
-	"douniu/server/common/consts"
 	"douniu/server/relation/model"
 	"errors"
 	"github.com/zeromicro/go-zero/core/stores/redis"
@@ -33,9 +33,9 @@ func NewFollowActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Foll
 func (l *FollowActionLogic) FollowAction(in *pb.FollowActionRequest) (resp *pb.FollowActionResponse, err error) {
 	userIdStr := strconv.FormatInt(in.UserId, 10)
 	ToUserIdStr := strconv.FormatInt(in.ToUserId, 10)
-	if in.ActionType == consts.FollowAdd {
+	if in.ActionType == consts2.FollowAdd {
 		// 判断是否已经关注
-		isFollow, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserFollowPrefix+userIdStr, ToUserIdStr)
+		isFollow, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts2.UserFollowPrefix+userIdStr, ToUserIdStr)
 		if err != nil && !errors.Is(err, redis.Nil) {
 			l.Errorf("redis ZscoreCtx err: %v", err)
 			return nil, err
@@ -44,19 +44,19 @@ func (l *FollowActionLogic) FollowAction(in *pb.FollowActionRequest) (resp *pb.F
 			return nil, errors.New("您已经关注了该用户")
 		}
 		// 加入关注列表
-		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts.UserFollowPrefix+userIdStr, time.Now().Unix(), ToUserIdStr)
+		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts2.UserFollowPrefix+userIdStr, time.Now().Unix(), ToUserIdStr)
 		if err != nil {
 			l.Errorf("redis zadd err: %v", err)
 			return nil, err
 		}
 		// 加入粉丝列表
-		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts.UserFollowerPrefix+ToUserIdStr, time.Now().Unix(), userIdStr)
+		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts2.UserFollowerPrefix+ToUserIdStr, time.Now().Unix(), userIdStr)
 		if err != nil {
 			l.Errorf("redis zadd err: %v", err)
 			return nil, err
 		}
 		// 判断对方是否是自己的粉丝
-		isFollower, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserFollowerPrefix+userIdStr, ToUserIdStr)
+		isFollower, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts2.UserFollowerPrefix+userIdStr, ToUserIdStr)
 		if err != nil && !errors.Is(err, redis.Nil) {
 			l.Errorf("redis ZscoreCtx err: %v", err)
 			return nil, err
@@ -67,7 +67,7 @@ func (l *FollowActionLogic) FollowAction(in *pb.FollowActionRequest) (resp *pb.F
 				FromUserId: in.UserId,
 				ToUserId:   in.ToUserId,
 				Content:    "我们已经是好友了，快来聊天吧！",
-				Action:     consts.MessageSend,
+				Action:     consts2.MessageSend,
 			})
 			if err != nil {
 				l.Errorf("chatrpc message action err: %v", err)
@@ -77,7 +77,7 @@ func (l *FollowActionLogic) FollowAction(in *pb.FollowActionRequest) (resp *pb.F
 
 	} else {
 		// 判断是否已经关注
-		isFollow, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserFollowPrefix+userIdStr, ToUserIdStr)
+		isFollow, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts2.UserFollowPrefix+userIdStr, ToUserIdStr)
 		if err != nil && !errors.Is(err, redis.Nil) {
 			l.Errorf("redis ZscoreCtx err: %v", err)
 			return nil, err
@@ -87,13 +87,13 @@ func (l *FollowActionLogic) FollowAction(in *pb.FollowActionRequest) (resp *pb.F
 		}
 
 		// 移除关注列表
-		_, err = l.svcCtx.RedisClient.ZremCtx(l.ctx, consts.UserFollowPrefix+userIdStr, ToUserIdStr)
+		_, err = l.svcCtx.RedisClient.ZremCtx(l.ctx, consts2.UserFollowPrefix+userIdStr, ToUserIdStr)
 		if err != nil {
 			l.Errorf("redis zrem err: %v", err)
 			return nil, err
 		}
 		// 移除粉丝列表
-		_, err = l.svcCtx.RedisClient.ZremCtx(l.ctx, consts.UserFollowerPrefix+ToUserIdStr, userIdStr)
+		_, err = l.svcCtx.RedisClient.ZremCtx(l.ctx, consts2.UserFollowerPrefix+ToUserIdStr, userIdStr)
 		if err != nil {
 			l.Errorf("redis zrem err: %v", err)
 			return nil, err
@@ -110,7 +110,7 @@ func (l *FollowActionLogic) FollowAction(in *pb.FollowActionRequest) (resp *pb.F
 	//	l.Errorf("kafka push err: %v", err)
 	//	return nil, err
 	//}
-	if in.ActionType == consts.FollowAdd {
+	if in.ActionType == consts2.FollowAdd {
 		_, err = l.svcCtx.FollowModel.Insert(context.Background(), &model.Follow{
 			Id:         l.svcCtx.Snowflake.Generate().Int64(),
 			UserId:     in.UserId,

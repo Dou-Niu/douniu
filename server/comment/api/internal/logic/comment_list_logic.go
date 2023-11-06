@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
+	"douniu/common/consts"
 	"douniu/server/comment/rpc/commentrpc"
-	"douniu/server/common/consts"
 	"encoding/json"
 	"github.com/jinzhu/copier"
 

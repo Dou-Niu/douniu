@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	consts2 "douniu/common/consts"
 	"strconv"
 	"time"
 
@@ -29,7 +29,7 @@ func NewGetUserCollectionIdListLogic(ctx context.Context, svcCtx *svc.ServiceCon
 func (l *GetUserCollectionIdListLogic) GetUserCollectionIdList(in *pb.GetUserCollectionIdListRequest) (resp *pb.GetUserCollectionIdListResponse, err error) {
 	resp = new(pb.GetUserCollectionIdListResponse)
 	//idListStr, err := l.svcCtx.RedisClient.ZrevrangeCtx(l.ctx, consts.UserFavoriteIdPrefix+strconv.Itoa(int(in.UserId)), 0, -1)
-	idListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts.UserCollectPrefix+strconv.Itoa(int(in.UserId)), 0, time.Now().Unix(), int(in.PageNum), consts.DefaultSize)
+	idListStr, err := l.svcCtx.RedisClient.ZrevrangebyscoreWithScoresAndLimitCtx(l.ctx, consts2.UserCollectPrefix+strconv.Itoa(int(in.UserId)), 0, time.Now().Unix(), int(in.PageNum), consts2.DefaultSize)
 	if err != nil {
 		l.Errorf("RedisClient ZrangeCtx error: %v", err)
 		return

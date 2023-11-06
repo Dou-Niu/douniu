@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"strconv"
 
 	"douniu/server/relation/rpc/internal/svc"

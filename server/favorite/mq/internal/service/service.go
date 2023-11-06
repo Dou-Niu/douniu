@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"douniu/server/favorite/model"
 	"douniu/server/favorite/mq/internal/config"
 	"douniu/server/favorite/rpc/pb"

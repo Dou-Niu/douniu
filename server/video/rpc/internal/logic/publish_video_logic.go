@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/batcher"
-	"douniu/server/common/errorx"
+	"douniu/common/batcher"
+	errorx2 "douniu/common/errorx"
 	"douniu/server/video/model"
 	"encoding/json"
 	"github.com/pkg/errors"
@@ -75,7 +75,7 @@ func (l *PublishVideoLogic) PublishVideo(in *pb.PublishVideoReq) (*pb.CommonResp
 	// kafka异步处理file元数据
 	err := l.batcher.Add(strconv.FormatInt(in.MeUserID, 10), &v)
 	if err != nil {
-		return nil, errors.Wrapf(errorx.NewCodeError(10000, errorx.ErrKafkaUserFileMeta+err.Error()), "kafka异步UserFileMeta失败 err:%v", err)
+		return nil, errors.Wrapf(errorx2.NewCodeError(10000, errorx2.ErrKafkaUserFileMeta+err.Error()), "kafka异步UserFileMeta失败 err:%v", err)
 	}
 	return &pb.CommonResp{}, nil
 }

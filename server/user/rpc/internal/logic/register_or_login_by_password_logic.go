@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/errorx"
-	"douniu/server/common/utils"
+	"douniu/common/errorx"
+	"douniu/common/utils"
 	"github.com/pkg/errors"
 	"time"
 

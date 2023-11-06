@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"douniu/server/common/response"
+	"douniu/common/response"
 	"net/http"
 
 	"douniu/server/relation/api/internal/logic"

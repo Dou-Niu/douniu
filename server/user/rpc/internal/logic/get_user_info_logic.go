@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"douniu/server/common/errorx"
+	"douniu/common/errorx"
 	"douniu/server/favorite/rpc/favoriterpc"
 	"douniu/server/relation/rpc/relationrpc"
 	"douniu/server/video/rpc/videorpc"

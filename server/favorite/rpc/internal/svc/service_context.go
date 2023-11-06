@@ -1,7 +1,7 @@
 package svc
 
 import (
-	"douniu/server/common/consts"
+	"douniu/common/consts"
 	"douniu/server/favorite/model"
 	"douniu/server/favorite/rpc/internal/config"
 	"douniu/server/video/rpc/videorpc"

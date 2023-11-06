@@ -42,8 +42,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop chat-rpc
-            docker-compose.yaml rm -f chat-rpc
+            docker-compose stop chat-rpc
+            docker-compose rm -f chat-rpc
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}chat-rpc:latest
             docker-compose -f docker-compose.yaml up -d chat-rpc
   # chat-api

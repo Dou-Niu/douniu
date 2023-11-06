@@ -13,6 +13,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"math/rand"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -49,10 +50,9 @@ func (l *RegisterOrLoginByPhoneLogic) RegisterOrLoginByPhone(in *pb.RegisterOrLo
 	if errors.Is(err, sqlc.ErrNotFound) {
 		// 注册
 		logc.Info(l.ctx, fmt.Sprintf("手机号为 %v 的新用户开始注册", in.Phone))
-		userId = l.svcCtx.Snowflake.Generate().Int64()
 		u := model.User{
 			Id:              userId,
-			Nickname:        "斗牛用户" + fmt.Sprint(userId),
+			Nickname:        "斗牛用户" + fmt.Sprint(rand.Intn(100000000)),
 			Phone:           in.Phone,
 			Password:        utils.Md5Password(utils.GeneratePassword(11), l.svcCtx.Config.Salt),
 			Avatar:          consts.DefaultAvatar,

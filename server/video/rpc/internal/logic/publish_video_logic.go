@@ -64,7 +64,6 @@ func NewPublishVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Publ
 
 func (l *PublishVideoLogic) PublishVideo(in *pb.PublishVideoReq) (*pb.CommonResp, error) {
 	v := model.Video{
-		Id:        l.svcCtx.Snowflake.Generate().Int64(),
 		UserId:    in.MeUserID,
 		Title:     in.Title,
 		PlayUrl:   in.VideoUrl,

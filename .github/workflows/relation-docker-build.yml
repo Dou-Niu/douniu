@@ -43,10 +43,10 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop relation-rpc
-            docker-compose.yaml rm -f relation-rpc
+            docker-compose stop relation-rpc
+            docker-compose rm -f relation-rpc
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}relation-rpc:latest
-            docker-compose -f docker-compose.yaml up -d relation-rpc
+            docker-compose up -d relation-rpc
   # relation-api
   build-and-push-relation-api:
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop relation-api
-            docker-compose.yaml rm -f relation-api
+            docker-compose stop relation-api
+            docker-compose rm -f relation-api
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}relation-api:latest
-            docker-compose -f docker-compose.yaml up -d relation-api
+            docker-compose up -d relation-api

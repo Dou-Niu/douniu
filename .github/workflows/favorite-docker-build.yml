@@ -88,8 +88,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop favorite-rpc
-            docker-compose.yaml rm -f favorite-rpc
+            docker-compose stop favorite-rpc
+            docker-compose rm -f favorite-rpc
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}favorite-rpc:latest
             docker-compose -f docker-compose.yaml up -d favorite-rpc
   # favorite-mq
@@ -128,7 +128,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop favorite-mq
-            docker-compose.yaml rm -f favorite-mq
+            docker-compose stop favorite-mq
+            docker-compose rm -f favorite-mq
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}favorite-mq:latest
             docker-compose -f docker-compose.yaml up -d favorite-mq

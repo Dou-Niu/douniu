@@ -83,7 +83,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop comment-api
-            docker-compose.yaml rm -f comment-api
+            docker-compose stop comment-api
+            docker-compose rm -f comment-api
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}comment-api:latest
             docker-compose -f docker-compose.yaml up -d comment-api

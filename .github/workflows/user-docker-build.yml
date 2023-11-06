@@ -87,7 +87,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop user-rpc
-            docker-compose.yaml rm -f user-rpc
+            docker-compose stop user-rpc
+            docker-compose rm -f user-rpc
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}user-rpc:latest
             docker-compose -f docker-compose.yaml up -d user-rpc

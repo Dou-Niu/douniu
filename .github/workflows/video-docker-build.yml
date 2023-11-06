@@ -49,10 +49,10 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop video-rpc
-            docker-compose.yaml rm -f video-rpc
+            docker-compose stop video-rpc
+            docker-compose rm -f video-rpc
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}video-rpc:latest
-            docker-compose -f docker-compose.yaml up -d video-rpc
+            docker-compose  up -d video-rpc
 
   # video-api
   build-and-push-video-api:
@@ -90,10 +90,10 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop video-api
-            docker-compose.yaml rm -f video-api
+            docker-compose stop video-api
+            docker-compose rm -f video-api
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}video-api:latest
-            docker-compose -f docker-compose.yaml up -d video-api
+            docker-compose up -d video-api
   # video-mq
   build-and-push-video-mq:
     runs-on: ubuntu-latest
@@ -130,7 +130,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop video-mq
-            docker-compose.yaml rm -f video-mq
+            docker-compose stop video-mq
+            docker-compose rm -f video-mq
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}video-mq:latest
-            docker-compose -f docker-compose.yaml up -d video-mq
+            docker-compose up -d video-mq

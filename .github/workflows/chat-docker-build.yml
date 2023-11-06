@@ -82,7 +82,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop chat-api
-            docker-compose.yaml rm -f chat-api
+            docker-compose stop chat-api
+            docker-compose rm -f chat-api
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}chat-api:latest
             docker-compose -f docker-compose.yaml up -d chat-api

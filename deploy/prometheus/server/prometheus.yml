@@ -113,9 +113,9 @@ scrape_configs:
           env: dev
 
 
-  - job_name: 'douniu-favor-rpc'
+  - job_name: 'douniu-favorite-rpc'
     static_configs:
-      - targets: [ 'douniu-favor-rpc-1:21003' ]
+      - targets: [ 'douniu-favorite-rpc-1:21003' ]
         labels:
           job: favor-rpc
           app: favor-rpc

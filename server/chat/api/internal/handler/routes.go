@@ -14,12 +14,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/douyin/message/action",
+				Path:    "/douniu/message/action",
 				Handler: MessageActionHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/douyin/message/chat",
+				Path:    "/douniu/message/chat",
 				Handler: MessageChatHandler(serverCtx),
 			},
 		},

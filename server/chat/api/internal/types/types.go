@@ -7,9 +7,9 @@ type BaseResponse struct {
 }
 
 type MessageActionRequest struct {
-	ToUserId   int64  `form:"to_user_id" vd:"$>0;msg:'to_user_id error'"`
-	ActionType int64  `form:"action_type" vd:"$==1;msg:'action_type error'"`
-	Content    string `form:"content" vd:"$!='';msg:'消息不能为空'"`
+	ToUserId   int64  `json:"to_user_id" vd:"$>0;msg:'to_user_id error'"`
+	ActionType int64  `json:"action_type" vd:"$==1;msg:'action_type error'"`
+	Content    string `json:"content" vd:"$!='';msg:'消息不能为空'"`
 }
 
 type MessageActionResponse struct {

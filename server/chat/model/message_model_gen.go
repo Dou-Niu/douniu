@@ -17,8 +17,8 @@ import (
 var (
 	messageFieldNames          = builder.RawFieldNames(&Message{})
 	messageRows                = strings.Join(messageFieldNames, ",")
-	messageRowsExpectAutoSet   = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	messageRowsWithPlaceHolder = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	messageRowsExpectAutoSet   = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`create_at`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	messageRowsWithPlaceHolder = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`create_at`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 )
 
 type (
@@ -72,8 +72,8 @@ func (m *defaultMessageModel) FindOne(ctx context.Context, id int64) (*Message, 
 }
 
 func (m *defaultMessageModel) Insert(ctx context.Context, data *Message) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, messageRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.FromUserId, data.ToUserId, data.Content)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?,?)", m.table, messageRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.FromUserId, data.ToUserId, data.Content,data.CreateTime)
 	return ret, err
 }
 

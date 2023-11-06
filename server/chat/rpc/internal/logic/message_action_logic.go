@@ -66,6 +66,4 @@ func (l *MessageActionLogic) MessageAction(in *pb.MessageActionRequest) (resp *p
 	resp = new(pb.MessageActionResponse)
 
 	return
-
-	return
 }

@@ -3,6 +3,8 @@ package logic
 import (
 	"context"
 	"douniu/server/chat/rpc/pb"
+	"douniu/server/common/consts"
+	"encoding/json"
 	"errors"
 	"github.com/jinzhu/copier"
 
@@ -27,7 +29,7 @@ func NewMessageChatLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Messa
 }
 
 func (l *MessageChatLogic) MessageChat(req *types.MessageChatRequest) (resp *types.MessageChatResponse, err error) {
-	fromUserId := l.ctx.Value("userId").(int64)
+	fromUserId, _ := l.ctx.Value(consts.UserId).(json.Number).Int64()
 
 	if fromUserId == req.ToUserId {
 		return nil, errors.New("不能查看自己的消息记录")

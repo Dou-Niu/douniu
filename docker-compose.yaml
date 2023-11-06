@@ -219,7 +219,7 @@ services:
 
   relation-api: # 自定义容器名称
     image: ${DOCKERHUB_IMAGE}relation-api:latest
-    container_name: douniu-relation-api
+    #   container_name: douniu-relation-api
     environment: # 设置环境变量
       - TZ=Asia/Shanghai
     privileged: true
@@ -246,7 +246,7 @@ services:
   # favorite服务
   favorite-rpc: # 自定义容器名称
     image: ${DOCKERHUB_IMAGE}favorite-rpc:latest
-    container_name: douniu-favorite-rpc
+    #    container_name: douniu-favorite-rpc
     environment: # 设置环境变量
       - TZ=Asia/Shanghai
     privileged: true
@@ -262,7 +262,7 @@ services:
 
   favorite-api: # 自定义容器名称
     image: ${DOCKERHUB_IMAGE}favorite-api:latest
-    container_name: douniu-favorite-api
+    #   container_name: douniu-favorite-api
     environment: # 设置环境变量
       - TZ=Asia/Shanghai
     privileged: true
@@ -275,7 +275,7 @@ services:
     restart: always                      # 指定容器退出后的重启策略为始终重启
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.douniu-favorite-api.rule=Host(`43.139.195.17`) && PathPrefix(`/douniu/favoriteite`)" # 转发规则
+      - "traefik.http.routers.douniu-favorite-api.rule=Host(`43.139.195.17`) && PathPrefix(`/douniu/favorite`,`/douniu/collection`)" # 转发规则
       - "traefik.http.routers.douniu-favorite-api.entrypoints=douniu"
       - "traefik.http.services.douniu-favorite-api.loadbalancer.server.port=6006"    # 实例的端口
       - "traefik.docker.network=douniu"

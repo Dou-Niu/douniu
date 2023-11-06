@@ -21,3 +21,15 @@ RedisConf:
   Host: 106.15.58.0:6379
   Pass: "liuyt777"
 
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 21006
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: chat.rpc
+  Endpoint: http://localhost:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

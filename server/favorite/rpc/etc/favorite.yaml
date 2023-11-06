@@ -36,3 +36,15 @@ KafkaConf:
   Addrs:
     - 106.15.58.0:9092
   Topic: favorite-topic
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 21003
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: favorite-rpc
+  Endpoint: http://localhost:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

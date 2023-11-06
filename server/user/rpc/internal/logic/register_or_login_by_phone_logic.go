@@ -50,7 +50,7 @@ func (l *RegisterOrLoginByPhoneLogic) RegisterOrLoginByPhone(in *pb.RegisterOrLo
 	if errors.Is(err, sqlc.ErrNotFound) {
 		// 注册
 		logc.Info(l.ctx, fmt.Sprintf("手机号为 %v 的新用户开始注册", in.Phone))
-		u := model.User{
+		newUser := model.User{
 			Id:              userId,
 			Nickname:        "斗牛用户" + fmt.Sprint(rand.Intn(100000000)),
 			Phone:           in.Phone,
@@ -62,10 +62,11 @@ func (l *RegisterOrLoginByPhoneLogic) RegisterOrLoginByPhone(in *pb.RegisterOrLo
 			UpdateTime:      time.Now(),
 			DeleteTime:      time.Now(),
 		}
-		_, err := l.svcCtx.UserModel.Insert(l.ctx, &u)
+		res, err := l.svcCtx.UserModel.Insert(l.ctx, &newUser)
 		if err != nil {
 			return nil, errors.Wrapf(errorx.NewDefaultError("注册失败，userinfo 写入mysql错误"), "注册失败，userinfo 写入mysql错误 RegisterReq：%v", in)
 		}
+		userId, _ = res.LastInsertId()
 		// 向redis添加phone
 
 	} else {

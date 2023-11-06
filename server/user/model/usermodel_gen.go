@@ -22,7 +22,8 @@ var (
 	userRowsExpectAutoSet   = strings.Join(stringx.Remove(userFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	userRowsWithPlaceHolder = strings.Join(stringx.Remove(userFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheUserIdPrefix    = "cache:user:id:"
+	cacheUserIdPrefix = "cache:user:id:"
+
 	cacheUserPhonePrefix = "cache:user:phone:"
 )
 
@@ -75,7 +76,8 @@ func (m *defaultUserModel) Delete(ctx context.Context, id int64) error {
 		return err
 	}
 
-	userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, id)
+	userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, data.Id)
+
 	userPhoneKey := fmt.Sprintf("%s%v", cacheUserPhonePrefix, data.Phone)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)

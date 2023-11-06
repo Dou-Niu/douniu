@@ -15,7 +15,8 @@
             <div class="user-data-item" @click="() => { listVisible = true; listType = '粉丝' }">粉丝 <span class="data">{{
               user.follower_count }}</span>
             </div>
-            <div class="user-data-item">获赞 <span class="data">{{ user.total_favorited
+            <div class="user-data-item" @click="() => { listVisible = true; listType = '获赞' }">获赞 <span class="data">{{
+              user.total_favorited
             }}</span></div>
           </div>
           <div class="user-info">
@@ -28,9 +29,6 @@
             {{ user.signature }}
           </div>
 
-        </div>
-        <div class="header-right">
-          <div class="btn editor" @click="dialogVisible = true">编辑资料</div>
         </div>
       </div>
       <div class="mid_nav">
@@ -49,85 +47,35 @@
         </div>
       </div>
     </div>
-    <el-dialog v-model="dialogVisible" title="编辑资料" width="30%" center align-center destroy-on-close
-      style="background-color:rgb(37,38,50);color:red;height:auto;">
-      <!-- <div class="my-4 text-white flex justify-center flex-col items-center">
-        <div class="mb-4 text-4">头像</div>
-        <el-upload :on-success="handleAvatarSuccess" action="http://s3oqk9upj.bkt.clouddn.com">
-          <el-avatar :src="user.avatar" :size="100" />
-        </el-upload>
-        <input type="file" ref="fileInput" @change="onFileChange" accept="image/*">
-      </div> -->
-      <!-- <div class="my-4 flex justify-center flex-col items-center">
-        <div class="mb-4 text-4 text-white">背景图片</div>
-        <el-upload class="w-full" drag :on-success="handleAvatarSuccess" action="">
-          <el-icon :size="50"><upload-filled /></el-icon>
-        </el-upload>
-      </div> -->
-      <div class="my-4 text-white text-4">
-        <span>名字</span>
-        <el-input type="text" v-model="formUserInfo.nickname" />
-      </div>
-      <div class="mt-8 text-white text-4">
-        <span class="mb-2">简介</span>
-        <el-input type="textarea" v-model="formUserInfo.signature" :rows="4" :maxlength="40" />
-      </div>
-      <template #footer>
-        <span>
-          <el-button type="primary" size="large" @click="handleSubmit" color="rgb(124,101,109)">
-            保存
-          </el-button>
-          <el-button @click="dialogVisible = false" size="large" color="rgb(60,62,73)">取消</el-button>
-        </span>
-      </template>
-    </el-dialog>
   </el-scrollbar>
   <PeopleList :dialogVisible="listVisible" :listType="listType" :list="list" @update:dialogVisible="setListVisible" />
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch } from "vue"
+import type { UploadProps } from 'element-plus'
 import { storeToRefs } from 'pinia'
-
-
-import { User } from "@/services/user";
+import { type User } from "@/services/user";
 import showVideoList from "@/components/Video/showVideoList.vue";
 import { Video } from '@/types'
 import { user as userInfo } from '@/store/user';
-import { video as videoInfo } from '@/store/video';
-
 import { user as userApi, video as videoApi, social as socialApi } from "@/services"
-// import * as qiniu from 'qiniu-js'
-// // 七牛云上传图片
-// function getQiniuToken() {
-//   let mac = new qiniu.auth.digest.Mac("pMdHb3Ke_nlZmRv3WB9XuPLMb237DkEwOfKwgmal", "5ZJ9efpLn8YZ8_KQZq329NQdyh6PSd9z7BCH-1pS");
-//   const options = {
-//     scope: "coderlx"
-//   };
-//   let putPolicy = new qiniu.rs.PutPolicy(options);
-//   console.log(putPolicy.uploadToken(mac));
-//   return putPolicy.uploadToken(mac)
-// }
-
-
-
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 const userStore = userInfo();
 const { user_info } = storeToRefs(userStore);
-const videoStore = videoInfo()
 
 const activeName = ref<string>("works")
 const dialogVisible = ref<boolean>(false)
 const listVisible = ref<boolean>(false)
 const videoList = ref<Video[]>([])
-
 // 列表展示
 const listType = ref<string>("")
 const list = ref([])
 const setListVisible = (v: boolean) => {
   listVisible.value = v
 }
-
 //个人信息
 const user = reactive<User>({
   id: BigInt(0),
@@ -173,7 +121,6 @@ const handleSubmit = () => {
     })
   }
   if (formUserInfo.avatar) {
-    console.log(formUserInfo.avatar.toString());
     userApi.changeUserInfo(
       3,
       formUserInfo.avatar
@@ -194,76 +141,39 @@ const handleSubmit = () => {
 
 //获取个人信息
 const initInfo = () => {
-  user.id = user_info.value.id
-  userStore.getUserInfo().then(res => {
+  user.id = route.params.id
+  userApi.getUserInfo(user.id).then(res => {
     console.log(res);
-    user.id = BigInt(res.id)
-    user.nickname = res.nickname
-    user.avatar = res.avatar
-    user.background_image = res.background_image
-    user.nickname = res.nickname
-    user.signature = res.signature
-    user.background_image = res.background_image
-    user.follow_count = res.follow_count
-    user.follower_count = res.follower_count
-    user.is_follow = res.is_follow
-    user.total_favorited = res.total_favorited
-    user.work_count = res.work_count
-    user.favorite_count = res.favorite_count
-    user.collection_count = res.collection_count
-    getVideos()
   })
+  getVideos()
 }
 
 // 上传图片
-// const file = ref("")
-
-const onFileChange = (event) => {
-  let file = event.target.files[0];
-  // let reader = new FileReader();
-  // reader.onload = (event) => {
-  //   formUserInfo.avatar = event.target?.result as string;
-  // };
-  // reader.readAsDataURL(file);
-  // getQiniuToken().then(res => {
-  //   console.log(res);
-  //   const observer = {
-  //     next(res) {
-  //       console.log(res)
-  //     },
-  //     err(err) {
-  //       console.log(err);
-  //     },
-  //     complete(res) {
-  //       console.log(res);
-  //     }
-  //   }
-  //   // const observable = qiniu.upload(file, key, res.data, {}, {})
-  //   // const subscription = observable.subscribe(observer) // 上传开始
-  // })
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
+  response,
+  uploadFile
+) => {
+  console.log(response, uploadFile.raw);
+  formUserInfo.avatar = URL.createObjectURL(uploadFile.raw!)
 }
+
 
 const getVideos = () => {
   if (activeName.value === 'works') {
     videoList.value = []
+
     videoApi.getUserAllVideo(BigInt(user.id), 9999999999999, 2).then(res => {
       videoList.value = res.data.video_list
-      videoStore.setVideoList(res.data.video_list)
-      videoStore.setCurrentIndex(0)
     })
   } else if (activeName.value === 'collect') {
     videoList.value = []
     videoApi.getCollectVideoList(BigInt(user.id), 1).then(res => {
       videoList.value = res.data.video_list
-      videoStore.setVideoList(res.data.video_list)
-      videoStore.setCurrentIndex(0)
     })
   } else if (activeName.value === 'favorite') {
     videoList.value = []
     videoApi.getLikeVideoList(BigInt(user.id), 1).then(res => {
       videoList.value = res.data.video_list
-      videoStore.setVideoList(res.data.video_list)
-      videoStore.setCurrentIndex(0)
     })
   }
 }
@@ -274,13 +184,15 @@ watch(activeName, () => {
 
 watch(listType, (newVal) => {
   if (newVal === '关注') {
-    socialApi.getSbFollowList(BigInt(user.id), 0).then(res => {
+    socialApi.getSbFollowList(BigInt(user.id), 1).then(res => {
       list.value = res.data.user_list
     })
   } else if (newVal === '粉丝') {
-    socialApi.getSbFollowerList(BigInt(user.id), 0).then(res => {
+    socialApi.getSbFollowerList(BigInt(user.id), 1).then(res => {
       list.value = res.data.user_list
     })
+  } else if (newVal === '获赞') {
+
   }
 })
 
@@ -437,5 +349,4 @@ onMounted(() => {
       color: rgba(255, 255, 255, .9);
     }
   }
-}
-</style>
+}</style>

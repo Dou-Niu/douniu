@@ -40,6 +40,7 @@ declare module 'vue' {
     ItemList: typeof import('./src/components/Video/itemList.vue')['default']
     List: typeof import('./src/components/List/List.vue')['default']
     LoginCard: typeof import('./src/components/LoginCard/LoginCard.vue')['default']
+    PeopleList: typeof import('./src/components/Mine/PeopleList.vue')['default']
     ProgressBar: typeof import('./src/components/Upload/progressBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

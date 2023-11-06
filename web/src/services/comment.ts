@@ -1,15 +1,15 @@
 import { post, get } from './method';
-import { User } from './user';
+import { User } from '@/types/user';
 
 export type Comment = {
-    id : bigint,
-    user: User,
+    id: bigint,
     content: string,
-    sub_count: number,
-    create_time: string
+    create_time: string,
+    sub_count:number
+    user: User
 }
 
-export const sendComment = (video_id : bigint, action_type: number,  parent_id : bigint,content?: string, comment_id ?: bigint): Promise<{
+export const sendComment = (video_id : any, action_type: number,  parent_id : bigint,content?: string, comment_id ?: bigint): Promise<{
     "code": number
     "message": string
     comment: Comment
@@ -24,7 +24,9 @@ export const sendComment = (video_id : bigint, action_type: number,  parent_id :
 export const getVideoComment = (video_id : bigint, last_comment_id : bigint): Promise<{
     "code": number
     "message": string
-    comment_list: Comment[]
+    "data":{
+        comment_list: Comment[]
+    }
 }> => get('/comment/list', { video_id, last_comment_id })
 
 /**

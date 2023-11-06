@@ -38,7 +38,7 @@ const removeLoading = () => {
     }
 };
 
-const notHeaderService = ['/user/sendcode', '/user/refreshToken', '/user/login/password', '/user/password/forget']
+const notHeaderService = ['/user/sendcode', '/user/login/password', '/user/password/forget']
 
 const service = (config?: AxiosRequestConfig) => {
     const instance: AxiosInstance = axios.create({
@@ -52,7 +52,8 @@ const service = (config?: AxiosRequestConfig) => {
     instance.interceptors.request.use((config) => {
         // 请求之前做什么
         console.log("请求拦截器" + config);
-        const { loading = true } = config;
+        // const { loading = true } = config;
+        const loading = true;
         if (!notHeaderService.includes(config.url as string)) {
             config.headers['Authorization'] = token
         }
@@ -68,7 +69,8 @@ const service = (config?: AxiosRequestConfig) => {
     instance.interceptors.response.use((res: AxiosResponse<any, any>) => {
         // 对响应数据做什么
         console.log("响应拦截器" + res);
-        const { loading = true } = res.config;
+        const loading = true;
+        // const { loading = true } = res.config;
         if (loading) {
             removeLoading();
         }
@@ -80,6 +82,8 @@ const service = (config?: AxiosRequestConfig) => {
             // 未登录
             console.log("未登录，跳转登录");
             refreshToken().then(res => {
+                localStorage.setItem('REFRESH_TOKEN', res.data.refresh_token)
+                localStorage.setItem('ACCESS_TOKEN', res.data.access_token)
                 console.log(res);
             })
         }
@@ -90,6 +94,14 @@ const service = (config?: AxiosRequestConfig) => {
         }
         // return res;
     }, error => {
+        // if(error.response.data.code === 14){
+        //     refreshToken().then(res => {
+        //         localStorage.setItem('REFRESH_TOKEN', res.data.refresh_token)
+        //         localStorage.setItem('ACCESS_TOKEN', res.data.access_token)
+        //         console.log(res);
+        //     })
+        // }
+        console.log(error);
         console.log("error-response:" + error.response);
         console.log("error-config:" + error.config);
         console.log("error-request:" + error.request);

@@ -1,4 +1,5 @@
 import { post, get, Resp, del } from "./method";
+import {Video} from '@/types'
 
 export enum Partition {
     "游戏",
@@ -16,32 +17,32 @@ export const publishVideo = (video_url: string, cover_url: string, title: string
     video_url, cover_url, title, partition
 }) as any
 
-export interface Video {
-    "video_id": bigint
-    "author": {
-        "id": bigint
-        "nickname": string
-        "follow_count": number
-        "follower_count": number
-        "is_follow": boolean
-        "avatar": string
-        "background_image": string
-        "signature": string
-        "total_favorited": number
-        "work_count": number
-        "favorite_count": number
-        "collection_count": number
-    }
-    "play_url": string
-    "cover_url": string
-    "favorite_count": number
-    "collection_count": number
-    "comment_count": number
-    "is_favorite": boolean
-    "title": string
-    "partition": number
-    "create_time": string
-}
+// export interface Video {
+//     "video_id": bigint
+//     "author": {
+//         "id": bigint
+//         "nickname": string
+//         "follow_count": number
+//         "follower_count": number
+//         "is_follow": boolean
+//         "avatar": string
+//         "background_image": string
+//         "signature": string
+//         "total_favorited": number
+//         "work_count": number
+//         "favorite_count": number
+//         "collection_count": number
+//     }
+//     "play_url": string
+//     "cover_url": string
+//     "favorite_count": number
+//     "collection_count": number
+//     "comment_count": number
+//     "is_favorite": boolean
+//     "title": string
+//     "partition": number
+//     "create_time": string
+// }
 
 export const searchVideo = (key_words: string, page: number): Promise<{
     "code": number
@@ -58,7 +59,7 @@ export const getHomeVideo = (latest_time: number): Promise<{
     message: string,
     data: {
         next_time: number
-        video_list: []
+        video_list: Video[]
     }
 }> => get('/video/feed/home', { latest_time })
 

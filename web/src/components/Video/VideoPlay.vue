@@ -19,7 +19,7 @@
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.favorite_count  }}
+            {{ currentVideo?.favorite_count }}
           </span>
         </div>
         <div class="my-6! flex flex-col items-center justify-center">
@@ -45,7 +45,7 @@
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.comment_count}}
+            {{ currentVideo?.comment_count }}
           </span>
         </div>
         <div class="my-6! flex flex-col items-center justify-center">
@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 import Comments from "@/components/Video/Comments.vue"
 import { Video } from '@/types'
@@ -92,6 +92,8 @@ const { currentIndex, video_list, currentVideo } = storeToRefs(videoStore)
 const videoItem = ref<Video>()
 
 const route = useRoute()
+const router = useRouter()
+
 const player = ref<Player>()
 const showComments = ref<boolean>(false)
 const videoRef = ref()
@@ -110,7 +112,8 @@ const handleWheel = (event) => {
       return
     }
     videoStore.setCurrentIndex(--currentIndex.value)
-    console.log(videoStore.getCurrentVideo());
+    showComments.value = false
+    router.push(`/play?id=${BigInt(video_list.value[currentIndex.value].video_id)}`)
     player?.value?.playNext({
       id: "video",
       el: document.getElementById("video") as HTMLElement,
@@ -138,8 +141,9 @@ const handleWheel = (event) => {
       ElMessage.warning("已经是最后一个视频了")
       return
     }
+    showComments.value = false
     videoStore.setCurrentIndex(++currentIndex.value)
-    console.log(currentVideo.value);
+    router.push(`/play?id=${BigInt(videoStore.getCurrentVideo().video_id)}`)
     player?.value?.playNext({
       id: "video",
       el: document.getElementById("video") as HTMLElement,
@@ -165,12 +169,13 @@ const handleWheel = (event) => {
 }
 // 操作
 const handleFavorite = () => {
-  videoApi.toLikeVideo(route.query.id, 1, currentVideo.value?.partition).then(res => {
-
+  videoApi.toLikeVideo(BigInt(route.query.id), 1, currentVideo.value?.partition).then(res => {
+    console.log(res);
   })
 }
 
 const handleCollect = () => {
+  console.log("收藏");
   videoApi.toCollectVideo(BigInt(route.query.id), 1, currentVideo.value?.partition).then(res => {
     console.log(res);
   })
@@ -185,47 +190,50 @@ const handleShare = () => {
 
 
 onMounted(() => {
-  videoApi.getVideoInfo(BigInt(route.query.id)).then(res => {
-    videoItem.value = res.data.video_list[0]
-    let index = 0
-    videoStore.setCurrentVideo(videoItem.value)
-    video_list.value.forEach((item: any) => {
-      if (item.video_id === videoItem.value?.video_id) {
-        videoStore.setCurrentIndex(index)
-        return
+  if (route.query.id) {
+    videoApi.getVideoInfo(BigInt(route.query.id)).then(res => {
+      videoItem.value = res.data.video_list[0]
+      let index = 0
+      videoStore.setCurrentVideo(videoItem.value)
+      video_list.value.forEach((item: any) => {
+        if (item.video_id === videoItem.value?.video_id) {
+          videoStore.setCurrentIndex(index)
+          return
+        }
+        index++;
+      })
+      playerConfig.value = {
+        id: "video",
+        el: document.getElementById("video") as HTMLElement,
+        width: "100%",
+        height: "100%",
+        url: [
+          {
+            src: currentVideo?.value?.play_url || videoItem?.value?.play_url,
+            type: "video/mp4"
+          },
+          // {
+          //   src: "https://www.kecat.top/video/jingliu.mp4",
+          //   type: "video/mp4"
+          // },
+          // {
+          //   src: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/xgplayer-demo.mp4",
+          //   type: "video/mp4"
+          // }
+        ],
+        playsinline: true,
+        poster: currentVideo?.value?.cover_url || videoItem?.value?.cover_url,
+        lang: 'zh',
+        autoplay: true,
+        marginControls: false,
+        dynamicBg: {
+          disable: false
+        }
       }
-      index++;
+      player.value = new Player(playerConfig.value);
     })
-  })
-  playerConfig.value = {
-    id: "video",
-    el: document.getElementById("video") as HTMLElement,
-    width: "100%",
-    height: "100%",
-    url: [
-      {
-        src: currentVideo?.value?.play_url || videoItem?.value?.play_url,
-        type: "video/mp4"
-      },
-      // {
-      //   src: "https://www.kecat.top/video/jingliu.mp4",
-      //   type: "video/mp4"
-      // },
-      // {
-      //   src: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/xgplayer-demo.mp4",
-      //   type: "video/mp4"
-      // }
-    ],
-    playsinline: true,
-    poster: currentVideo?.value?.cover_url || videoItem?.value?.cover_url,
-    lang: 'zh',
-    autoplay: true,
-    marginControls: false,
-    dynamicBg: {
-      disable: false
-    }
   }
-  player.value = new Player(playerConfig.value);
+
 })
 
 </script>

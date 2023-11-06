@@ -59,7 +59,11 @@ const HomeRoutes: RouteRecordRaw[] = [
 				path: "/follows",
 				name: "关注",
 				component: () => import("@/views/follows/index.vue"),
-
+			},
+			{
+				path: "/mine",
+				name: "我的",
+				component: () => import("@/views/mine/index.vue"),
 			},
 			// {
 			// 	path: "/friends",
@@ -127,6 +131,11 @@ const notShowRoutes: RouteRecordRaw[] = [
 		path:"/play",
 		name:"play",
 		component: () => import("@/views/play/index.vue"),
+	},
+	{
+		path:"/home/:id",
+		name:"home",
+		component: () => import("@/views/home/index.vue"),
 	}
 ]
 

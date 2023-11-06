@@ -171,7 +171,7 @@ const handleWheel = (event) => {
 }
 // 操作
 const handleFavorite = () => {
-    videoApi.toLikeVideo(route.query.id, 1, currentVideo.value?.partition).then(res => {
+    videoApi.toLikeVideo(BigInt(currentVideo.value.video_id), 1, currentVideo.value?.partition).then(res => {
 
     })
 }

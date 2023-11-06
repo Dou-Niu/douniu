@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { User } from '@/services/user';
+import type{ User } from '@/services/user';
 import { user as userApi } from '@/services'
 
 interface user {
@@ -48,7 +48,7 @@ export const user = defineStore('user', {
             this.user_info = value;
         },
         async getUserInfo() {
-            const user_info = await userApi.getUserInfo(this.user_id);
+            const user_info = await userApi.getUserInfo(BigInt(this.user_id));
             this.setUserInfo(user_info.data.userinfo);
             localStorage.setItem("USER_INFO", JSON.stringify(this.user_info));
             return user_info.data.userinfo;

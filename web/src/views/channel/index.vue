@@ -24,6 +24,7 @@ let handleLoad = () => {
   videoApi.getPartitionVideo(0, 2, route.params.id).then(res => {
     videoList.value = res.data.video_list
     max_value.value = res.data.next_time
+    finished.value = !res.data.is_final
     videoStore.setVideoList(videoList.value)
   }).catch(() => {
     finished.value = true;

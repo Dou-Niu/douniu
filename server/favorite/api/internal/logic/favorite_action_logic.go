@@ -30,8 +30,9 @@ func (l *FavoriteActionLogic) FavoriteAction(req *types.FavoriteLikeRequest) (re
 
 	if req.ActionType == consts.FavoriteAdd {
 		_, err = l.svcCtx.FavoriteRpc.AddFavorite(l.ctx, &favoriterpc.AddFavoriteRequest{
-			UserId:  userId,
-			VideoId: req.VideoId,
+			UserId:    userId,
+			VideoId:   req.VideoId,
+			Partition: req.Partition,
 		})
 		if err != nil {
 			l.Errorf("AddFavorite error: %v", err)

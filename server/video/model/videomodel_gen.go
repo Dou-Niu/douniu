@@ -19,7 +19,7 @@ import (
 var (
 	videoFieldNames          = builder.RawFieldNames(&Video{})
 	videoRows                = strings.Join(videoFieldNames, ",")
-	videoRowsExpectAutoSet   = strings.Join(stringx.Remove(videoFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	videoRowsExpectAutoSet   = strings.Join(stringx.Remove(videoFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	videoRowsWithPlaceHolder = strings.Join(stringx.Remove(videoFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheVideoIdPrefix = "cache:video:id:"
@@ -121,8 +121,8 @@ func (m *defaultVideoModel) FindOneById(ctx context.Context, id int64) (*Video, 
 func (m *defaultVideoModel) Insert(ctx context.Context, data *Video) (sql.Result, error) {
 	videoIdKey := fmt.Sprintf("%s%v", cacheVideoIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, videoRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Id, data.UserId, data.Title, data.Partition, data.PlayUrl, data.CoverUrl, data.DeleteTime)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, videoRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.UserId, data.Title, data.Partition, data.PlayUrl, data.CoverUrl, data.DeleteTime)
 	}, videoIdKey)
 	return ret, err
 }

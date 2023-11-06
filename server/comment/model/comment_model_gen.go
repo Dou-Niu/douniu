@@ -17,7 +17,7 @@ import (
 var (
 	commentFieldNames          = builder.RawFieldNames(&Comment{})
 	commentRows                = strings.Join(commentFieldNames, ",")
-	commentRowsExpectAutoSet   = strings.Join(stringx.Remove(commentFieldNames, "`create_at`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	commentRowsExpectAutoSet   = strings.Join(stringx.Remove(commentFieldNames, "`id`", "`create_at`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	commentRowsWithPlaceHolder = strings.Join(stringx.Remove(commentFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 )
 
@@ -74,8 +74,8 @@ func (m *defaultCommentModel) FindOne(ctx context.Context, id int64) (*Comment, 
 }
 
 func (m *defaultCommentModel) Insert(ctx context.Context, data *Comment) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?,?, ?, ?, ?, ?,?)", m.table, commentRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Id,data.UserId, data.VideoId, data.Content, data.ParentId, data.SubCount,data.CreateTime)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?,?)", m.table, commentRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query,data.UserId, data.VideoId, data.Content, data.ParentId, data.SubCount,data.CreateTime)
 	return ret, err
 }
 

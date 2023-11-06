@@ -73,8 +73,8 @@ func (m *defaultFavoriteModel) FindOne(ctx context.Context, id int64) (*Favorite
 }
 
 func (m *defaultFavoriteModel) Insert(ctx context.Context, data *Favorite) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?,?, ?, ?, ?,?)", m.table, favoriteRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Id, data.UserId, data.VideoId, data.AuthorId, data.Status, data.UpdateTime)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?,?)", m.table, favoriteRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.VideoId, data.AuthorId, data.Status, data.UpdateTime)
 	return ret, err
 }
 

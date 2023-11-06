@@ -31,8 +31,9 @@ func (l *CollectionActionLogic) CollectionAction(req *types.CollectionActionRequ
 
 	if req.ActionType == consts.CollectionAdd {
 		_, err = l.svcCtx.FavoriteRpc.AddCollection(l.ctx, &favoriterpc.AddCollectionRequest{
-			UserId:  userId,
-			VideoId: req.VideoId,
+			UserId:    userId,
+			VideoId:   req.VideoId,
+			Partition: req.Partition,
 		})
 		if err != nil {
 			l.Errorf("AddFavorite error: %v", err)

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	consts2 "douniu/common/consts"
+	"douniu/common/consts"
 	"douniu/common/init_db"
 	"douniu/common/utils"
 	"douniu/server/video/model"
@@ -101,7 +101,7 @@ func (s *Service) consume(ch chan *model.Video) {
 			return err
 		}, func() error {
 			// 全部视频时序排序
-			err := s.RedisClient.ZAdd(s.ctx, consts2.VideoTimeScore, redis.Z{
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoTimeScore, redis.Z{
 				Score:  float64(v.CreateTime.Unix()),
 				Member: m.Id,
 			}).Err()
@@ -109,35 +109,35 @@ func (s *Service) consume(ch chan *model.Video) {
 			return err
 		}, func() error {
 			// 全部视频热度排序
-			err := s.RedisClient.ZAdd(s.ctx, consts2.VideoHotScore, redis.Z{
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoHotScore, redis.Z{
 				Score:  float64(v.CreateTime.Unix()) * 0.5,
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 用户所有视频时序排序
-			err := s.RedisClient.ZAdd(s.ctx, consts2.VideoEveryUserTimeScore+fmt.Sprint(m.UserId), redis.Z{
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoEveryUserTimeScore+fmt.Sprint(m.UserId), redis.Z{
 				Score:  float64(v.CreateTime.Unix()),
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 用户所有视频热度排序
-			err := s.RedisClient.ZAdd(s.ctx, consts2.VideoEveryUserHotScore+fmt.Sprint(m.UserId), redis.Z{
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoEveryUserHotScore+fmt.Sprint(m.UserId), redis.Z{
 				Score:  float64(v.CreateTime.Unix()) * 0.5,
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 分区所有视频时序排序
-			err := s.RedisClient.ZAdd(s.ctx, consts2.VideoPartitionTimeScore+fmt.Sprint(m.Partition), redis.Z{
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoPartitionTimeScore+fmt.Sprint(m.Partition), redis.Z{
 				Score:  float64(v.CreateTime.Unix()),
 				Member: m.Id,
 			}).Err()
 			return err
 		}, func() error {
 			// 分区所有视频热度排序
-			err := s.RedisClient.ZAdd(s.ctx, consts2.VideoPartitionHotScore+fmt.Sprint(m.Partition), redis.Z{
+			err := s.RedisClient.ZAdd(s.ctx, consts.VideoPartitionHotScore+fmt.Sprint(m.Partition), redis.Z{
 				Score:  float64(v.CreateTime.Unix()) * 0.5,
 				Member: m.Id,
 			}).Err()
@@ -154,7 +154,7 @@ func (s *Service) consume(ch chan *model.Video) {
 			return
 		}
 		_, err = s.ESClient.Index().
-			Index(consts2.EsVideoIndex).
+			Index(consts.EsVideoIndex).
 			BodyJson(vJson).
 			Do(s.ctx)
 		if err != nil {

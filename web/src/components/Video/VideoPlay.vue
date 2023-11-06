@@ -3,7 +3,7 @@
     <div id="video" ref="videoRef" @wheel="handleWheel">
       <div class="info fw-600">
         <div class="text-6 flex gap-5 items-center">@{{ currentVideo?.author.nickname }}
-          <el-button type="danger" icon="Plus" circle plain />
+          <el-button type="danger" icon="Plus" circle plain v-if="user_id !== currentVideo.author.user_id" @click="handleFollow"/>
         </div>
         <div class="text-4">{{ currentVideo?.title }}</div>
       </div>
@@ -19,7 +19,7 @@
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.favorite_count }}
+            {{ currentVideo?.favorite_count+Number(currentVideo.is_favorite) }}
           </span>
         </div>
         <div class="my-6! flex flex-col items-center justify-center">
@@ -32,7 +32,7 @@
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.collection_count }}
+            {{ currentVideo?.collection_count}}
           </span>
         </div>
         <div @click="showComments = !showComments" class="my-6! flex flex-col items-center justify-center">
@@ -69,10 +69,10 @@
       </el-scrollbar>
     </div>
   </div>
-  <el-dialog v-model="dialogVisible" width="45%" destroy-on-close center style="background-color:#141414;height:30%;">
+  <!-- <el-dialog v-model="dialogVisible" width="45%" destroy-on-close center style="background-color:#141414;height:30%;">
     <div class="text-white! text-center text-6 fw-600">请复制视频URL:</div>
     <div class="text-white! text-center">{{ videoItem.play_url }}:</div>
-  </el-dialog>
+  </el-dialog> -->
 </template>
 
 <script setup lang="ts">
@@ -81,12 +81,20 @@ import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 import Comments from "@/components/Video/Comments.vue"
 import { Video } from '@/types'
-import { video as videoApi } from "@/services"
+import { social as socialApi, video as videoApi } from "@/services"
 import Player, { IPlayerOptions } from 'xgplayer';
 import 'xgplayer/dist/index.min.css';
 import { video } from '@/store/video'
+import { user as userInfo } from '@/store/user'
+
 import { storeToRefs } from 'pinia'
+const props = defineProps<{
+  id: string
+}>()
+
 const videoStore = video()
+const userStore = userInfo()
+const { user_id } =storeToRefs(userStore)
 const { currentIndex, video_list, currentVideo } = storeToRefs(videoStore)
 
 const videoItem = ref<Video>()
@@ -169,20 +177,27 @@ const handleWheel = (event) => {
 }
 // 操作
 const handleFavorite = () => {
-  videoApi.toLikeVideo(BigInt(route.query.id), 1, currentVideo.value?.partition).then(res => {
+  console.log(typeof props.id);
+  console.log(typeof BigInt(props.id));
+  videoApi.toLikeVideo(BigInt(props.id), 1, currentVideo.value?.partition).then(res => {
     console.log(res);
   })
 }
 
 const handleCollect = () => {
-  console.log("收藏");
-  videoApi.toCollectVideo(BigInt(route.query.id), 1, currentVideo.value?.partition).then(res => {
+  videoApi.toCollectVideo(props.id, 1, currentVideo.value?.partition).then(res => {
+    console.log(res);
+  })
+}
+
+const handleFollow = () => {
+  socialApi.toFollow(currentVideo.value.author.user_id,1).then(res=>{
     console.log(res);
   })
 }
 
 const handleShare = () => {
-  videoApi.shareVideo(BigInt(route.query.id)).then(res => {
+  videoApi.shareVideo(props.id).then(res => {
     dialogVisible.value = true
     url.value = res.data.share_url
   })

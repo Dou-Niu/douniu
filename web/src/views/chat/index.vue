@@ -1,8 +1,8 @@
 <template>
     <div class="main">
-        <el-scrollbar class="friend">
+        <el-scrollbar class="friend" v-if="friendList">
             <div v-for="(item, index) in friendList" class="item" :class="{ click: hoverIndex == index }"
-                @click="handleChangeChatingFriend(index)">
+                @click="() => { switchItem(item, index) }">
                 <el-avatar :src="item.avatar" :size="32" />
                 <div style="width: 70%">
                     <div style="font-size: 18px">{{ item.name }}</div>
@@ -10,20 +10,20 @@
                 </div>
             </div>
         </el-scrollbar>
-        <div class="chat">
-            <div class="header">
-                <div class="friendName">{{ friendList[hoverIndex].name }}</div>
-            </div>
+        <div class="chat" v-if="friendList">
+            <!-- <div class="header">
+                <div class="friendName">{{ friendList[hoverIndex].nickname }}</div>
+            </div> -->
             <el-scrollbar class="message">
-                <div v-for="item in friendList[hoverIndex].messages" class="const"
-                    :class="{ right: item.name === '星野露比', left: item.name !== '星野露比' }">
+                <div v-for="item in messages" class="const"
+                    :class="item.from_user_id == userStore?.user_id ? 'right' : 'left'">
                     <el-avatar :src="item.avatar" class="avatar"></el-avatar>
                     <div class="content">
                         {{ item.content }}
                     </div>
                 </div>
             </el-scrollbar>
-            <el-input v-model="content" type="textarea" placeholder="我来讲两句." :maxlength="100" resize="none" />
+            <el-input v-model="content" type="textarea" placeholder="输入你想对他说的话" :maxlength="100" resize="none" />
             <el-button type="primary" plain class="send" @click="send">
                 发送
             </el-button>
@@ -32,13 +32,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, onUnmounted } from 'vue';
 import { ElMessage } from 'element-plus';
-
+import { storeToRefs } from 'pinia'
+import { social as socialApi,chat as chatApi } from '@/services';
+import { user as userInfo } from '@/store/user'
+import { User } from '@/types/user';
+const userStore = userInfo()
+const { user_id, user_info } = storeToRefs(userStore)
 let hoverIndex = ref(0);
 let content = ref('')
 
-let friendList = ref([
+let friendList = ref<any[]>([])
+let messages = ref<any[]>([]);
+let pre_msg_time = 0;
+let messageT;
+let user = ref<User>();
+let testList = ref([
     {
         avatar: 'https://www.kecat.top/other/avatar.webp',
         name: 'kecat1',
@@ -249,6 +259,32 @@ let friendList = ref([
     }
 ])
 
+function switchItem(u: User, index: number) {
+    user.value = u;
+    hoverIndex.value = index;
+    chatApi.getMessage(u.id as bigint).then((res) => {
+        if (res.code == 0) {
+            messages.value = res.data.message_list;
+            if (res.data.message_list.length > 0) {
+                pre_msg_time =
+                    res.data.message_list[res.data.message_list.length - 1]?.create_time;
+            }
+            clearInterval(messageT);
+            messageT = setInterval(() => {
+                chatApi.getMessage(u.id as bigint, pre_msg_time).then((res) => {
+                    if (res.code == 0) {
+                        if (res.data.message_list.length > 0) {
+                            pre_msg_time =
+                                res.data.message_list[res.data.message_list.length - 1].create_time;
+                        }
+                        messages.value.push(...res.data.message_list);
+                    }
+                });
+            }, 1000);
+        }
+    });
+}
+
 
 const handleScrollToBottom = () => {
     let chatBox = document.querySelector('.chat');
@@ -271,20 +307,34 @@ const send = () => {
         return;
     }
     // 模拟
-    try {
-        friendList.value[hoverIndex.value].messages.push({
-            avatar: 'https://www.kecat.top/avatar.webp',
-            name: '星野露比',
-            content: content.value
-        })
-        nextTick(() => {
-            handleScrollToBottom();
-        })
-    } catch (error: any) {
-        ElMessage.error(error.message)
-    } finally {
-        content.value = '';
-    }
+    // try {
+    //     friendList.value[hoverIndex.value].messages.push({
+    //         avatar: 'https://www.kecat.top/avatar.webp',
+    //         name: '星野露比',
+    //         content: content.value
+    //     })
+    //     nextTick(() => {
+    //         handleScrollToBottom();
+    //     })
+    // } catch (error: any) {
+    //     ElMessage.error(error.message)
+    // } finally {
+    //     content.value = '';
+    // }
+        chatApi.sendMessage(user.value?.id as bigint,1, content.value)
+        .then((res) => {
+            if (res.code == 0) {
+                content.value = "";
+                ElMessage.success("发送成功");
+                // messages.value.push({
+                //   id: "-1",
+                //   content: content.value,
+                //   from_user_id: info?.value.id as string,
+                //   to_user_id: userId.value,
+                //   create_time: Date.now(),
+                // });
+            }
+        });
 }
 
 // // 轮询接口函数
@@ -301,10 +351,24 @@ const send = () => {
 // }
 
 onMounted(() => {
-    handleScrollToBottom();
+    // handleScrollToBottom();
+    if (user_info?.value) {
+        socialApi.getFriendsList(user_id.value as bigint).then((res) => {
+            if (res.code == 0) {
+                friendList.value = res.data.user_list;
+            }
+        });
+    } else {
+        ElMessage.error("请先登录");
+        // if (loginDialog) {
+        //   loginDialog.value = true;
+        // }
+    }
 })
 
-
+onUnmounted(() => {
+    clearInterval(messageT);
+});
 </script>
   
 <style lang="scss" scoped>

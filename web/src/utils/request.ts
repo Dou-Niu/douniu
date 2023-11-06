@@ -84,6 +84,8 @@ const service = (config?: AxiosRequestConfig) => {
             refreshToken().then(res => {
                 localStorage.setItem('REFRESH_TOKEN', res.data.refresh_token)
                 localStorage.setItem('ACCESS_TOKEN', res.data.access_token)
+                userStore.setToken('refresh_token',res.data.refresh_token)
+                userStore.setToken('access_token',res.data.access_token)
                 console.log(res);
             })
         }
@@ -101,11 +103,12 @@ const service = (config?: AxiosRequestConfig) => {
         //         console.log(res);
         //     })
         // }
-        console.log(error);
-        console.log("error-response:" + error.response);
-        console.log("error-config:" + error.config);
-        console.log("error-request:" + error.request);
-        const { loading = true } = error.config;
+        // console.log(error);
+        // console.log("error-response:" + error.response);
+        // console.log("error-config:" + error.config);
+        // console.log("error-request:" + error.request);
+        // const { loading = true } = error.config;
+        const loading = true;
         if (loading) {
             removeLoading();
         }

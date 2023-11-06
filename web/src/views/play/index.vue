@@ -1,5 +1,5 @@
 <template>
-    <VideoPlay />
+    <VideoPlay :id="route.query.id"/>
 </template>
 
 <script setup>

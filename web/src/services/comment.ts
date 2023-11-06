@@ -9,7 +9,7 @@ export type Comment = {
     user: User
 }
 
-export const sendComment = (video_id : any, action_type: number,  parent_id : bigint,content?: string, comment_id ?: bigint): Promise<{
+export const sendComment = (video_id : bigint, action_type: number,  parent_id : bigint,content?: string, comment_id ?: bigint): Promise<{
     "code": number
     "message": string
     comment: Comment

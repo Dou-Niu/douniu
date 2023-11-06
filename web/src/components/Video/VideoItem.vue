@@ -1,7 +1,12 @@
 <template>
-    <div ref="videoRef" class="video-item" @click="handlePlay">
+    <div ref="videoRef" class="video-item" @click="handlePlay" :style="{ transform: `scale(${scale})` }">
         <div class="video-item-top">
-            <img @load="handleImgLoad" :src="videoItem.cover_url">
+            <el-image @load="handleImgLoad" :src="videoItem.cover_url">
+                <template #error>
+                    <el-image @load="handleImgLoad" src="https://www.kecat.top/video/logo.jpg
+" alt="默认图片" />
+                </template>
+            </el-image>
             <div class="video-item-likeCount">{{ videoItem.favorite_count }}</div>
             <!-- <div class="video-item-duration">{{ "00:12" }}</div> -->
         </div>
@@ -17,28 +22,29 @@
 
 <script setup lang="ts">
 import { Video } from '../../types/index';
-import { ref } from 'vue'
+import { ref } from 'vue';
 import { flowList } from '../../utils/flowList/index';
 import { formatTime } from '@/utils/format';
 import { useRouter } from "vue-router"
 const router = useRouter()
 
 let videoRef = ref<HTMLElement>();
-
+let scale = ref(0);
 let props = defineProps<{
     videoItem: Video,
     listInstance: flowList
 }>()
 
-let handleImgLoad = () => {
-    props.listInstance.setPosition(props.videoItem, (videoRef.value?.parentElement as HTMLElement));
+let handleImgLoad = async () => {
+    await props.listInstance.setPosition(props.videoItem, (videoRef.value?.parentElement as HTMLElement));
+    scale.value = 1;
 }
 
 const handlePlay = () => {
     router.push({
         path: "/play",
         query: {
-            id:BigInt(props.videoItem.video_id).toString(),
+            id: BigInt(props.videoItem.video_id).toString(),
         }
     })
 }
@@ -47,10 +53,11 @@ const handlePlay = () => {
 
 <style lang="less" scoped>
 .elipsis {
-    max-width:50%;
+    max-width: 50%;
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
 .video-item {
     position: relative;
     background-color: rgb(37, 38, 50);

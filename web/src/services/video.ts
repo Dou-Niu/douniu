@@ -127,5 +127,5 @@ export const getLikeVideoList = (user_id: bigint, page_num: number) => get('/fav
  * @param partition 
  * @returns 
  */
-export const toCollectVideo = (video_id : bigint, action_type: number, partition: number) => post('/collection/action', { video_id, action_type, partition })
+export const toCollectVideo = (video_id : bigint | string, action_type: number, partition: number) => post('/collection/action', { video_id, action_type, partition })
 export const getCollectVideoList = (user_id: bigint, page_num: number) => get('/collection/list', { user_id, page_num })

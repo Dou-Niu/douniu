@@ -1,6 +1,7 @@
 <template>
   <div class="h-full flex flex-col bg-#060716">
     <Logo />
+
     <el-menu active-text-color="white" text-color="rgba(255, 255, 255, 0.5)" background-color="#060716"
       class="h-full border-none! flex flex-col items-center">
       <template v-for="item in HomeRoutes[0].children" :key="item.path">

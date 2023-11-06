@@ -2,8 +2,14 @@
   <el-scrollbar>
     <div class="my_container">
       <div class="header">
-        <div>
-          <el-avatar :src="user.avatar" :size="110" />
+        <div :style="{ borderRadius: '50%', overflow: 'hidden', width: '110px', height: '110px' }">
+          <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :show-file-list="false" :before-upload="handleAvatarUpload">
+            <img v-if="user.avatar" :src="user.avatar" :style="{ width: '100%', height: '100%', objectFit: 'cover' }" />
+            <el-icon v-else class="avatar-uploader-icon">
+              <Plus />
+            </el-icon>
+          </el-upload>
         </div>
         <div class="header-mid">
           <div class="name">{{ user.nickname }}</div>
@@ -27,7 +33,6 @@
           <div class="user-produce">
             {{ user.signature }}
           </div>
-
         </div>
         <div class="header-right">
           <div class="btn editor" @click="dialogVisible = true">编辑资料</div>
@@ -51,18 +56,22 @@
     </div>
     <el-dialog v-model="dialogVisible" title="编辑资料" width="30%" center align-center destroy-on-close
       style="background-color:rgb(37,38,50);color:red;height:auto;">
-      <!-- <div class="my-4 text-white flex justify-center flex-col items-center">
+      <div class="my-4 text-white flex justify-center flex-col items-center">
         <div class="mb-4 text-4">头像</div>
-        <el-upload :on-success="handleAvatarSuccess" action="http://s3oqk9upj.bkt.clouddn.com">
-          <el-avatar :src="user.avatar" :size="100" />
+        <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          :show-file-list="false" :before-upload="handleAvatarUpload">
+          <img v-if="user.avatar" :src="user.avatar"
+            :style="{ width: '50%', height: '50%', objectFit: 'cover', borderRadius: '50%' }" />
+          <el-icon v-else class="avatar-uploader-icon">
+            <Plus />
+          </el-icon>
         </el-upload>
-        <input type="file" ref="fileInput" @change="onFileChange" accept="image/*">
-      </div> -->
+      </div>
       <!-- <div class="my-4 flex justify-center flex-col items-center">
         <div class="mb-4 text-4 text-white">背景图片</div>
         <el-upload class="w-full" drag :on-success="handleAvatarSuccess" action="">
           <el-icon :size="50"><upload-filled /></el-icon>
-        </el-upload>
+        </el-upload
       </div> -->
       <div class="my-4 text-white text-4">
         <span>名字</span>
@@ -98,6 +107,7 @@ import { video as videoInfo } from '@/store/video';
 
 import { user as userApi, video as videoApi, social as socialApi } from "@/services"
 // import * as qiniu from 'qiniu-js'
+import { uploadVideo } from '../../utils/upload/uploadVideo';
 // // 七牛云上传图片
 // function getQiniuToken() {
 //   let mac = new qiniu.auth.digest.Mac("pMdHb3Ke_nlZmRv3WB9XuPLMb237DkEwOfKwgmal", "5ZJ9efpLn8YZ8_KQZq329NQdyh6PSd9z7BCH-1pS");
@@ -136,7 +146,7 @@ const user = reactive<User>({
   follow_count: 0,
   follower_count: 0,
   is_follow: false,
-  avatar: 'https://www.kecat.top/avatar.webp',
+  avatar: 'http://s36rnw3k2.hn-bkt.clouddn.com/douniu/%E6%96%97%E7%89%9B%E9%BB%98%E8%AE%A4%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8F.jpg',
   background_image: '',
   signature: '',
   total_favorited: '',
@@ -190,6 +200,17 @@ const handleSubmit = () => {
     })
   }
   dialogVisible.value = false
+}
+
+// 上传头像
+let handleAvatarUpload = async (file: File) => {
+  let { videoURL } = await uploadVideo(file);
+  userApi.changeUserInfo(
+    3,
+    videoURL
+  ).then(() => {
+    initInfo()
+  })
 }
 
 //获取个人信息
@@ -291,6 +312,16 @@ onMounted(() => {
 </script>
 
 <style scoped lang="less">
+.avatar-uploader {
+  width: 100%;
+  height: 100%;
+}
+
+:deep(.el-upload) {
+  width: 100%;
+  height: 100%;
+}
+
 :deep(.el-textarea__inner) {
   --el-input-border-color: none;
   background-color: rgb(51, 52, 63);

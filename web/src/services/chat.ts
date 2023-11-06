@@ -23,8 +23,10 @@ export type Message = {
  * @returns 
  */
 
-export const getMessage = (to_user_id : bigint): Promise<{
+export const getMessage = (to_user_id : bigint,pre_msg_time?:number): Promise<{
     "code": number
     "message": string,
-    message_list: Message[]
-}> => get('/message/chat', { to_user_id });
+    "data":{
+        message_list:Message[]
+    }
+}> => get('/message/chat', { to_user_id,pre_msg_time });

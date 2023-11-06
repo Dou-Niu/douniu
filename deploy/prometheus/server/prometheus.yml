@@ -12,7 +12,7 @@ scrape_configs:
   ## User服务
   - job_name: 'douniu-user-api'
     static_configs:
-      - targets: [ '127.0.0.1:7001' ]
+      - targets: [ 'douniu-user-api-1:7001' ]
         labels:
           job: user-api
           app: user-api
@@ -20,7 +20,7 @@ scrape_configs:
 
   - job_name: 'douniu-user-rpc'
     static_configs:
-      - targets: [ '127.0.0.1:7002' ]
+      - targets: [ 'douniu-user-rpc-1:7002' ]
         labels:
           job: user-rpc
           app: user-rpc
@@ -29,7 +29,7 @@ scrape_configs:
   ## Video服务
   - job_name: 'douniu-video-api'
     static_configs:
-      - targets: [ '127.0.0.1:7003' ]
+      - targets: [ 'douniu-video-api-1:7003' ]
         labels:
           job: video-api
           app: video-api
@@ -38,7 +38,7 @@ scrape_configs:
 
   - job_name: 'douniu-video-rpc'
     static_configs:
-      - targets: [ '127.0.0.1:7004' ]
+      - targets: [ 'douniu-video-rpc-1:7004' ]
         labels:
           job: video-rpc
           app: video-rpc
@@ -49,7 +49,7 @@ scrape_configs:
   ## Chat服务
   - job_name: 'douniu-chat-api'
     static_configs:
-      - targets: [ '127.0.0.1:7008' ]
+      - targets: [ 'douniu-chat-api-1:7008' ]
         labels:
           job: chat-api
           app: chat-api
@@ -57,7 +57,7 @@ scrape_configs:
 
   - job_name: 'douniu-chat-rpc'
     static_configs:
-      - targets: [ '127.0.0.1:21006' ]
+      - targets: [ 'douniu-chat-rpc-1:21006' ]
         labels:
           job: chat-rpc
           app: chat-rpc
@@ -66,7 +66,7 @@ scrape_configs:
   ## Chat服务
   - job_name: 'douniu-comment-api'
     static_configs:
-      - targets: [ '127.0.0.1:7007' ]
+      - targets: [ 'douniu-comment-api-1:7007' ]
         labels:
           job: comment-api
           app: comment-api
@@ -76,7 +76,7 @@ scrape_configs:
 
   - job_name: 'douniu-comment-rpc'
     static_configs:
-      - targets: [ '127.0.0.1:21004' ]
+      - targets: [ 'douniu-comment-rpc-1:21004' ]
         labels:
           job: comment-rpc
           app: comment-rpc
@@ -85,7 +85,7 @@ scrape_configs:
   ## Relation服务
   - job_name: 'douniu-relation-api'
     static_configs:
-      - targets: [ '127.0.0.1:7005' ]
+      - targets: [ 'douniu-relation-api-1:7005' ]
         labels:
           job: relation-api
           app: relation-api
@@ -95,7 +95,7 @@ scrape_configs:
 
   - job_name: 'douniu-relation-rpc'
     static_configs:
-      - targets: [ '127.0.0.1:21005' ]
+      - targets: [ 'douniu-relation-rpc-1:21005' ]
         labels:
           job: relation-rpc
           app: relation-rpc
@@ -106,7 +106,7 @@ scrape_configs:
   ## Fafor服务
   - job_name: 'douniu-favorite-api'
     static_configs:
-      - targets: [ '127.0.0.1:7006' ]
+      - targets: [ 'douniu-favorite-api-1:7006' ]
         labels:
           job: favor-api
           app: favor-api
@@ -115,7 +115,7 @@ scrape_configs:
 
   - job_name: 'douniu-favor-rpc'
     static_configs:
-      - targets: [ '127.0.0.1:21003' ]
+      - targets: [ 'douniu-favor-rpc-1:21003' ]
         labels:
           job: favor-rpc
           app: favor-rpc

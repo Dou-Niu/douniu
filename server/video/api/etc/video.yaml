@@ -30,6 +30,6 @@ Prometheus:
 #链路追踪
 Telemetry:
   Name: video-api
-  Endpoint: http://localhost:14268/api/traces
+  Endpoint: http://jaeger:14268/api/traces
   Sampler: 1.0
   Batcher: jaeger

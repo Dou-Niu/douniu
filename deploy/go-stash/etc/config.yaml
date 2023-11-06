@@ -41,5 +41,5 @@ Clusters:
     Output:
       ElasticSearch:
         Hosts:
-          - "http://localhost:9200"
+          - "http://elasticsearch:9200"
         Index: "douniu-{{yyyy-MM-dd}}"

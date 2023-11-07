@@ -4,46 +4,47 @@
       <div class="info fw-600">
         <div class="text-6 flex gap-5 items-center">@{{ currentVideo?.author.nickname }}
           <div v-if="parseInt(user_id) != currentVideo.author.id">
-            <el-button type="danger" icon="Plus" circle plain v-if="!currentVideo.author.is_follow"
-              @click="handleFollow(1)" />
-            <el-button type="success" icon="Check" circle v-else="currentVideo.author.is_follow"
-              @click="handleFollow(2)" />
+            <el-button type="danger" icon="Plus" circle plain v-if="!isFollow"
+              @click="handleFollow" />
+            <el-button type="success" icon="Check" circle v-else-if="isFollow"
+              @click="handleFollow" />
           </div>
           <div v-else-if="parseInt(user_id) == currentVideo.author.id">自己</div>
         </div>
         <div class="text-4">{{ currentVideo?.title }}</div>
       </div>
       <div class="right-side text-black">
-        <el-avatar :src="currentVideo?.author.avatar" :size="50" @click="router.push(`/home/${currentVideo.author.id}`)"/>
+        <el-avatar :src="currentVideo?.author.avatar" :size="50"
+          @click="router.push(`/home/${currentVideo.author.id}`)" />
         <div class="my-6! flex flex-col items-center justify-center">
           <el-popover placement="left-start" :width="20" trigger="hover" content="点赞"
             popper-class="bg-#33343F! border-none! text-white! icon">
             <template #reference>
-              <el-image style="width: 40px; height: 40px" src="/img/favorite-fill.png" fit="cover"
-                v-if="currentVideo.is_favorite" @click="handleFavorite(2)" />
-              <el-image style="width: 40px; height: 40px" src="/img/favorite.png" fit="cover" v-else
-                @click="handleFavorite(1)" />
+              <el-image style="width: 40px; height: 40px" src="/img/favorite-fill.png" fit="cover" v-if="isFavorite"
+                @click="handleFavorite" />
+              <el-image style="width: 40px; height: 40px" src="/img/favorite.png" fit="cover" v-else-if="!isFavorite"
+                @click="handleFavorite" />
               <!-- <el-icon class="color-white!" :size="40" @click="handleFavorite">
                 <Star />
               </el-icon> -->
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.favorite_count }}
+            {{ currentVideo?.favorite_count +Number(isFavorite)}}
           </span>
         </div>
         <div class="my-6! flex flex-col items-center justify-center">
           <el-popover placement="left-start" :width="20" trigger="hover" content="收藏"
             popper-class="bg-#33343F! border-none! text-white! icon">
             <template #reference>
-              <el-image style="width: 40px; height: 40px" src="/img/collect.png" fit="cover" @click="handleCollect(1)"
-                v-if="!currentVideo.is_collect" />
-              <el-image style="width: 40px; height: 40px" src="/img/collect-fill.png" fit="cover"
-                @click="handleCollect(2)" v-else />
+              <el-image style="width: 40px; height: 40px" src="/img/collect.png" fit="cover" @click="handleCollect"
+                v-if="!isCollect" />
+              <el-image style="width: 40px; height: 40px" src="/img/collect-fill.png" fit="cover" @click="handleCollect"
+                v-else-if="isCollect" />
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.author.collection_count }}
+            {{ currentVideo?.author.collection_count+Number(isCollect) }}
           </span>
         </div>
         <div @click="showComments = !showComments" class="my-6! flex flex-col items-center justify-center">
@@ -57,7 +58,7 @@
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.comment_count }}
+            {{ currentVideo?.comment_count}}
           </span>
         </div>
       </div>
@@ -67,7 +68,7 @@
       <el-divider class="border-#4C4D4F!" />
       <div>全部评论&nbsp;&nbsp;{{ currentVideo?.comment_count }}</div>
       <el-scrollbar>
-        <Comments :videoId="currentVideo?.video_id" />
+        <Comments :videoId="currentVideo?.video_id" @update:comments="handleUpdateComments" />
       </el-scrollbar>
     </div>
   </div>
@@ -94,6 +95,8 @@ const props = defineProps<{
   id: string
 }>()
 
+
+
 const videoStore = video()
 const userStore = userInfo()
 
@@ -109,8 +112,16 @@ const player = ref<Player>()
 const showComments = ref<boolean>(false)
 const videoRef = ref()
 const playerConfig = ref<IPlayerOptions>()
+const isFavorite = ref(false)
+const isCollect = ref(false)
+const isFollow = ref(false)
 
 
+
+const comments = ref(currentVideo.value.comment_count)
+const handleUpdateComments = (val: number) => {
+  comments.value = val
+}
 // 鼠标滚动
 const handleWheel = (event) => {
   if (event.deltaY < 0) {
@@ -176,34 +187,37 @@ const handleWheel = (event) => {
   }
 }
 // 操作
-const handleFavorite = (type: number) => {
-  videoApi.toLikeVideo(parseInt(props.id), type, currentVideo.value?.partition).then(() => {
+const handleFavorite = () => {
+  videoApi.toLikeVideo(parseInt(props.id), isFavorite.value ? 2 : 1, currentVideo.value?.partition).then(() => {
+    isFavorite.value = !isFavorite.value;
+    ElMessage.success(isFavorite.value ? "点赞成功" : "取消点赞成功");
     initVideo()
   })
 }
 
-const handleCollect = (type: number) => {
-  videoApi.toCollectVideo(parseInt(props.id), type, currentVideo.value?.partition).then(() => {
+const handleCollect = () => {
+  videoApi.toCollectVideo(parseInt(props.id), isCollect.value ? 2 : 1, currentVideo.value?.partition).then(() => {
+    isCollect.value = !isCollect.value;
+    ElMessage.success(isCollect.value ? "收藏成功" : "取消收藏成功");
     initVideo()
   })
 }
 
-const handleFollow = (type: number) => {
-  socialApi.toFollow(currentVideo.value.author.id, type).then(() => {
+const handleFollow = () => {
+  socialApi.toFollow(currentVideo.value.author.id, isFollow.value ? 2 :1).then(() => {
+    isFollow.value = !isFollow.value
+    ElMessage.success(isFollow.value ? "关注成功" : "取消关注成功");
     initVideo()
   })
 }
 
-// const handleShare = () => {
-//   videoApi.shareVideo(props.id).then(res => {
-//     dialogVisible.value = true
-//     url.value = res.data.share_url
-//   })
-// }
 
 const initVideo = () => {
   videoApi.getVideoInfo(parseInt(route.query.id as string)).then(res => {
     videoItem.value = res.data.video_list[0]
+    isFavorite.value = res.data.video_list[0].is_favorite
+    isCollect.value = res.data.video_list[0].is_collect
+    isFollow.value = res.data.video_list[0].author.is_follow
     let index = 0
     videoStore.setCurrentVideo(videoItem.value as Video)
     video_list.value.forEach((item: any) => {

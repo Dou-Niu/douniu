@@ -73,6 +73,7 @@ import { video } from "@/store/video"
 import { storeToRefs } from 'pinia'
 import { User } from "@/types/user";
 import { useRoute } from 'vue-router'
+const emits=defineEmits(["update:comments"])
 defineProps<{
   videoId: number
 }>()
@@ -102,6 +103,7 @@ const handleSendComment = (parent_id?: number) => {
     // 评论回复
     commentApi.sendComment(currentVideo.value.video_id, 1, parent_id, reply.value).then(() => {
       getReply(parent_id as number)
+      emits("update:comments", commentsList.value.length)
       reply.value = ""
     })
   } else {
@@ -125,7 +127,6 @@ const getComments = () => {
 const getReply = (parent_id: number) => {
   commentApi.getComment(parent_id).then(res => {
     replyList.value.push(res.data.comment_list)
-    console.log(replyList.value);
   })
 }
 

@@ -5,7 +5,9 @@ import { user } from '@/store/user';
 import pinia from "@/store";
 const userStore = user(pinia);
 
-let token = userStore.getToken('access_token') || localStorage.getItem("ACCESS_TOKEN");
+// let token = userStore.getToken('access_token')
+let token = localStorage.getItem('ACCESS_TOKEN')
+
 
 const BASE_URL = "/douniu";
 

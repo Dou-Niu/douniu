@@ -1,0 +1,5 @@
+# Let's Encrypt
+[certificatesResolvers.myresolver.acme]
+  email = "example.com"
+  storage="/letsencrypt/acme.json"
+  [certificatesResolvers.myresolver.acme.tlsChallenge]

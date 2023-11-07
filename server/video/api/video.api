@@ -1,0 +1,178 @@
+syntax = "v1"
+
+// 接口信息
+info(
+	title: "douniu/video.api"
+	author: "liuxian"
+	version: "1.0.0"
+)
+
+// Author
+type AuthorInfo {
+    ID int64 `json:"id"`
+    NickName string `json:"nickname"`
+    FollowCount int64 `json:"follow_count"`
+    FollowerCount int64 `json:"follower_count"`
+    IsFollow bool `json:"is_follow"`
+    Avatar string `json:"avatar"`
+	BackgroundImage string `json:"background_image"`
+    Signature string `json:"signature"`
+    TotalFavorited int64 `json:"total_favorited"`
+    WorkCount int64 `json:"work_count"`
+    FavoriteCount int64 `json:"favorite_count"`
+    CollectionCount int64 `json:"collection_count"`
+}
+// video
+type VideoInfo {
+    VideoID int64 `json:"video_id"`
+    Author AuthorInfo `json:"author"`
+    PlayURL string `json:"play_url"`
+    CoverURL string `json:"cover_url"`
+    FavoriteCount int64 `json:"favorite_count"`
+    CollectionCount int64 `json:"collection_count"`
+    CommentCount int64 `json:"comment_count"`
+    IsFavorite bool `json:"is_favorite"`
+    IsCollect bool `json:"is_collect"`
+    Title string `json:"title"`
+    Partition int64 `json:"partition"`
+    CreateTime string `json:"create_time"`
+}
+// video list
+type VideoList {
+	List []*VideoInfo `json:"video_list"`
+}
+
+type (
+	// 投稿视频
+	PublishVideoReq {
+        VideoUrl string `json:"video_url"`
+        CoverUrl string `json:"cover_url"`
+        Title string `json:"title"`
+        Partition int64 `json:"partition"`
+	}
+
+        // 获取用户视频流
+	FeedUserReq {
+        UserId int64 `form:"user_id"`
+        Sort int64 `form:"sort"  validate:"gte=1,lte=2"`
+		MaxValue int64 `form:"max_value"`
+	}
+	FeedResp {
+		NextMaxValue int64 `json:"next_max_value"`
+        IsFinal bool `json:"is_final"`
+		VideoList
+	}
+        // 获取热门视频流
+	FeedHotReq {
+		MaxHot int64 `form:"max_hot"`
+	}
+	FeedHotResp {
+		NextMaxHot int64 `form:"next_max_hot"`
+		VideoList
+	}
+        // 获取首页视频（最新）
+	FeedHomeReq {
+		LatestTime int64 `form:"latest_time"`
+	}
+	FeedHomeResp {
+		NextTime int64 `json:"next_time"`
+		VideoList
+	}
+        // 关注的的视频流
+	FeedFollowReq {
+		LatestTime int64 `form:"latest_time"`
+	}
+
+        // 分区视频流
+	FeedPartitionReq {
+        Sort int64 `form:"sort" validate:"gte=1,lte=2"`
+        MaxValue int64 `form:"max_value"`
+		Partition int64 `form:"partition" validate:"gte=1,lte=5"`
+	}
+        // 删除视频
+	DeleteVideoReq {
+        VideoId int64 `form:"video_id"`
+		Partition int64 `form:"partition" validate:"gte=1,lte=5"`
+	}
+        // 搜索视频
+	SearchVideoReq {
+		KeyWords string `form:"key_words"`
+        Page int64 `form:"page" validate:"gte=1"` // 从1开始
+	}
+        // 分享视频
+	ShareVideoReq {
+		VideoId int64 `form:"video_id"`
+	}
+	ShareVideoResp {
+		ShareUrl string `json:"share_url"`
+	}
+        // 查看单个视频
+	LookOneVideoReq {
+		VideoId int64 `form:"video_id"`
+	}
+)
+@server(
+	jwt: JWTAuth
+	prefix: douniu/video
+	timeout: 9999999s
+)
+service video {
+	@doc(
+		summary: "投稿视频"
+	)
+	@handler PublishVideo
+	post /publish (PublishVideoReq) returns ()
+
+	@doc(
+		summary: "首页视频流（最新） "
+	)
+	@handler FeedHome
+	get /feed/home (FeedHomeReq) returns (FeedHomeResp)
+
+	@doc(
+		summary: "热门视频流"
+	)
+	@handler FeedHot
+	get /feed/hot (FeedHotReq) returns (FeedHotResp)
+
+	@doc(
+		summary: "用户视频流"
+	)
+	@handler FeedUser
+	get /feed/user (FeedUserReq) returns (FeedResp)
+
+	@doc(
+		summary: "关注视频流"
+	)
+	@handler FeedFollow
+	get /feed/follow (FeedFollowReq) returns (FeedResp)
+
+	@doc(
+		summary: "分区视频流"
+	)
+	@handler FeedPartition
+	get /feed/partition (FeedPartitionReq) returns (FeedResp)
+
+	@doc(
+		summary: "用户删除视频"
+	)
+	@handler DeleteVideo
+	delete /delete (DeleteVideoReq) returns ()
+
+	@doc(
+		summary: "搜索视频"
+	)
+	@handler SearchVideo
+	get /search (SearchVideoReq) returns (FeedResp)
+
+	@doc(
+		summary: "分享视频"
+	)
+	@handler ShareVideo
+	get /share (ShareVideoReq) returns (ShareVideoResp)
+	@doc(
+		summary: "查看单个视频"
+	)
+	@handler LookOneVideo
+	get / (LookOneVideoReq) returns (FeedResp)
+}

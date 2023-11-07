@@ -1,1 +1,0 @@
-export { uploadVideo, uploadPercentage, videoCovers, curCover, curVideoURL, curCoverFile } from './uploadVideo';

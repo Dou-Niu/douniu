@@ -1,0 +1,8 @@
+/data/
+*.xml
+*.iml
+
+
+.env
+.idea
+/tmp/

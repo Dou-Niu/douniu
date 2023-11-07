@@ -1,0 +1,47 @@
+Name: comment.rpc
+ListenOn: 0.0.0.0:20004
+
+Mode: dev
+
+Log:
+  Encoding: plain
+  Stat: false
+
+
+Etcd:
+  Hosts:
+    - 106.15.58.0:2379
+  Key: comment.rpc
+
+MySQLConf:
+  DataSource: root:liuyt777@tcp(106.15.58.0:3306)/douniu_comment
+
+
+UserRpcConf:
+  Etcd:
+    Hosts:
+      - 106.15.58.0:2379
+    Key: user.rpc
+  NonBlock: true
+
+RedisConf:
+  Host: 106.15.58.0:6379
+  Pass: "liuyt777"
+
+KafkaConf:
+  Addrs:
+    - 106.15.58.0:9092
+  Topic: comment-topic
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 21004
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: comment.rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger

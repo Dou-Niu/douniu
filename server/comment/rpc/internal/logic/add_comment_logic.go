@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	consts2 "douniu/common/consts"
+	"douniu/common/consts"
 	"douniu/server/comment/model"
 	"douniu/server/comment/rpc/commentrpc"
 	"douniu/server/comment/rpc/internal/svc"
@@ -53,7 +53,7 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 	//	return
 	//}
 
-	_, err = l.svcCtx.CommentModel.Insert(l.ctx, comment)
+	res, err := l.svcCtx.CommentModel.Insert(l.ctx, comment)
 	if err != nil {
 		l.Errorf("Insert comment error: %v", err)
 		return
@@ -67,8 +67,10 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 		}
 	}
 
+	comment.Id, _ = res.LastInsertId()
+
 	// 视频评论数+1
-	_, err = l.svcCtx.RedisClient.Incr(consts2.VideoCommentCountPrefix + strconv.Itoa(int(comment.VideoId)))
+	_, err = l.svcCtx.RedisClient.Incr(consts.VideoCommentCountPrefix + strconv.Itoa(int(comment.VideoId)))
 	if err != nil {
 		logx.Errorf("MessageAction RedisClient.Incr error: %s", err.Error())
 		return
@@ -76,7 +78,7 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 
 	// 视频热度提升
 	videoIdStr := strconv.Itoa(int(in.VideoId))
-	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoHotScore, int64(consts2.SingleHotScore), videoIdStr)
+	_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, int64(consts.SingleHotScore), videoIdStr)
 	if err != nil {
 		l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 		return
@@ -95,7 +97,7 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 	resp.Comment = new(pb.Comment)
 	_ = copier.Copy(resp.Comment, comment)
 	resp.Comment.User = new(commentrpc.User)
-	_ = copier.Copy(resp.Comment.User, userInfoResp)
+	_ = copier.Copy(resp.Comment.User, userInfoResp.Userinfo)
 
 	//resp.Comment.User.Id = in.UserId
 	//resp.Comment.User.Username = "test"

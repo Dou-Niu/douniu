@@ -124,7 +124,7 @@ func (s *Service) consume(ch chan *model.Video) {
 			// 用户所有视频热度排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoEveryUserHotScore+fmt.Sprint(m.UserId), redis.Z{
 				Score:  float64(v.CreateTime.Unix()) * 0.5,
-				Member: m.Id,
+				Member: v.Id,
 			}).Err()
 			return err
 		}, func() error {

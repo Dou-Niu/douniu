@@ -46,8 +46,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop favorite-api
-            docker-compose.yaml rm -f favorite-api
+            docker-compose stop favorite-api
+            docker-compose rm -f favorite-api
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}favorite-api:latest
             docker-compose -f docker-compose.yaml up -d favorite-api
 

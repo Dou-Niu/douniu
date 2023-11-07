@@ -94,12 +94,11 @@ func (s *Service) consume(ch chan *model.Video) {
 		s.SensitiveTrie.AddWords([]string{"傻逼", "死", "你妈", "滚"})
 		v.Title = s.SensitiveTrie.Filter(v.Title)
 		fmt.Println(v)
+		// 写入mysql
+		res, err := s.VideoModel.Insert(s.ctx, &v)
+		v.Id, _ = res.LastInsertId()
 		// 并发写入redis,mysql
-		err := mr.Finish(func() error {
-			// 写入mysql
-			_, err := s.VideoModel.Insert(s.ctx, &v)
-			return err
-		}, func() error {
+		err = mr.Finish(func() error {
 			// 全部视频时序排序
 			err := s.RedisClient.ZAdd(s.ctx, consts.VideoTimeScore, redis.Z{
 				Score:  float64(v.CreateTime.Unix()),

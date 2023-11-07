@@ -67,8 +67,6 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 		}
 	}
 
-	comment.Id, _ = res.LastInsertId()
-
 	// 视频评论数+1
 	_, err = l.svcCtx.RedisClient.Incr(consts.VideoCommentCountPrefix + strconv.Itoa(int(comment.VideoId)))
 	if err != nil {
@@ -96,6 +94,8 @@ func (l *AddCommentLogic) AddComment(in *pb.AddCommentRequest) (resp *pb.AddComm
 	resp = new(pb.AddCommentResponse)
 	resp.Comment = new(pb.Comment)
 	_ = copier.Copy(resp.Comment, comment)
+
+	resp.Comment.Id, _ = res.LastInsertId()
 	resp.Comment.User = new(commentrpc.User)
 	_ = copier.Copy(resp.Comment.User, userInfoResp.Userinfo)
 

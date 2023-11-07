@@ -1,5 +1,4 @@
 import { post, get, Resp } from './method';
-import { User } from './user';
 /**
  * 关注
  * @param to_user_id 
@@ -23,5 +22,5 @@ export const getSbFollowList = (user_id : number, page_num: number) => get('/rel
 export const getSbFollowerList = (user_id : number, page_num: number) => get('/relation/follower/list', { user_id, page_num })
 
 export const getFriendsList = (user_id : number): Resp<{
-    "user_list": User[]
+    "user_list": []
 }> => get('/relation/friend/list', { user_id })

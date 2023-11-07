@@ -54,7 +54,7 @@ const handlePush = (user: User) => {
 }
 
 const handleFollow = async(id:number,type: number) => {
-  const res = await socialApi.toFollow(id, type)
+  await socialApi.toFollow(id, type)
 }
 onMounted(() => {
 

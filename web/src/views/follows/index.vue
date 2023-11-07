@@ -69,10 +69,10 @@
             </el-scrollbar>
         </div>
     </div>
-    <el-dialog v-model="dialogVisible" width="45%" destroy-on-close center style="background-color:#141414;height:30%;">
+    <!-- <el-dialog v-model="dialogVisible" width="45%" destroy-on-close center style="background-color:#141414;height:30%;">
         <div class="text-white! text-center text-6 fw-600">请复制视频URL:</div>
-        <div class="text-white! text-center">{{ videoItem.play_url }}:</div>
-    </el-dialog>
+        <div class="text-white! text-center">{{ videoItem?.play_url }}:</div>
+    </el-dialog> -->
 </template>
   
 <script setup lang="ts">
@@ -172,7 +172,7 @@ const handleWheel = (event) => {
 // 操作
 const handleFavorite = () => {
     videoApi.toLikeVideo(currentVideo.value.video_id, 1, currentVideo.value?.partition).then(res => {
-
+        console.log(res);
     })
 }
 

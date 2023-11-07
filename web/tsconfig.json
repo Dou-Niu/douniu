@@ -11,6 +11,7 @@
     // "types": [
     //   "element-plus/global"
     // ],
+    "allowJs": true,
     "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -40,8 +41,9 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
-, "src/utils/upload/uploadPic.jss"  ],
+    "src/**/*.vue",
+    "src/utils/upload/uploadPic.jss"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"

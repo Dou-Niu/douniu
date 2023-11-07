@@ -18,7 +18,7 @@
                 <div v-for="item in messages" class="const"
                     :class="item.from_user_id == userStore?.user_id ? 'right' : 'left'">
                     <el-avatar :src="user_info.avatar" class="avatar" v-if="item.from_user_id === user_info.id"></el-avatar>
-                    <el-avatar :src="user.avatar" class="avatar" v-if="item.from_user_id === user.id"></el-avatar>
+                    <el-avatar :src="user?.avatar" class="avatar" v-if="item.from_user_id === user?.id"></el-avatar>
                     <div class="content">
                         {{ item.content }}
                     </div>

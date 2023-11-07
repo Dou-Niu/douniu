@@ -14,7 +14,6 @@ declare module 'vue' {
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDivider: typeof import('element-plus/es')['ElDivider']
-    ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
@@ -34,15 +33,10 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
-    ElText: typeof import('element-plus/es')['ElText']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FlowList: typeof import('./src/components/Video/flowList.vue')['default']
-    Item: typeof import('./src/components/List/Item.vue')['default']
-    ItemList: typeof import('./src/components/Video/itemList.vue')['default']
-    List: typeof import('./src/components/List/List.vue')['default']
     LoginCard: typeof import('./src/components/LoginCard/LoginCard.vue')['default']
     PeopleList: typeof import('./src/components/Mine/PeopleList.vue')['default']
-    ProgressBar: typeof import('./src/components/Upload/progressBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SelectCover: typeof import('./src/components/Upload/selectCover.vue')['default']
@@ -52,9 +46,5 @@ declare module 'vue' {
     VideoItem: typeof import('./src/components/Video/VideoItem.vue')['default']
     VideoList: typeof import('./src/components/Video/VideoList.vue')['default']
     VideoPlay: typeof import('./src/components/Video/VideoPlay.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
-    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

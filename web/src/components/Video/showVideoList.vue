@@ -16,27 +16,12 @@ const props = defineProps<{
 let finished = ref(false);
 let bottomRef = ref<HTMLElement>();
 // let videoList = ref<Video[]>([]);
-let curPage = ref(0);
 let limit = 25;
 
 
-let handleLoad = async () => {
-  // if (videoList.value.length < testList.value.length) {
-  //   await (() => {
-  //     return new Promise((resolve) => {
-  //       setTimeout(() => {
-  //         videoList.value = [...videoList.value, ...testList.value.slice(curPage.value * limit, curPage.value * limit + limit)];
-  //         curPage.value++;
-  //         resolve('success');
-  //       }, 100);
-  //     })
-  //   })()
-  //   if (videoList.value.length >= testList.value.length) {
-  //     finished.value = true;
-  //     observer.unobserve(bottomRef.value as HTMLElement)
-  //   }
-  // }
-}
+// let handleLoad = async () => {
+
+// }
 
 let observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {

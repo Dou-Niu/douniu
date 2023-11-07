@@ -14,7 +14,7 @@ import { useRoute } from 'vue-router';
 import VideoList from '@/components/Video/VideoList.vue';
 import { Video } from '../../types/index';
 import { video as videoApi } from "@/services"
-import { video as videoInfo} from "@/store"
+import { video as videoInfo} from "@/store/video"
 const videoStore = videoInfo()
 
 const route = useRoute()
@@ -58,6 +58,7 @@ let observeBottom = () => {
 watch(() => route.query.key_words, (newVal) => {
   if (newVal) {
     curPage.value = 1;
+    videoList.value = [];
     videoApi.searchVideo(newVal as string, curPage.value).then(res => {
       videoList.value = res.data.video_list
       finished.value = res.data.is_final;

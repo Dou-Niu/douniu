@@ -69,7 +69,7 @@ const formLabelAlign = reactive({
 })
 const formRef = ref<FormInstance>();
 
-const validatePass = (rule: any, value: any, callback: any) => {
+const validatePass = (_: any, value: any, callback: any) => {
   if (formLabelAlign.pwd !== '') {
     if (value !== formLabelAlign.pwd) {
       callback(new Error('两次输入密码不一致！'))

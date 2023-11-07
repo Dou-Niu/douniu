@@ -1,4 +1,4 @@
-import { type User } from "@/services/user";
+import { User } from "@/types/user";
 export interface Video {
     video_id: number,
     author:User,

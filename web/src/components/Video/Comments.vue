@@ -11,8 +11,8 @@
           <span class="text-#4C4D4F mb-3">{{ comment.user.nickname }}</span>
           <span class="mb-3">{{ comment.content }}</span>
           <div class="flex justify-start items-center mb-3">
-            <div class="text-#4C4D4F mx-4">
-              <span @click="showReplyList(comment.id,comment.user.nickname)">评论</span>
+            <div class="text-#4C4D4F">
+              <el-button type="primary" @click="showReplyList(comment.id, comment.user.nickname)" plain>评论</el-button>
             </div>
           </div>
           <!-- <div class="flex items-center justify-center">
@@ -36,11 +36,11 @@
           <el-divider class="border-#4C4D4F!" />
           <div v-for="replys in replyList">
             <template v-for="rep in replys">
-              <div class="flex" v-if="rep.parent_id == comment.id">
+              <div class="flex" v-if="rep?.parent_id == comment.id.toString()">
                 <el-avatar :size="50" :src="rep.user.avatar" class="mr-2" />
                 <div class="flex flex-col">
-                  <span class="text-#4C4D4F mb-3">{{ rep.user.nickname }}</span>
-                  <span class="mb-3">{{ rep.content }}</span>
+                  <span class="text-#4C4D4F mb-3">{{ rep?.user?.nickname }}</span>
+                  <span class="mb-3">{{ rep?.content }}</span>
                   <div>
                   </div>
                 </div>
@@ -52,7 +52,7 @@
     </div>
     <div class="my-4 text-white text-4 fixed bottom-0 mx-4" v-if="replyVisible">
       <div class="flex justify-center w-full">
-        <el-input type="text" v-model="reply" :placeholder="`回复@${replyName}`" class="w-250px!"/>
+        <el-input type="text" v-model="reply" :placeholder="`回复@${replyName}`" class="w-250px!" />
         <el-button type="primary" class="ml-2" @click="handleSendComment(replyId)">发送</el-button>
       </div>
     </div>
@@ -74,7 +74,7 @@ import { storeToRefs } from 'pinia'
 import { User } from "@/types/user";
 import { useRoute } from 'vue-router'
 defineProps<{
-  video_id: number
+  videoId: number
 }>()
 const route = useRoute()
 
@@ -82,16 +82,16 @@ const videoStore = video()
 const { currentVideo } = storeToRefs(videoStore)
 
 const commentsList = ref<IComment[]>([])
-const replyList = ref<IComment[]>([])
+const replyList = ref<any[]>([])
 const myComment = ref("")
 const reply = ref("")
-const replyId=ref(0)
-const replyName=ref("")
+const replyId = ref(0)
+const replyName = ref("")
 const replyVisible = ref(false)
-const showReplyList = (id: number,name:string) => {
-  replyId.value=id
-  replyName.value=name
-  replyVisible.value = true
+const showReplyList = (id: number, name: string) => {
+  replyId.value = id
+  replyName.value = name
+  replyVisible.value = !replyVisible.value
 }
 
 
@@ -102,13 +102,13 @@ const handleSendComment = (parent_id?: number) => {
     // 评论回复
     commentApi.sendComment(currentVideo.value.video_id, 1, parent_id, reply.value).then(() => {
       getReply(parent_id as number)
-      reply.value=""
+      reply.value = ""
     })
   } else {
     // 评论视频
     commentApi.sendComment(currentVideo.value.video_id, 1, 0, myComment.value).then(() => {
       getComments()
-      myComment.value=""
+      myComment.value = ""
     })
 
   }

@@ -3,13 +3,13 @@
     <div id="video" ref="videoRef" @wheel="handleWheel">
       <div class="info fw-600">
         <div class="text-6 flex gap-5 items-center">@{{ currentVideo?.author.nickname }}
-          <div v-if="user_id != currentVideo.author.id">
+          <div v-if="parseInt(user_id) != currentVideo.author.id">
             <el-button type="danger" icon="Plus" circle plain v-if="!currentVideo.author.is_follow"
               @click="handleFollow(1)" />
             <el-button type="success" icon="Check" circle v-else="currentVideo.author.is_follow"
               @click="handleFollow(2)" />
           </div>
-          <div v-else-if="user_id == currentVideo.author.id">自己</div>
+          <div v-else-if="parseInt(user_id) == currentVideo.author.id">自己</div>
         </div>
         <div class="text-4">{{ currentVideo?.title }}</div>
       </div>
@@ -205,7 +205,7 @@ const initVideo = () => {
   videoApi.getVideoInfo(parseInt(route.query.id as string)).then(res => {
     videoItem.value = res.data.video_list[0]
     let index = 0
-    videoStore.setCurrentVideo(videoItem.value)
+    videoStore.setCurrentVideo(videoItem.value as Video)
     video_list.value.forEach((item: any) => {
       if (item.video_id === videoItem.value?.video_id) {
         videoStore.setCurrentIndex(index)

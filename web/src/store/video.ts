@@ -33,6 +33,7 @@ export const video = defineStore('video', {
                 collection_count:0,
                 comment_count:0,
                 is_favorite:false,
+                is_collect:false,
                 title:"",
                 partition:0,
                 create_time:new Date(),

@@ -37,5 +37,5 @@ export const getVideoComment = (video_id : number, last_comment_id : number): Pr
 export const getComment = (comment_id : number): Promise<{
     "code": number
     "message": string
-    comment_list: any
+    "data": any
 }> => get('/comment/detail', { comment_id });

@@ -3,13 +3,13 @@
         <div id="video" ref="videoRef" @wheel="handleWheel">
             <div class="info fw-600">
                 <div class="text-6 flex gap-5 items-center">@{{ currentVideo?.author.nickname }}
-                    <div v-if="user_id != currentVideo.author.id">
+                    <div v-if="user_id != currentVideo.author.id.toString()">
                         <el-button type="danger" icon="Plus" circle plain v-if="!currentVideo.author.is_follow"
                             @click="handleFollow(1)" />
                         <el-button type="success" icon="Check" circle v-else="currentVideo.author.is_follow"
                             @click="handleFollow(2)" />
                     </div>
-                    <div v-else-if="user_id == currentVideo.author.id">自己</div>
+                    <div v-else-if="user_id == currentVideo.author.id.toString()">自己</div>
                 </div>
                 <div class="text-4">{{ currentVideo?.title }}</div>
             </div>
@@ -60,16 +60,16 @@
                         {{ currentVideo?.comment_count }}
                     </span>
                 </div>
-                <div class="my-6! flex flex-col items-center justify-center">
+                <!-- <div class="my-6! flex flex-col items-center justify-center">
                     <el-popover placement="left-start" :width="100" trigger="hover" content="分享"
                         popper-class="bg-#33343F! border-none! text-white! icon">
                         <template #reference>
-                            <el-icon class="color-white!" :size="40" @click="handleShare">
+                            <el-icon class="color-white!" :size="40">
                                 <BottomRight />
                             </el-icon>
                         </template>
                     </el-popover>
-                </div>
+                </div> -->
             </div>
         </div>
         <div v-if="showComments">
@@ -127,7 +127,7 @@ const handleWheel = (event) => {
         }
         videoStore.setCurrentIndex(--currentIndex.value)
         showComments.value = false
-        router.push(`/play?id=${Bvideo_list.value[currentIndex.value].video_id}`)
+        router.push(`/play?id=${video_list.value[currentIndex.value].video_id}`)
         player?.value?.playNext({
             id: "video",
             el: document.getElementById("video") as HTMLElement,
@@ -195,7 +195,7 @@ const handleCollect = (type: number) => {
 }
 
 const handleFollow = (type: number) => {
-    socialApi.toFollow(currentVideo.value.author.user_id, type).then(() => {
+    socialApi.toFollow(currentVideo.value.author.id, type).then(() => {
         initVideo()
     })
 }

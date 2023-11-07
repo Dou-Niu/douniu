@@ -1,0 +1,123 @@
+global:
+  scrape_interval:
+  external_labels:
+    monitor: 'codelab-monitor'
+
+# 这里表示抓取对象的配置
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s  #重写了全局抓取间隔时间，由15秒重写成5秒
+    static_configs:
+      - targets: [ '127.0.0.1:9090' ]
+  ## User服务
+  - job_name: 'douniu-user-api'
+    static_configs:
+      - targets: [ 'douniu-user-api-1:7001' ]
+        labels:
+          job: user-api
+          app: user-api
+          env: dev
+
+  - job_name: 'douniu-user-rpc'
+    static_configs:
+      - targets: [ 'douniu-user-rpc-1:7002' ]
+        labels:
+          job: user-rpc
+          app: user-rpc
+          env: dev
+
+  ## Video服务
+  - job_name: 'douniu-video-api'
+    static_configs:
+      - targets: [ 'douniu-video-api-1:7003' ]
+        labels:
+          job: video-api
+          app: video-api
+          env: dev
+
+
+  - job_name: 'douniu-video-rpc'
+    static_configs:
+      - targets: [ 'douniu-video-rpc-1:7004' ]
+        labels:
+          job: video-rpc
+          app: video-rpc
+          env: dev
+
+
+
+  ## Chat服务
+  - job_name: 'douniu-chat-api'
+    static_configs:
+      - targets: [ 'douniu-chat-api-1:7008' ]
+        labels:
+          job: chat-api
+          app: chat-api
+          env: dev
+
+  - job_name: 'douniu-chat-rpc'
+    static_configs:
+      - targets: [ 'douniu-chat-rpc-1:21006' ]
+        labels:
+          job: chat-rpc
+          app: chat-rpc
+          env: dev
+
+  ## Chat服务
+  - job_name: 'douniu-comment-api'
+    static_configs:
+      - targets: [ 'douniu-comment-api-1:7007' ]
+        labels:
+          job: comment-api
+          app: comment-api
+          env: dev
+
+
+
+  - job_name: 'douniu-comment-rpc'
+    static_configs:
+      - targets: [ 'douniu-comment-rpc-1:21004' ]
+        labels:
+          job: comment-rpc
+          app: comment-rpc
+          env: dev
+
+  ## Relation服务
+  - job_name: 'douniu-relation-api'
+    static_configs:
+      - targets: [ 'douniu-relation-api-1:7005' ]
+        labels:
+          job: relation-api
+          app: relation-api
+          env: dev
+
+
+
+  - job_name: 'douniu-relation-rpc'
+    static_configs:
+      - targets: [ 'douniu-relation-rpc-1:21005' ]
+        labels:
+          job: relation-rpc
+          app: relation-rpc
+          env: dev
+
+
+
+  ## Fafor服务
+  - job_name: 'douniu-favorite-api'
+    static_configs:
+      - targets: [ 'douniu-favorite-api-1:7006' ]
+        labels:
+          job: favor-api
+          app: favor-api
+          env: dev
+
+
+  - job_name: 'douniu-favorite-rpc'
+    static_configs:
+      - targets: [ 'douniu-favorite-rpc-1:21003' ]
+        labels:
+          job: favor-rpc
+          app: favor-rpc
+          env: dev
+

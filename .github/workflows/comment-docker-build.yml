@@ -43,8 +43,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop comment-rpc
-            docker-compose.yaml rm -f comment-rpc
+            docker-compose stop comment-rpc
+            docker-compose rm -f comment-rpc
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}comment-rpc:latest
             docker-compose -f docker-compose.yaml up -d comment-rpc
   # comment-api

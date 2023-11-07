@@ -46,8 +46,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/douniu
-            docker-compose.yaml stop user-api
-            docker-compose.yaml rm -f user-api
+            docker-compose stop user-api
+            docker-compose rm -f user-api
             docker image rm ${{ secrets.DOCKERHUB_IMAGE }}user-api:latest
             docker-compose -f docker-compose.yaml up -d user-api
 

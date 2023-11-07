@@ -39,6 +39,7 @@ func (l *IsCollectionLogic) IsCollection(in *pb.IsCollectionRequest) (resp *pb.I
 
 	resp = new(pb.IsCollectionResponse)
 	resp.IsCollection = isFavorited != 0
+	err = nil
 
 	return
 }

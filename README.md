@@ -14,8 +14,20 @@ https://lyt-cloud-1315438822.cos.ap-nanjing.myqcloud.com/diuniu/show.mp4
 ## 快速开始
 
 ### 前端
+1. 安装pnpm
 
-x x x
+```
+npm install pnpm -g
+```
+2. 下载依赖
+```
+cd ./web
+pnpm i
+```
+3. 启动
+```
+pnpm run dev
+```
 
 ### 后端
 

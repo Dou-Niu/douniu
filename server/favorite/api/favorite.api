@@ -63,6 +63,7 @@ type Video {
 	CommentCount    int64  `json:"comment_count"`
 	IsFavorite      bool   `json:"is_favorite"`
 	CollectionCount int64  `json:"collection_count"`
+	IsCollect       bool   `json:"is_collect"`
 }
 
 type User {

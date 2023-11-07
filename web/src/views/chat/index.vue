@@ -3,9 +3,9 @@
         <el-scrollbar class="friend" v-if="friendList">
             <div v-for="(item, index) in friendList" class="item" :class="{ click: hoverIndex == index }"
                 @click="() => { switchItem(item, index) }">
-                <el-avatar :src="item.avatar" :size="32" />
-                <div style="width: 70%">
-                    <div style="font-size: 18px">{{ item.name }}</div>
+                <el-avatar :src="item.avatar" :size="32" v-if="item.id != user_id" />
+                <div style="width: 70%" v-if="item.id != user_id">
+                    <div style="font-size: 18px">{{ item.nickname }}</div>
                     <div class="message">{{ item.message }}</div>
                 </div>
             </div>
@@ -14,10 +14,11 @@
             <!-- <div class="header">
                 <div class="friendName">{{ friendList[hoverIndex].nickname }}</div>
             </div> -->
-            <el-scrollbar class="message">
+            <el-scrollbar class="message" ref="scrollRef">
                 <div v-for="item in messages" class="const"
                     :class="item.from_user_id == userStore?.user_id ? 'right' : 'left'">
-                    <el-avatar :src="item.avatar" class="avatar"></el-avatar>
+                    <el-avatar :src="user_info.avatar" class="avatar" v-if="item.from_user_id === user_info.id"></el-avatar>
+                    <el-avatar :src="user.avatar" class="avatar" v-if="item.from_user_id === user.id"></el-avatar>
                     <div class="content">
                         {{ item.content }}
                     </div>
@@ -32,10 +33,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, onUnmounted } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { ElMessage, ElScrollbar } from 'element-plus';
 import { storeToRefs } from 'pinia'
-import { social as socialApi,chat as chatApi } from '@/services';
+import { social as socialApi, chat as chatApi } from '@/services';
 import { user as userInfo } from '@/store/user'
 import { User } from '@/types/user';
 const userStore = userInfo()
@@ -46,232 +47,22 @@ let content = ref('')
 let friendList = ref<any[]>([])
 let messages = ref<any[]>([]);
 let pre_msg_time = 0;
-let messageT;
+let timeOut;
 let user = ref<User>();
-let testList = ref([
-    {
-        avatar: 'https://www.kecat.top/other/avatar.webp',
-        name: 'kecat1',
-        message: '你好啊',
-        messages: [
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '我叫kecat1'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '我叫kecat1'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '我叫kecat1'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '我叫kecat1'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '我叫kecat1'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat1',
-                content: '我叫kecat1'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            },
-        ]
-    },
-    {
-        avatar: 'https://www.kecat.top/other/avatar.webp',
-        name: 'kecat2',
-        message: '你好啊',
-        messages: [
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat2',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat2',
-                content: '我叫kecat2'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            }
-        ]
-    },
-    {
-        avatar: 'https://www.kecat.top/other/avatar.webp',
-        name: 'kecat3',
-        message: '你好啊',
-        messages: [
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat3',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat3',
-                content: '我叫kecat3'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            }
-        ]
-    },
-    {
-        avatar: 'https://www.kecat.top/other/avatar.webp',
-        name: 'kecat4',
-        message: '你好啊',
-        messages: [
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat4',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/other/avatar.webp',
-                name: 'kecat4',
-                content: '我叫kecat4'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '你好啊'
-            },
-            {
-                avatar: 'https://www.kecat.top/avatar.webp',
-                name: '星野露比',
-                content: '我叫星野露比'
-            }
-        ]
-    }
-])
-
+let scrollRef = ref<InstanceType<typeof ElScrollbar>>()
 function switchItem(u: User, index: number) {
     user.value = u;
     hoverIndex.value = index;
-    chatApi.getMessage(u.id as bigint).then((res) => {
+    chatApi.getMessage(u.id as number).then((res) => {
         if (res.code == 0) {
             messages.value = res.data.message_list;
             if (res.data.message_list.length > 0) {
                 pre_msg_time =
                     res.data.message_list[res.data.message_list.length - 1]?.create_time;
             }
-            clearInterval(messageT);
-            messageT = setInterval(() => {
-                chatApi.getMessage(u.id as bigint, pre_msg_time).then((res) => {
+            clearInterval(timeOut);
+            timeOut = setInterval(() => {
+                chatApi.getMessage(u.id as number, pre_msg_time).then((res) => {
                     if (res.code == 0) {
                         if (res.data.message_list.length > 0) {
                             pre_msg_time =
@@ -280,52 +71,23 @@ function switchItem(u: User, index: number) {
                         messages.value.push(...res.data.message_list);
                     }
                 });
+                handleScrollToBottom();
             }, 1000);
         }
     });
 }
 
-
-const handleScrollToBottom = () => {
-    let chatBox = document.querySelector('.chat');
-    let scrollContainer = chatBox?.children[1].children[0] as HTMLElement;
-    let scrollHeight = scrollContainer?.scrollHeight;
-    let containerHeight = scrollContainer?.offsetHeight;
-    let scrollTop = scrollHeight - containerHeight;
-    scrollContainer.scrollTo(0, scrollTop);
-}
-const handleChangeChatingFriend = (index: number) => {
-    if (hoverIndex.value === index) return;
-    hoverIndex.value = index
-    nextTick(() => {
-        handleScrollToBottom();
-    })
-}
 const send = () => {
     if (content.value === '') {
         ElMessage('发了个寂寞')
         return;
     }
-    // 模拟
-    // try {
-    //     friendList.value[hoverIndex.value].messages.push({
-    //         avatar: 'https://www.kecat.top/avatar.webp',
-    //         name: '星野露比',
-    //         content: content.value
-    //     })
-    //     nextTick(() => {
-    //         handleScrollToBottom();
-    //     })
-    // } catch (error: any) {
-    //     ElMessage.error(error.message)
-    // } finally {
-    //     content.value = '';
-    // }
-        chatApi.sendMessage(user.value?.id as bigint,1, content.value)
+    chatApi.sendMessage(user.value?.id as number, 1, content.value)
         .then((res) => {
             if (res.code == 0) {
                 content.value = "";
                 ElMessage.success("发送成功");
+                handleScrollToBottom();
                 // messages.value.push({
                 //   id: "-1",
                 //   content: content.value,
@@ -335,6 +97,16 @@ const send = () => {
                 // });
             }
         });
+}
+// 滚动到底部
+const handleScrollToBottom = () => {
+    let chatBox = document.querySelector('.chat');
+    let scrollContainer = chatBox?.children[1].children[0] as HTMLElement;
+    let scrollHeight = scrollContainer?.scrollHeight;
+    let containerHeight = scrollContainer?.offsetHeight;
+    let scrollTop = containerHeight - scrollHeight;
+    console.log(scrollHeight, containerHeight);
+    scrollContainer.scrollTo(0, scrollTop);
 }
 
 // // 轮询接口函数
@@ -351,9 +123,9 @@ const send = () => {
 // }
 
 onMounted(() => {
-    // handleScrollToBottom();
-    if (user_info?.value) {
-        socialApi.getFriendsList(user_id.value as bigint).then((res) => {
+    handleScrollToBottom();
+    if (user_id?.value) {
+        socialApi.getFriendsList(parseInt(user_id.value)).then((res) => {
             if (res.code == 0) {
                 friendList.value = res.data.user_list;
             }
@@ -367,7 +139,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    clearInterval(messageT);
+    clearInterval(timeOut);
 });
 </script>
   

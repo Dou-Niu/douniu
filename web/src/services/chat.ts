@@ -7,7 +7,7 @@ import { Resp, post, get } from './method';
  * @param content 
  * @returns 
  */
-export const sendMessage = (to_user_id : bigint, action_type: number, content: string): Resp<any> => post('/message/action', { to_user_id, action_type, content })
+export const sendMessage = (to_user_id : number, action_type: number, content: string): Resp<any> => post('/message/action', { to_user_id, action_type, content })
 
 export type Message = {
     "id": number
@@ -23,7 +23,7 @@ export type Message = {
  * @returns 
  */
 
-export const getMessage = (to_user_id : bigint,pre_msg_time?:number): Promise<{
+export const getMessage = (to_user_id : number,pre_msg_time?:number): Promise<{
     "code": number
     "message": string,
     "data":{

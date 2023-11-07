@@ -1,5 +1,5 @@
 export interface User{
-  id : bigint,
+  id : number,
   phone: string,
   nickname: string,
   follow_count: number,

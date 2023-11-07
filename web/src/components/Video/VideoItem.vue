@@ -7,7 +7,10 @@
 " alt="默认图片" />
                 </template>
             </el-image>
-            <div class="video-item-likeCount">{{ videoItem.favorite_count }}</div>
+            <div class="video-item-likeCount">
+                <el-image style="width: 20px; height:20px" src="/img/favorite-fill.png" fit="cover" />
+                {{ videoItem.favorite_count }}
+            </div>
             <!-- <div class="video-item-duration">{{ "00:12" }}</div> -->
         </div>
         <div class="video-item-bottom">
@@ -44,7 +47,7 @@ const handlePlay = () => {
     router.push({
         path: "/play",
         query: {
-            id: BigInt(props.videoItem.video_id).toString(),
+            id: props.videoItem.video_id.toString(),
         }
     })
 }

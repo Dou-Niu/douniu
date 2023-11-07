@@ -1,6 +1,6 @@
 import { type User } from "@/services/user";
 export interface Video {
-    video_id: bigint,
+    video_id: number,
     author:User,
     play_url:string,
     cover_url:string,
@@ -8,6 +8,7 @@ export interface Video {
     collection_count:number,
     comment_count:number,
     is_favorite:boolean,
+    is_collect:boolean,
     title:string,
     partition:number,
     create_time:Date,

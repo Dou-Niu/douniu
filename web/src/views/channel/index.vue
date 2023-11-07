@@ -21,10 +21,10 @@ let videoList = ref<Video[]>([]);
 let max_value = ref(0);
 
 let handleLoad = () => {
-  videoApi.getPartitionVideo(0, 2, route.params.id).then(res => {
+  videoApi.getPartitionVideo(max_value.value, 2, parseInt(route.params.id as string)).then(res => {
     videoList.value = res.data.video_list
-    max_value.value = res.data.next_time
-    finished.value = !res.data.is_final
+    max_value.value = res.data.next_max_value
+    finished.value = res.data.is_final
     videoStore.setVideoList(videoList.value)
   }).catch(() => {
     finished.value = true;
@@ -44,21 +44,24 @@ let observeBottom = () => {
   let bottomDom = bottomRef.value as HTMLElement;
   observer.observe(bottomDom);
 }
+const getVideos = (partition: number) => {
+  videoApi.getPartitionVideo(0, 2, partition).then(res => {
+    videoList.value = res.data.video_list
+    max_value.value = res.data.next_max_value
+    videoStore.setVideoList(videoList.value)
+  })
+}
+
 watch(() => route.params.id, (newVal) => {
   if (route.params.id) {
     videoList.value = []
     max_value.value = 0
+    finished.value = false
     videoStore.setVideoList([])
-    videoApi.getPartitionVideo(0, 2, newVal).then(res => {
-      videoList.value = res.data.video_list
-      max_value.value = res.data.next_max_value
-      videoStore.setVideoList(videoList.value)
-    }).catch(() => {
-      finished.value = true;
-      observer.unobserve(bottomRef.value as HTMLElement)
-    })
+    getVideos(parseInt(newVal as string))
   }
 })
+
 onMounted(() => {
   observeBottom();
 })

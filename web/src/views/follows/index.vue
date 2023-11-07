@@ -96,7 +96,7 @@ const player = ref<Player>()
 const showComments = ref<boolean>(false)
 const videoRef = ref()
 const playerConfig = ref<IPlayerOptions>()
-const nextMaxHot = ref<bigint>(0)
+const nextMaxHot = ref<number>(0)
 const url = ref("")
 // 对话框
 const dialogVisible = ref(false)
@@ -136,10 +136,10 @@ const handleWheel = (event) => {
         // 下滚
         if (currentIndex.value === video_list.value.length - 1) {
             ElMessage.warning("已经是最后一个视频了")
-            videoApi.getFollowFeed(0).then(res => {
-                nextMaxHot.value = res.data.next_max_value
-                videoStore.setVideoList(res.data.video_list)
-                videoStore.setCurrentIndex(0)
+            videoApi.getHotVideo(nextMaxHot.value).then(res => {
+                nextMaxHot.value = res.data.NextMaxHot
+                console.log(res.data);
+                videoStore.setVideoList([...videoStore.getVideoList(), ...res.data.video_list])
             })
             return
         } else {
@@ -171,19 +171,19 @@ const handleWheel = (event) => {
 }
 // 操作
 const handleFavorite = () => {
-    videoApi.toLikeVideo(route.query.id, 1, currentVideo.value?.partition).then(res => {
+    videoApi.toLikeVideo(currentVideo.value.video_id, 1, currentVideo.value?.partition).then(res => {
 
     })
 }
 
 const handleCollect = () => {
-    videoApi.toCollectVideo(BigInt(route.query.id), 1, currentVideo.value?.partition).then(res => {
+    videoApi.toCollectVideo(parseInt(route.query.id as string), 1, currentVideo.value?.partition).then(res => {
         console.log(res);
     })
 }
 
 const handleShare = () => {
-    videoApi.shareVideo(BigInt(route.query.id)).then(res => {
+    videoApi.shareVideo(parseInt(route.query.id as string)).then(res => {
         dialogVisible.value = true
         url.value = res.data.share_url
     })
@@ -196,6 +196,18 @@ onMounted(() => {
         videoStore.setVideoList(res.data.video_list)
         videoStore.setCurrentIndex(0)
     })
+    // videoApi.getVideoInfo(BigInt(route.query.id)).then(res => {
+    //     videoItem.value = res.data.video_list[0]
+    //     let index = 0
+    //     videoStore.setCurrentVideo(videoItem.value)
+    //     video_list.value.forEach((item: any) => {
+    //         if (item.video_id === videoItem.value?.video_id) {
+    //             videoStore.setCurrentIndex(index)
+    //             return
+    //         }
+    //         index++;
+    //     })
+    // })
     playerConfig.value = {
         id: "video",
         el: document.getElementById("video") as HTMLElement,
@@ -206,6 +218,14 @@ onMounted(() => {
                 src: currentVideo?.value?.play_url || videoItem?.value?.play_url,
                 type: "video/mp4"
             },
+            // {
+            //   src: "https://www.kecat.top/video/jingliu.mp4",
+            //   type: "video/mp4"
+            // },
+            // {
+            //   src: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/xgplayer-demo.mp4",
+            //   type: "video/mp4"
+            // }
         ],
         playsinline: true,
         poster: currentVideo?.value?.cover_url || videoItem?.value?.cover_url,

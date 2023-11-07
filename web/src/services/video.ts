@@ -18,9 +18,9 @@ export const publishVideo = (video_url: string, cover_url: string, title: string
 }) as any
 
 // export interface Video {
-//     "video_id": bigint
+//     "video_id": number
 //     "author": {
-//         "id": bigint
+//         "id": number
 //         "nickname": string
 //         "follow_count": number
 //         "follower_count": number
@@ -82,7 +82,7 @@ export const getFollowFeed = (latest_time: number): Resp<{
  * @param sort 1-热点排序 2-最新排序
  * @returns 
  */
-export const getUserAllVideo = (user_id: bigint, max_value: number, sort: number): Resp<{
+export const getUserAllVideo = (user_id: number, max_value: number, sort: number): Resp<{
     next_max_value: number,
     is_final: number,
     video_list: Video[]
@@ -97,17 +97,17 @@ export const getUserAllVideo = (user_id: bigint, max_value: number, sort: number
  */
 export const getPartitionVideo = (max_value: number, sort: number, partition: number): Resp<{
     next_max_value: number,
-    is_final: number,
+    is_final: boolean,
     video_list: Video[]
 }> => get("/video/feed/partition", { max_value, sort, partition })
 
-export const delVideo = (video_id: bigint, partition: number): Resp<0> => del('/video/delete', { video_id, partition })
+export const delVideo = (video_id: number, partition: number): Resp<0> => del('/video/delete', { video_id, partition })
 
-export const shareVideo = (video_id: bigint): Resp<{
+export const shareVideo = (video_id: number): Resp<{
     "share_url": string
 }> => get('/video/share', { video_id })
 
-export const getVideoInfo = (video_id: bigint) => get('/video', { video_id });
+export const getVideoInfo = (video_id: number) => get('/video', { video_id });
 
 /**
  * 
@@ -116,9 +116,9 @@ export const getVideoInfo = (video_id: bigint) => get('/video', { video_id });
  * @param partition 
  * @returns 
  */
-export const toLikeVideo = (video_id : bigint, action_type: number, partition: number) => post('/favorite/action', { video_id, action_type, partition })
+export const toLikeVideo = (video_id : number, action_type: number, partition: number) => post('/favorite/action', { video_id, action_type, partition })
 
-export const getLikeVideoList = (user_id: bigint, page_num: number) => get('/favorite/list', { user_id, page_num })
+export const getLikeVideoList = (user_id: number, page_num: number) => get('/favorite/list', { user_id, page_num })
 
 /**
  * 
@@ -127,5 +127,5 @@ export const getLikeVideoList = (user_id: bigint, page_num: number) => get('/fav
  * @param partition 
  * @returns 
  */
-export const toCollectVideo = (video_id : bigint | string, action_type: number, partition: number) => post('/collection/action', { video_id, action_type, partition })
-export const getCollectVideoList = (user_id: bigint, page_num: number) => get('/collection/list', { user_id, page_num })
+export const toCollectVideo = (video_id : number | string, action_type: number, partition: number) => post('/collection/action', { video_id, action_type, partition })
+export const getCollectVideoList = (user_id: number, page_num: number) => get('/collection/list', { user_id, page_num })

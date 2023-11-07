@@ -12,13 +12,13 @@
         <el-form-item label="手机号" prop="phone">
           <el-input :maxlength="32" v-model="formLabelAlign.phone" />
         </el-form-item>
-        <el-form-item label="密码" v-if="loginType === '1'" prop="pwd">
+        <el-form-item label="密码" v-if="loginType === '1' && activeName !== 'register'" prop="pwd">
           <el-input :maxlength="32" type="password" show-password v-model="formLabelAlign.pwd" />
         </el-form-item>
-        <el-form-item v-if="activeName === 'register'" label="重复" prop="pwd2">
-          <el-input :maxlength="32"  v-model="formLabelAlign.pwd2" />
-        </el-form-item>
-        <el-form-item v-if="loginType === '2'" label="验证码">
+        <!-- <el-form-item v-if="activeName === 'register' " label="重复" prop="pwd2">
+          <el-input :maxlength="32" v-model="formLabelAlign.pwd2" />
+        </el-form-item> -->
+        <el-form-item v-if="loginType === '2' || activeName === 'register'" label="验证码">
           <div class="flex justify-center items-center">
             <el-input :maxlength="8" type="text" v-model="formLabelAlign.code" />
             <el-button type="primary" class="ml-3" @click="handleSendCode">发送验证码</el-button>
@@ -118,13 +118,19 @@ const handleSendCode = () => {
 const handleLogin = async () => {
   if (loginType.value === '1') {
     // 密码登录
+    let res = await login.loginByPass(formLabelAlign.phone, formLabelAlign.pwd);
+    userStore.setUserId(res.data.user_id.toString());
+    userStore.setToken('access_token', res.data.access_token);
+    userStore.setToken('refresh_token', res.data.refresh_token);
+    userStore.getUserInfo();
   } else {
     // 验证码登录
     let res = await login.loginByCode(formLabelAlign.phone, formLabelAlign.code);
     // 存储token信息
+    console.log(res.data);
+    userStore.setUserId(res.data.user_id.toString());
     userStore.setToken('access_token', res.data.access_token);
     userStore.setToken('refresh_token', res.data.refresh_token);
-    userStore.setUserId(BigInt(res.data.user_id).toString());
     userStore.getUserInfo();
   }
   visible.value = false;

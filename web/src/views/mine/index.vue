@@ -99,28 +99,14 @@ import { ref, reactive, onMounted, watch } from "vue"
 import { storeToRefs } from 'pinia'
 
 
-import { User } from "@/services/user";
+import { User } from "@/types/user";
 import showVideoList from "@/components/Video/showVideoList.vue";
 import { Video } from '@/types'
 import { user as userInfo } from '@/store/user';
 import { video as videoInfo } from '@/store/video';
 
 import { user as userApi, video as videoApi, social as socialApi } from "@/services"
-// import * as qiniu from 'qiniu-js'
 import { uploadVideo } from '../../utils/upload/uploadVideo';
-// // 七牛云上传图片
-// function getQiniuToken() {
-//   let mac = new qiniu.auth.digest.Mac("pMdHb3Ke_nlZmRv3WB9XuPLMb237DkEwOfKwgmal", "5ZJ9efpLn8YZ8_KQZq329NQdyh6PSd9z7BCH-1pS");
-//   const options = {
-//     scope: "coderlx"
-//   };
-//   let putPolicy = new qiniu.rs.PutPolicy(options);
-//   console.log(putPolicy.uploadToken(mac));
-//   return putPolicy.uploadToken(mac)
-// }
-
-
-
 
 const userStore = userInfo();
 const { user_info } = storeToRefs(userStore);
@@ -140,7 +126,7 @@ const setListVisible = (v: boolean) => {
 
 //个人信息
 const user = reactive<User>({
-  id: BigInt(0),
+  id: 0,
   phone: '',
   nickname: '',
   follow_count: 0,
@@ -191,14 +177,14 @@ const handleSubmit = () => {
       initInfo()
     })
   }
-  if (formUserInfo.background_image) {
-    userApi.changeUserInfo(
-      4,
-      formUserInfo.background_image
-    ).then(() => {
-      initInfo()
-    })
-  }
+  // if (formUserInfo.background_image) {
+  //   userApi.changeUserInfo(
+  //     4,
+  //     formUserInfo.background_image
+  //   ).then(() => {
+  //     initInfo()
+  //   })
+  // }
   dialogVisible.value = false
 }
 
@@ -217,8 +203,7 @@ let handleAvatarUpload = async (file: File) => {
 const initInfo = () => {
   user.id = user_info.value.id
   userStore.getUserInfo().then(res => {
-    console.log(res);
-    user.id = BigInt(res.id)
+    user.id = res.id
     user.nickname = res.nickname
     user.avatar = res.avatar
     user.background_image = res.background_image
@@ -236,52 +221,24 @@ const initInfo = () => {
   })
 }
 
-// 上传图片
-// const file = ref("")
-
-const onFileChange = (event) => {
-  let file = event.target.files[0];
-  // let reader = new FileReader();
-  // reader.onload = (event) => {
-  //   formUserInfo.avatar = event.target?.result as string;
-  // };
-  // reader.readAsDataURL(file);
-  // getQiniuToken().then(res => {
-  //   console.log(res);
-  //   const observer = {
-  //     next(res) {
-  //       console.log(res)
-  //     },
-  //     err(err) {
-  //       console.log(err);
-  //     },
-  //     complete(res) {
-  //       console.log(res);
-  //     }
-  //   }
-  //   // const observable = qiniu.upload(file, key, res.data, {}, {})
-  //   // const subscription = observable.subscribe(observer) // 上传开始
-  // })
-}
-
 const getVideos = () => {
   if (activeName.value === 'works') {
     videoList.value = []
-    videoApi.getUserAllVideo(BigInt(user.id), 9999999999999, 2).then(res => {
+    videoApi.getUserAllVideo(user.id, 9999999999999, 2).then(res => {
       videoList.value = res.data.video_list
       videoStore.setVideoList(res.data.video_list)
       videoStore.setCurrentIndex(0)
     })
   } else if (activeName.value === 'collect') {
     videoList.value = []
-    videoApi.getCollectVideoList(BigInt(user.id), 1).then(res => {
+    videoApi.getCollectVideoList(user.id, 0).then(res => {
       videoList.value = res.data.video_list
       videoStore.setVideoList(res.data.video_list)
       videoStore.setCurrentIndex(0)
     })
   } else if (activeName.value === 'favorite') {
     videoList.value = []
-    videoApi.getLikeVideoList(BigInt(user.id), 1).then(res => {
+    videoApi.getLikeVideoList(user.id, 0).then(res => {
       videoList.value = res.data.video_list
       videoStore.setVideoList(res.data.video_list)
       videoStore.setCurrentIndex(0)
@@ -295,11 +252,11 @@ watch(activeName, () => {
 
 watch(listType, (newVal) => {
   if (newVal === '关注') {
-    socialApi.getSbFollowList(BigInt(user.id), 0).then(res => {
+    socialApi.getSbFollowList(user.id, 0).then(res => {
       list.value = res.data.user_list
     })
   } else if (newVal === '粉丝') {
-    socialApi.getSbFollowerList(BigInt(user.id), 0).then(res => {
+    socialApi.getSbFollowerList(user.id, 0).then(res => {
       list.value = res.data.user_list
     })
   }

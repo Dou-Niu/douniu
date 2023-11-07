@@ -3,60 +3,62 @@
     <div id="video" ref="videoRef" @wheel="handleWheel">
       <div class="info fw-600">
         <div class="text-6 flex gap-5 items-center">@{{ currentVideo?.author.nickname }}
-          <el-button type="danger" icon="Plus" circle plain v-if="user_id !== currentVideo.author.user_id" @click="handleFollow"/>
+          <div v-if="user_id != currentVideo.author.id">
+            <el-button type="danger" icon="Plus" circle plain v-if="!currentVideo.author.is_follow"
+              @click="handleFollow(1)" />
+            <el-button type="success" icon="Check" circle v-else="currentVideo.author.is_follow"
+              @click="handleFollow(2)" />
+          </div>
+          <div v-else-if="user_id == currentVideo.author.id">自己</div>
         </div>
         <div class="text-4">{{ currentVideo?.title }}</div>
       </div>
       <div class="right-side text-black">
-        <el-avatar :src="currentVideo?.author.avatar" :size="50" />
+        <el-avatar :src="currentVideo?.author.avatar" :size="50" @click="router.push(`/home/${currentVideo.author.id}`)"/>
         <div class="my-6! flex flex-col items-center justify-center">
           <el-popover placement="left-start" :width="20" trigger="hover" content="点赞"
             popper-class="bg-#33343F! border-none! text-white! icon">
             <template #reference>
-              <el-icon class="color-white!" :size="40" @click="handleFavorite">
+              <el-image style="width: 40px; height: 40px" src="/img/favorite-fill.png" fit="cover"
+                v-if="currentVideo.is_favorite" @click="handleFavorite(2)" />
+              <el-image style="width: 40px; height: 40px" src="/img/favorite.png" fit="cover" v-else
+                @click="handleFavorite(1)" />
+              <!-- <el-icon class="color-white!" :size="40" @click="handleFavorite">
                 <Star />
-              </el-icon>
+              </el-icon> -->
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.favorite_count+Number(currentVideo.is_favorite) }}
+            {{ currentVideo?.favorite_count }}
           </span>
         </div>
         <div class="my-6! flex flex-col items-center justify-center">
           <el-popover placement="left-start" :width="20" trigger="hover" content="收藏"
             popper-class="bg-#33343F! border-none! text-white! icon">
             <template #reference>
-              <el-icon class="color-white!" :size="40" @click="handleCollect">
-                <Star />
-              </el-icon>
+              <el-image style="width: 40px; height: 40px" src="/img/collect.png" fit="cover" @click="handleCollect(1)"
+                v-if="!currentVideo.is_collect" />
+              <el-image style="width: 40px; height: 40px" src="/img/collect-fill.png" fit="cover"
+                @click="handleCollect(2)" v-else />
             </template>
           </el-popover>
           <span class="color-white">
-            {{ currentVideo?.collection_count}}
+            {{ currentVideo?.author.collection_count }}
           </span>
         </div>
         <div @click="showComments = !showComments" class="my-6! flex flex-col items-center justify-center">
           <el-popover placement="left-start" :width="100" trigger="hover" content="评论"
             popper-class="bg-#33343F! border-none! text-white! icon">
             <template #reference>
-              <el-icon class="color-white!" :size="40">
+              <el-image style="width: 40px; height: 40px" src="/img/message.png" fit="cover" />
+              <!-- <el-icon class="color-white!" :size="40">
                 <ChatDotRound />
-              </el-icon>
+              </el-icon> -->
             </template>
           </el-popover>
           <span class="color-white">
             {{ currentVideo?.comment_count }}
           </span>
-        </div>
-        <div class="my-6! flex flex-col items-center justify-center">
-          <el-popover placement="left-start" :width="100" trigger="hover" content="分享"
-            popper-class="bg-#33343F! border-none! text-white! icon">
-            <template #reference>
-              <el-icon class="color-white!" :size="40" @click="handleShare">
-                <BottomRight />
-              </el-icon>
-            </template>
-          </el-popover>
         </div>
       </div>
     </div>
@@ -94,22 +96,20 @@ const props = defineProps<{
 
 const videoStore = video()
 const userStore = userInfo()
-const { user_id } =storeToRefs(userStore)
-const { currentIndex, video_list, currentVideo } = storeToRefs(videoStore)
-
-const videoItem = ref<Video>()
 
 const route = useRoute()
 const router = useRouter()
+
+const { user_id } = storeToRefs(userStore)
+const { currentIndex, video_list, currentVideo } = storeToRefs(videoStore)
+
+const videoItem = ref<Video>()
 
 const player = ref<Player>()
 const showComments = ref<boolean>(false)
 const videoRef = ref()
 const playerConfig = ref<IPlayerOptions>()
 
-const url = ref("")
-// 对话框
-const dialogVisible = ref(false)
 
 // 鼠标滚动
 const handleWheel = (event) => {
@@ -121,7 +121,7 @@ const handleWheel = (event) => {
     }
     videoStore.setCurrentIndex(--currentIndex.value)
     showComments.value = false
-    router.push(`/play?id=${BigInt(video_list.value[currentIndex.value].video_id)}`)
+    router.push(`/play?id=${video_list.value[currentIndex.value].video_id}`)
     player?.value?.playNext({
       id: "video",
       el: document.getElementById("video") as HTMLElement,
@@ -151,7 +151,7 @@ const handleWheel = (event) => {
     }
     showComments.value = false
     videoStore.setCurrentIndex(++currentIndex.value)
-    router.push(`/play?id=${BigInt(videoStore.getCurrentVideo().video_id)}`)
+    router.push(`/play?id=${videoStore.getCurrentVideo().video_id}`)
     player?.value?.playNext({
       id: "video",
       el: document.getElementById("video") as HTMLElement,
@@ -176,79 +176,70 @@ const handleWheel = (event) => {
   }
 }
 // 操作
-const handleFavorite = () => {
-  console.log(typeof props.id);
-  console.log(typeof BigInt(props.id));
-  videoApi.toLikeVideo(BigInt(props.id), 1, currentVideo.value?.partition).then(res => {
-    console.log(res);
+const handleFavorite = (type: number) => {
+  videoApi.toLikeVideo(parseInt(props.id), type, currentVideo.value?.partition).then(() => {
+    initVideo()
   })
 }
 
-const handleCollect = () => {
-  videoApi.toCollectVideo(props.id, 1, currentVideo.value?.partition).then(res => {
-    console.log(res);
+const handleCollect = (type: number) => {
+  videoApi.toCollectVideo(parseInt(props.id), type, currentVideo.value?.partition).then(() => {
+    initVideo()
   })
 }
 
-const handleFollow = () => {
-  socialApi.toFollow(currentVideo.value.author.user_id,1).then(res=>{
-    console.log(res);
+const handleFollow = (type: number) => {
+  socialApi.toFollow(currentVideo.value.author.id, type).then(() => {
+    initVideo()
   })
 }
 
-const handleShare = () => {
-  videoApi.shareVideo(props.id).then(res => {
-    dialogVisible.value = true
-    url.value = res.data.share_url
+// const handleShare = () => {
+//   videoApi.shareVideo(props.id).then(res => {
+//     dialogVisible.value = true
+//     url.value = res.data.share_url
+//   })
+// }
+
+const initVideo = () => {
+  videoApi.getVideoInfo(parseInt(route.query.id as string)).then(res => {
+    videoItem.value = res.data.video_list[0]
+    let index = 0
+    videoStore.setCurrentVideo(videoItem.value)
+    video_list.value.forEach((item: any) => {
+      if (item.video_id === videoItem.value?.video_id) {
+        videoStore.setCurrentIndex(index)
+        return
+      }
+      index++;
+    })
+    playerConfig.value = {
+      id: "video",
+      el: document.getElementById("video") as HTMLElement,
+      width: "100%",
+      height: "100%",
+      url: [
+        {
+          src: currentVideo?.value?.play_url || videoItem?.value?.play_url,
+          type: "video/mp4"
+        },
+      ],
+      playsinline: true,
+      poster: currentVideo?.value?.cover_url || videoItem?.value?.cover_url,
+      lang: 'zh',
+      autoplay: true,
+      marginControls: false,
+      dynamicBg: {
+        disable: false
+      }
+    }
+    player.value = new Player(playerConfig.value);
   })
 }
-
-
 onMounted(() => {
   if (route.query.id) {
-    videoApi.getVideoInfo(BigInt(route.query.id)).then(res => {
-      videoItem.value = res.data.video_list[0]
-      let index = 0
-      videoStore.setCurrentVideo(videoItem.value)
-      video_list.value.forEach((item: any) => {
-        if (item.video_id === videoItem.value?.video_id) {
-          videoStore.setCurrentIndex(index)
-          return
-        }
-        index++;
-      })
-      playerConfig.value = {
-        id: "video",
-        el: document.getElementById("video") as HTMLElement,
-        width: "100%",
-        height: "100%",
-        url: [
-          {
-            src: currentVideo?.value?.play_url || videoItem?.value?.play_url,
-            type: "video/mp4"
-          },
-          // {
-          //   src: "https://www.kecat.top/video/jingliu.mp4",
-          //   type: "video/mp4"
-          // },
-          // {
-          //   src: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/xgplayer-demo.mp4",
-          //   type: "video/mp4"
-          // }
-        ],
-        playsinline: true,
-        poster: currentVideo?.value?.cover_url || videoItem?.value?.cover_url,
-        lang: 'zh',
-        autoplay: true,
-        marginControls: false,
-        dynamicBg: {
-          disable: false
-        }
-      }
-      player.value = new Player(playerConfig.value);
-    })
+    initVideo()
   }
-
 })
 
 </script>

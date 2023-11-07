@@ -2,14 +2,14 @@ import { post, get } from './method';
 import { User } from '@/types/user';
 
 export type Comment = {
-    id: bigint,
+    id: number,
     content: string,
     create_time: string,
     sub_count:number
     user: User
 }
 
-export const sendComment = (video_id : bigint, action_type: number,  parent_id : bigint,content?: string, comment_id ?: bigint): Promise<{
+export const sendComment = (video_id : number, action_type: number,  parent_id : number,content?: string, comment_id ?: number): Promise<{
     "code": number
     "message": string
     comment: Comment
@@ -21,7 +21,7 @@ export const sendComment = (video_id : bigint, action_type: number,  parent_id :
  * @param last_comment_id last_comment_id是上一页的最后一条评论id，第一次打开评论，那就是0
  * @returns 
  */
-export const getVideoComment = (video_id : bigint, last_comment_id : bigint): Promise<{
+export const getVideoComment = (video_id : number, last_comment_id : number): Promise<{
     "code": number
     "message": string
     "data":{
@@ -34,8 +34,8 @@ export const getVideoComment = (video_id : bigint, last_comment_id : bigint): Pr
  * @param comment_id 
  * @returns 
  */
-export const getComment = (comment_id : bigint): Promise<{
+export const getComment = (comment_id : number): Promise<{
     "code": number
     "message": string
-    comment: Comment
+    comment_list: any
 }> => get('/comment/detail', { comment_id });

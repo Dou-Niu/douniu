@@ -2,15 +2,14 @@
   <el-menu default-active="1" class="w-full!" mode="horizontal" background-color="bg-#131314" :ellipsis="false"
     text-color="rgba(255,255,255,0.6)" active-text-color="rgba(255,255,255,1)" router>
     <div class="user flex justify-center items-center px-4 py-4">
-      <el-button type="success" round v-if="!user_info" @click="dialogVisible = true">
+      <el-button type="success" round v-if="user_id == ''" @click="dialogVisible = true">
         登录
       </el-button>
       <div v-else class="flex justify-center items-center">
-        <!-- <el-avatar :src="user_info?.avatar" /> -->
         <span class="whitespace-nowrap">Hi,{{ user_info.nickname }}</span>
-        <!-- <el-button type="info" round>
+        <el-button type="info" round @click="handleLogOut">
           注销
-        </el-button> -->
+        </el-button>
       </div>
     </div>
     <div class="grow-1 flex items-center justify-center">
@@ -48,11 +47,13 @@ import { user } from '@/store/user'
 import { video } from '@/store/video'
 import { storeToRefs } from 'pinia'
 import { video as videoApi } from "@/services"
+import { User } from "@/types/user";
 
-const { video_list } = storeToRefs(video())
 const { setVideoList } = video()
 
-const { user_info } = storeToRefs(user());
+const userStore = user();
+const { user_info,user_id } = storeToRefs(userStore);
+
 const router = useRouter();
 
 // 搜索框
@@ -62,6 +63,12 @@ const search = ref("")
 const dialogVisible = ref(false)
 const setDialogVisible = (v: boolean) => {
   dialogVisible.value = v
+}
+
+const handleLogOut = () => {
+  user_info.value = {} as User
+  userStore.logOut()
+  router.push('/')
 }
 
 const handleSearch = () => {

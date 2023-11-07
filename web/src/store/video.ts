@@ -11,9 +11,9 @@ export const video = defineStore('video', {
         return {
             video_list: [],
             currentVideo: {
-                video_id: BigInt(0),
+                video_id: 0,
                 author:{
-                    id : BigInt(0),
+                    id : (0),
                     phone: "",
                     nickname: "",
                     follow_count: 0,

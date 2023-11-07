@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import type{ User } from '@/services/user';
+import type{ User } from '@/types/user';
 import { user as userApi } from '@/services'
 
 interface user {
     refresh_token: string
     access_token: string
-    user_id: bigint | string
+    user_id: string
     user_info: User
 }
 
@@ -16,7 +16,7 @@ export const user = defineStore('user', {
             access_token: localStorage.getItem('ACCESS_TOKEN') || '',
             user_id: localStorage.getItem('USER_ID') || '',
             user_info: localStorage.getItem('USER_INFO') ? JSON.parse(localStorage.getItem('USER_INFO') as string) as User : {
-                id: BigInt(0),
+                id: 0,
                 phone: '',
                 nickname: '',
                 follow_count: 0,
@@ -42,13 +42,23 @@ export const user = defineStore('user', {
         },
         setUserId(id: string) {
             this.user_id = id;
-            localStorage.setItem('USER_ID', id);
+            localStorage.setItem('USER_ID', id.toString());
         },
         setUserInfo(value: User) {
             this.user_info = value;
         },
+        logOut(){
+            this.user_id = '';
+            this.user_info = {} as User
+            this.refresh_token = '';
+            this.access_token = '';
+            localStorage.removeItem("USER_ID")
+            localStorage.removeItem("USER_INFO")
+            localStorage.removeItem("ACCESS_TOKEN")
+            localStorage.removeItem("REFRESH_TOKEN")
+        },
         async getUserInfo() {
-            const user_info = await userApi.getUserInfo(BigInt(this.user_id));
+            const user_info = await userApi.getUserInfo(parseInt(this.user_id));
             this.setUserInfo(user_info.data.userinfo);
             localStorage.setItem("USER_INFO", JSON.stringify(this.user_info));
             return user_info.data.userinfo;

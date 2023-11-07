@@ -8,7 +8,7 @@ export const loginByCode =
     (phone: string, verification_code: string): Promise<{
         code: number,
         message: string,
-        data: { user_id : bigint, access_token: string, refresh_token: string }
+        data: { user_id : number, access_token: string, refresh_token: string }
     }> => post('/user/login/phone', { phone, verification_code }) as any
 // 手机号加密码登录
 export const loginByPass =

@@ -5,7 +5,7 @@ import { user } from '@/store/user';
 import pinia from "@/store";
 const userStore = user(pinia);
 
-let token = userStore.getToken('access_token');
+let token = userStore.getToken('access_token') || localStorage.getItem("ACCESS_TOKEN");
 
 const BASE_URL = "/douniu";
 
@@ -51,13 +51,13 @@ const service = (config?: AxiosRequestConfig) => {
     // 请求拦截器
     instance.interceptors.request.use((config) => {
         // 请求之前做什么
-        console.log("请求拦截器" + config);
+        console.log("请求拦截器");
         // const { loading = true } = config;
         const loading = true;
         if (!notHeaderService.includes(config.url as string)) {
             config.headers['Authorization'] = token
         }
-        if (loading) {
+        if (loading && !config.url?.includes('/chat')) {
             addLoading();
         }
         return config;
@@ -75,9 +75,14 @@ const service = (config?: AxiosRequestConfig) => {
             removeLoading();
         }
         const { code, message } = res.data;
+        if(res.config.url?.includes('/comment/detail')) {
+            if(res.status === 200) {
+                return res
+            }
+        }
         if (code === 0) {
             // 响应正确
-            return res.data;
+            return res.data
         } else if (code === 401) {
             // 未登录
             console.log("未登录，跳转登录");

@@ -8,6 +8,8 @@
         <el-avatar :size="40" src="/logo.jpg" class="mr-4" />
         <div class="flex flex-col whitespace-nowrap">
           <div class="text-5">{{ user.nickname }}</div>
+          <el-button type="danger" icon="Plus" circle plain v-if="!user.is_follow"
+            @click="handleFollow(user.id,1)" />
           <div class="opacity-50">斗牛号:{{ user.id }}</div>
         </div>
       </div>
@@ -22,10 +24,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed,onMounted } from 'vue';
-
-import { user as userInfo } from '@/store/user';
-import { useRouter} from 'vue-router'
+import {  computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
+import { social as socialApi } from '@/services';
+import { User } from '@/types/user';
 
 const router = useRouter()
 
@@ -36,7 +38,6 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits(["update:dialogVisible"])
-
 const visible = computed({
   get() {
     return props.dialogVisible
@@ -52,7 +53,9 @@ const handlePush = (user: User) => {
   })
 }
 
-
+const handleFollow = async(id:number,type: number) => {
+  const res = await socialApi.toFollow(id, type)
+}
 onMounted(() => {
 
 })

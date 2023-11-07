@@ -1,7 +1,7 @@
 import { post, get } from './method'
 import type {User} from "@/types/user"
 // export type User = {
-//     id: bigint,
+//     id: number,
 //     // phone: string,
 //     nickname: string,
 //     follow_count: number,
@@ -20,7 +20,7 @@ import type {User} from "@/types/user"
 export const changeUserInfo = (types: number, value: string): Promise<{ code: number, message: string }> => post('/user/userinfo/modify', { types, value }) as any
 // 获取用户信息
 export const getUserInfo =
-    (user_id: bigint): Promise<{
+    (user_id: number): Promise<{
         code: number, message: string,
         data: {
             userinfo: User

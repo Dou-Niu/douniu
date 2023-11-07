@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { HomeRoutes, ErrRoutes, HeaderRoutes, notShowRoutes, ChannelRoutes } from "./routes";
-
 const router = createRouter({
 	history: createWebHashHistory(),
 	routes: [...HomeRoutes, ...ErrRoutes, ...HeaderRoutes, ...notShowRoutes, ...ChannelRoutes]
@@ -13,6 +12,9 @@ router.beforeEach(async (to, _, next) => {
 		//判断有没有路由
 		next({ name: "404" });
 	} else {
+		if(!localStorage.getItem('ACCESS_TOKEN') || !localStorage.getItem('REFRESH_TOKEN') || !localStorage.getItem('USER_ID')){
+			next()
+		}
 		next();
 	}
 });

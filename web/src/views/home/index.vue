@@ -28,7 +28,6 @@
           <div class="user-produce">
             {{ user.signature }}
           </div>
-
         </div>
       </div>
       <div class="mid_nav">
@@ -53,32 +52,26 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch } from "vue"
-import type { UploadProps } from 'element-plus'
-import { storeToRefs } from 'pinia'
-import { type User } from "@/services/user";
+import { type User } from "@/types/user";
 import showVideoList from "@/components/Video/showVideoList.vue";
 import { Video } from '@/types'
-import { user as userInfo } from '@/store/user';
 import { user as userApi, video as videoApi, social as socialApi } from "@/services"
 import { useRoute } from 'vue-router'
 const route = useRoute()
-
-const userStore = userInfo();
-const { user_info } = storeToRefs(userStore);
-
 const activeName = ref<string>("works")
-const dialogVisible = ref<boolean>(false)
 const listVisible = ref<boolean>(false)
 const videoList = ref<Video[]>([])
+
 // 列表展示
 const listType = ref<string>("")
 const list = ref([])
 const setListVisible = (v: boolean) => {
   listVisible.value = v
 }
+
 //个人信息
 const user = reactive<User>({
-  id: BigInt(0),
+  id: 0,
   phone: '',
   nickname: '',
   follow_count: 0,
@@ -93,86 +86,42 @@ const user = reactive<User>({
   collection_count: 0
 })
 
-// 表单修改
-const formUserInfo = reactive({
-  nickname: '',
-  signature: '',
-  avatar: '',
-  background_image: '',
-})
-
-// 保存信息
-const handleSubmit = () => {
-  // 修改类型 1:昵称 2:个性签名 3:头像 4:背景图
-  if (formUserInfo.nickname) {
-    userApi.changeUserInfo(
-      1,
-      formUserInfo.nickname
-    ).then(() => {
-      initInfo()
-    })
-  }
-  if (formUserInfo.signature) {
-    userApi.changeUserInfo(
-      2,
-      formUserInfo.signature
-    ).then(() => {
-      initInfo()
-    })
-  }
-  if (formUserInfo.avatar) {
-    userApi.changeUserInfo(
-      3,
-      formUserInfo.avatar
-    ).then(() => {
-      initInfo()
-    })
-  }
-  if (formUserInfo.background_image) {
-    userApi.changeUserInfo(
-      4,
-      formUserInfo.background_image
-    ).then(() => {
-      initInfo()
-    })
-  }
-  dialogVisible.value = false
-}
 
 //获取个人信息
 const initInfo = () => {
-  user.id = route.params.id
+  user.id = parseInt(route.params.id as string)
   userApi.getUserInfo(user.id).then(res => {
-    console.log(res);
+    user.avatar = res.data.userinfo.avatar
+    user.background_image = res.data.userinfo.background_image
+    user.collection_count = res.data.userinfo.collection_count
+    user.favorite_count = res.data.userinfo.favorite_count
+    user.follow_count = res.data.userinfo.follow_count
+    user.follower_count = res.data.userinfo.follower_count
+    user.is_follow = res.data.userinfo.is_follow
+    user.nickname = res.data.userinfo.nickname
+    user.phone = res.data.userinfo.phone
+    user.signature = res.data.userinfo.signature
+    user.total_favorited = res.data.userinfo.total_favorited
+    user.work_count = res.data.userinfo.work_count
   })
   getVideos()
-}
-
-// 上传图片
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  response,
-  uploadFile
-) => {
-  console.log(response, uploadFile.raw);
-  formUserInfo.avatar = URL.createObjectURL(uploadFile.raw!)
 }
 
 
 const getVideos = () => {
   if (activeName.value === 'works') {
     videoList.value = []
-
-    videoApi.getUserAllVideo(BigInt(user.id), 9999999999999, 2).then(res => {
+    videoApi.getUserAllVideo(user.id, 9999999999999, 2).then(res => {
       videoList.value = res.data.video_list
     })
   } else if (activeName.value === 'collect') {
     videoList.value = []
-    videoApi.getCollectVideoList(BigInt(user.id), 1).then(res => {
+    videoApi.getCollectVideoList(user.id, 0).then(res => {
       videoList.value = res.data.video_list
     })
   } else if (activeName.value === 'favorite') {
     videoList.value = []
-    videoApi.getLikeVideoList(BigInt(user.id), 1).then(res => {
+    videoApi.getLikeVideoList(user.id, 0).then(res => {
       videoList.value = res.data.video_list
     })
   }
@@ -184,15 +133,13 @@ watch(activeName, () => {
 
 watch(listType, (newVal) => {
   if (newVal === '关注') {
-    socialApi.getSbFollowList(BigInt(user.id), 1).then(res => {
+    socialApi.getSbFollowList(user.id, 0).then(res => {
       list.value = res.data.user_list
     })
   } else if (newVal === '粉丝') {
-    socialApi.getSbFollowerList(BigInt(user.id), 1).then(res => {
+    socialApi.getSbFollowerList(user.id, 0).then(res => {
       list.value = res.data.user_list
     })
-  } else if (newVal === '获赞') {
-
   }
 })
 
@@ -349,4 +296,5 @@ onMounted(() => {
       color: rgba(255, 255, 255, .9);
     }
   }
-}</style>
+}
+</style>

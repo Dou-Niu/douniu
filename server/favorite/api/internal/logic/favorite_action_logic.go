@@ -41,8 +41,9 @@ func (l *FavoriteActionLogic) FavoriteAction(req *types.FavoriteLikeRequest) (re
 
 	} else {
 		_, err = l.svcCtx.FavoriteRpc.DelFavorite(l.ctx, &favoriterpc.DelFavoriteRequest{
-			UserId:  userId,
-			VideoId: req.VideoId,
+			UserId:    userId,
+			VideoId:   req.VideoId,
+			Partition: req.Partition,
 		})
 		if err != nil {
 			l.Errorf("DelFavorite error: %v", err)

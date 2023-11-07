@@ -42,8 +42,9 @@ func (l *CollectionActionLogic) CollectionAction(req *types.CollectionActionRequ
 
 	} else {
 		_, err = l.svcCtx.FavoriteRpc.DelCollection(l.ctx, &favoriterpc.DelCollectionRequest{
-			UserId:  userId,
-			VideoId: req.VideoId,
+			UserId:    userId,
+			VideoId:   req.VideoId,
+			Partition: req.Partition,
 		})
 		if err != nil {
 			l.Errorf("DelFavorite error: %v", err)

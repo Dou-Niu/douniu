@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	consts2 "douniu/common/consts"
+	"douniu/common/consts"
 	"douniu/server/video/rpc/videorpc"
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"github.com/zeromicro/go-zero/core/mr"
@@ -37,7 +37,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 	videoIdStr := strconv.Itoa(int(in.VideoId))
 	partitionIdStr := strconv.Itoa(int(in.Partition))
 	// 判断是否已经点赞
-	isFavorited, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts2.UserFavoriteIdPrefix+userIdStr, videoIdStr)
+	isFavorited, err := l.svcCtx.RedisClient.ZscoreCtx(l.ctx, consts.UserFavoriteIdPrefix+userIdStr, videoIdStr)
 	if err != nil && !errors.Is(err, redis.Nil) {
 		l.Errorf("RedisClient ZscoreCtx error: %v", err)
 		return
@@ -55,7 +55,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 
 	err = mr.Finish(func() error {
 		// 视频添加到用户的点赞列表
-		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts2.UserFavoriteIdPrefix+userIdStr, time.Now().Unix(), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts.UserFavoriteIdPrefix+userIdStr, time.Now().Unix(), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZaddCtx error: %v", err)
 			return err
@@ -63,7 +63,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 		return nil
 	}, func() error {
 		// 用户添加到视频的点赞列表
-		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts2.VideoFavoritedIdPrefix+videoIdStr, time.Now().Unix(), userIdStr)
+		_, err = l.svcCtx.RedisClient.ZaddCtx(l.ctx, consts.VideoFavoritedIdPrefix+videoIdStr, time.Now().Unix(), userIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZaddCtx error: %v", err)
 			return err
@@ -71,7 +71,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 		return nil
 	}, func() error {
 		// 作者的获赞数+1
-		_, err = l.svcCtx.RedisClient.IncrCtx(l.ctx, consts2.UserFavoritedCountPrefix+strconv.Itoa(int(authorId)))
+		_, err = l.svcCtx.RedisClient.IncrCtx(l.ctx, consts.UserFavoritedCountPrefix+strconv.Itoa(int(authorId)))
 		if err != nil {
 			l.Errorf("RedisClient IncrCtx error: %v", err)
 			return err
@@ -79,7 +79,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 		return nil
 	}, func() error {
 		// 视频热度增加
-		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoHotScore, int64(consts2.SingleHotScore), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoHotScore, int64(consts.SingleHotScore), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 			return err
@@ -87,7 +87,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 		return nil
 	}, func() error {
 		// 视频分区热度增加
-		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoPartitionHotScore+partitionIdStr, int64(consts2.SingleHotScore), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoPartitionHotScore+partitionIdStr, int64(consts.SingleHotScore), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 			return err
@@ -95,7 +95,7 @@ func (l *AddFavoriteLogic) AddFavorite(in *pb.AddFavoriteRequest) (resp *pb.AddF
 		return nil
 	}, func() error {
 		// 用户视频热度增加
-		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts2.VideoEveryUserHotScore+userIdStr, int64(consts2.SingleHotScore), videoIdStr)
+		_, err = l.svcCtx.RedisClient.ZincrbyCtx(l.ctx, consts.VideoEveryUserHotScore+userIdStr, int64(consts.SingleHotScore), videoIdStr)
 		if err != nil {
 			l.Errorf("RedisClient ZincrbyCtx error: %v", err)
 			return err

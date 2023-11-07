@@ -117,7 +117,7 @@ jobs:
           context: .
           file: ./server/favorite/mq/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_IMAGE }}favorite-rpc:latest
+          tags: ${{ secrets.DOCKERHUB_IMAGE }}favorite-mq:latest
           platforms: linux/amd64,linux/arm64  # 构建多个架构的镜像
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v0.1.10

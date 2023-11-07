@@ -9,7 +9,7 @@ Action进行CI/CD流程，最后使用traefik作为网关对服务进行负载�
 
 ## 演示视频地址
 
-xxxx
+https://lyt-cloud-1315438822.cos.ap-nanjing.myqcloud.com/diuniu/show.mp4
 
 ## 快速开始
 

@@ -49,46 +49,64 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 				UserId:     oneVideo.UserId,
 				FromUserId: in.MeUserId,
 			})
+			if err != nil {
+				return errors.New("获取视频作者信息错误" + err.Error())
+			}
 			userInfo = res.Userinfo
-			return err
+			return nil
 		}, func() error {
 			// 获取视频获赞数
 			res, err := l.svcCtx.FavoriteRpc.GetVideoFavoriteCount(l.ctx, &favoriterpc.GetVideoFavoriteCountRequest{
 				VideoId: oneVideo.Id,
 			})
+			if err != nil {
+				return errors.New("获取视频获赞数错误" + err.Error())
+			}
 			favoriteCount = res.Count
-			return err
+			return nil
 		}, func() error {
 			// 获取视频收藏数
 			res, err := l.svcCtx.FavoriteRpc.GetVideoCollectionCount(l.ctx, &favoriterpc.GetVideoCollectionCountRequest{
 				VideoId: oneVideo.Id,
 			})
+			if err != nil {
+				return errors.New("获取视频收藏数错误" + err.Error())
+			}
 			collectionCount = res.Count
 
-			return err
+			return nil
 		}, func() error {
 			// 是否对视频点赞
 			res, err := l.svcCtx.FavoriteRpc.IsFavorite(l.ctx, &favoriterpc.IsFavoriteRequest{
 				UserId:  in.MeUserId,
 				VideoId: oneVideo.Id,
 			})
+			if err != nil {
+				return errors.New("获取是否对视频点赞错误" + err.Error())
+			}
 			isFavorite = res.IsFavorite
-			return err
+			return nil
 		}, func() error {
 			// 是否对视频收藏
 			res, err := l.svcCtx.FavoriteRpc.IsCollection(l.ctx, &favoriterpc.IsCollectionRequest{
 				UserId:  in.MeUserId,
 				VideoId: oneVideo.Id,
 			})
+			if err != nil {
+				return errors.New("获取是否对视频收藏错误" + err.Error())
+			}
 			isCollect = res.IsCollection
-			return err
+			return nil
 		}, func() error {
 			// 获取视频的评论数
 			res, err := l.svcCtx.CommentRpc.GetCommentCount(l.ctx, &commentrpc.GetCommentCountRequest{
 				VideoId: oneVideo.Id,
 			})
+			if err != nil {
+				return errors.New("获取视频的评论数错误" + err.Error())
+			}
 			commentCount = res.Count
-			return err
+			return nil
 		})
 		if err != nil {
 			// Handle the error, log, and return if needed

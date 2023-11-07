@@ -7,10 +7,6 @@ Kodo)对视频，图片进行存储，智能多媒体服务(Dora)
 对视频进行处理，Redis作为缓存，Kafka进行异步处理和流量削峰，Etcd作为服务发现与注册中心。同时项目还具有良好的可观测性，使用Jaeger进行全链路追踪，Promethues+Grafana对服务进行性能监控，filebeat+go-stash+elasticsearch+kibana采集日志并且进行可视化呈现，使用docker-compose、Github
 Action进行CI/CD流程，最后使用traefik作为网关对服务进行负载均衡和转发
 
-## 接口文档
-
-https://lyt-cloud-1315438822.cos.ap-nanjing.myqcloud.com/diuniu/show.mp4
-
 ## 演示视频地址
 https://lyt-cloud-1315438822.cos.ap-nanjing.myqcloud.com/diuniu/show.mp4
 

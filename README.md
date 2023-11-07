@@ -23,21 +23,23 @@ x x x
 
 1. 设置**环境变量**：`DOCKERHUB_IMAGE=liuxian123/douniu-`
 
-2. 启动 docker-compose-env.yaml里面的相关中间件容器**（不需要可观测性可以省略）**
+2. 启动 docker-compose-env.yaml里面的相关中间件容器（**不需要可观测性可以省略**）
 
 ```
 docker-compose up -d -f docker-compose-env.yaml
 ```
 
-3. 配置GitHub Action的密钥**（不需要CI/CD流程可省略）**
+3. 配置GitHub Action的密钥（**不需要CI/CD流程可省略**）
 
 ![image-20231107172809895](https://raw.githubusercontent.com/liuxianloveqiqi/Xian-imagehost/main/image/202311071728126.png)
 
-4. 启动docker-compose.yaml里面的各个服务的容器**（必须）**
+4. 启动docker-compose.yaml里面的各个服务的容器（**必须**）
 
 ```
 docker-compose up -d
 ```
+
+**强调**！！！:由于etcd转发的原因，可能本地启动访问rpc被转发到我们服务的rpc从而导致访问不上
 
 注：**腾讯云密钥**请自己自行配置，相关中间件也可以自己配置，请在各个服务的etc下完成配置
 

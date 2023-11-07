@@ -149,7 +149,6 @@ func (s *Service) consume(ch chan *model.Video) {
 		vJson, err := jsonx.MarshalToString(v)
 		if err != nil {
 			logx.Error("解析json对象，err:", err)
-
 			return
 		}
 		_, err = s.ESClient.Index().

@@ -12,5 +12,5 @@ CREATE TABLE `video`
     PRIMARY KEY (`id`),
     UNIQUE KEY `id` (`id`),
     KEY           `idx_user_id_create_time` (`user_id`,`create_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=1721574251233812481 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci
 

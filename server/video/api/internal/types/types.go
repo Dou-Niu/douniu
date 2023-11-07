@@ -25,6 +25,7 @@ type VideoInfo struct {
 	CollectionCount int64      `json:"collection_count"`
 	CommentCount    int64      `json:"comment_count"`
 	IsFavorite      bool       `json:"is_favorite"`
+	IsCollect       bool       `json:"is_collect"`
 	Title           string     `json:"title"`
 	Partition       int64      `json:"partition"`
 	CreateTime      string     `json:"create_time"`

@@ -74,9 +74,11 @@ func (l *FeedHotLogic) FeedHot(req *types.FeedHotReq) (resp *types.FeedHotResp, 
 			FavoriteCount: v.FavoriteCount,
 			CommentCount:  v.CommentCount,
 			IsFavorite:    v.IsFavorite,
-			Title:         v.Title,
-			Partition:     v.Partition,
-			CreateTime:    time.Unix(v.CreateTime, 0).Format(time.DateTime),
+			IsCollect:     v.IsCollect,
+
+			Title:      v.Title,
+			Partition:  v.Partition,
+			CreateTime: time.Unix(v.CreateTime, 0).Format(time.DateTime),
 		})
 	}
 	return &types.FeedHotResp{

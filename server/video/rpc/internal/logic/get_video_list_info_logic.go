@@ -42,7 +42,7 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 		}
 		var userInfo *userrpc.UserInfoItem
 		var favoriteCount, collectionCount, commentCount int64
-		var isFavorite bool
+		var isFavorite, isCollect bool
 		err = mr.Finish(func() error {
 			// 获取视频作者信息
 			res, err := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &userrpc.UserInfoReq{
@@ -73,6 +73,14 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 				VideoId: oneVideo.Id,
 			})
 			isFavorite = res.IsFavorite
+			return err
+		}, func() error {
+			// 是否对视频收藏
+			res, err := l.svcCtx.FavoriteRpc.IsCollection(l.ctx, &favoriterpc.IsCollectionRequest{
+				UserId:  in.MeUserId,
+				VideoId: oneVideo.Id,
+			})
+			isCollect = res.IsCollection
 			return err
 		}, func() error {
 			// 获取视频的评论数
@@ -110,6 +118,7 @@ func (l *GetVideoListInfoLogic) GetVideoListInfo(in *pb.GetVideoListInfoReq) (*p
 			CollectionCount: collectionCount,
 			CommentCount:    commentCount,
 			IsFavorite:      isFavorite,
+			IsCollect:       isCollect,
 			Title:           oneVideo.Title,
 			Partition:       oneVideo.Partition,
 			CreateTime:      oneVideo.CreateTime.Unix(),

@@ -71,6 +71,7 @@ func (l *SearchVideoLogic) SearchVideo(req *types.SearchVideoReq) (resp *types.F
 			CollectionCount: v.CollectionCount,
 			CommentCount:    v.CommentCount,
 			IsFavorite:      v.IsFavorite,
+			IsCollect:       v.IsCollect,
 			Title:           v.Title,
 			Partition:       v.Partition,
 			CreateTime:      time.Unix(v.CreateTime, 0).Format(time.DateTime),

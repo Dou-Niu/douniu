@@ -66,6 +66,7 @@ func (l *FeedFollowLogic) FeedFollow(req *types.FeedFollowReq) (resp *types.Feed
 			FavoriteCount: v.FavoriteCount,
 			CommentCount:  v.CommentCount,
 			IsFavorite:    v.IsFavorite,
+			IsCollect:     v.IsCollect,
 			Title:         v.Title,
 			Partition:     v.Partition,
 			CreateTime:    time.Unix(v.CreateTime, 0).Format(time.DateTime),
